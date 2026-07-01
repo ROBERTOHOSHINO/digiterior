@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VICKEY × MTDS — Sinyal yang Diwariskan | Concept Sketch</title>
+<style>
+:root{
+  --ink:#1a2e25;
+  --paper:#faf6ee;
+  --deep:#0a2e1e;
+  --emerald:#1a6b5a;
+  --mint:#a7f3d0;
+  --gold:#d9a441;
+  --gold-deep:#b4822a;
+  --batik-red:#a6432c;
+  --line:#e4dcc8;
+  --muted:#8a8272;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Hiragino Sans','Noto Sans',-apple-system,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.7;
+}
+ruby rt{font-size:.55em;color:var(--muted)}
+
+/* ── HERO ── */
+.hero{
+  background:radial-gradient(140% 100% at 10% 0%, #123a2c 0%, var(--deep) 55%, #071d13 100%);
+  padding:40px 20px 34px;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(217,164,65,.05) 0 2px, transparent 2px 34px);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);font-weight:700;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.hero-eyebrow::before{content:'⟡';color:var(--mint)}
+.hero-title{
+  font-size:clamp(24px,7vw,34px);font-weight:900;letter-spacing:-.01em;
+  line-height:1.35;margin-bottom:14px;
+}
+.hero-title em{
+  font-style:normal;color:var(--mint);
+  border-bottom:2px solid rgba(167,243,208,.4);
+}
+.hero-sub{
+  font-size:13px;color:rgba(255,255,255,.72);max-width:520px;line-height:1.9;
+}
+.hero-note{
+  margin-top:20px;padding:12px 14px;border-radius:10px;
+  background:rgba(217,164,65,.1);border:1px solid rgba(217,164,65,.35);
+  font-size:11.5px;color:#f0e4c8;line-height:1.8;
+}
+.hero-note b{color:var(--gold)}
+
+/* ── ORIGIN BAR ── */
+.origin-bar{
+  background:var(--ink);color:#fff;
+  padding:11px 18px;font-size:11px;
+  display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+}
+.origin-bar b{color:var(--mint)}
+
+/* ── SECTION ── */
+.section{max-width:760px;margin:0 auto;padding:32px 20px}
+.eyebrow{
+  font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold-deep);font-weight:800;margin-bottom:8px;
+}
+.sec-title{
+  font-size:19px;font-weight:900;margin-bottom:14px;color:var(--ink);
+  letter-spacing:-.01em;
+}
+.sec-lead{font-size:13px;color:#5c5648;margin-bottom:20px;line-height:1.9}
+
+/* ── SIGNAL DIAGRAM (signature element) ── */
+.signal-panel{
+  background:#fff;border:1.5px solid var(--line);border-radius:14px;
+  padding:22px 18px;margin:18px 0;
+  box-shadow:0 6px 24px rgba(26,46,37,.06);
+}
+.signal-caption{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.8}
+.signal-row{display:flex;align-items:center;gap:4px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+.signal-year{width:34px;font-size:9.5px;color:var(--muted);text-align:right;padding-right:6px;flex-shrink:0}
+.signal-dot{
+  width:13px;height:13px;border-radius:50%;
+  background:var(--line);
+  transition:all .3s;
+}
+.signal-dot.on{background:var(--emerald)}
+.signal-dot.on.strong{background:var(--gold)}
+.signal-row-label{font-size:10px;color:var(--muted);margin-left:8px}
+
+/* ── DNA FLOW ── */
+.flow-panel{
+  background:linear-gradient(135deg,var(--deep),#123a2c);
+  border-radius:16px;padding:24px 18px;margin:18px 0;color:#fff;
+}
+.flow-title{font-size:14px;font-weight:900;color:var(--mint);margin-bottom:16px}
+.flow-track{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;justify-content:center}
+.flow-node{
+  background:rgba(255,255,255,.06);border:1px solid rgba(167,243,208,.25);
+  border-radius:12px;padding:14px 12px;text-align:center;width:130px;
+}
+.flow-kata{font-size:13px;font-weight:800;color:var(--gold);letter-spacing:.02em}
+.flow-label{font-size:9.5px;color:rgba(255,255,255,.65);margin-top:5px;line-height:1.6}
+.flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--mint);font-size:16px;width:22px}
+.flow-desc{
+  font-size:11.5px;color:rgba(255,255,255,.75);line-height:1.9;margin-top:16px;
+  border-top:1px solid rgba(255,255,255,.12);padding-top:14px;
+}
+
+/* ── VICKEY BUBBLES ── */
+.bubble-wrap{display:flex;gap:10px;align-items:flex-start;margin:14px 0}
+.bubble-right{flex-direction:row-reverse}
+.vcface{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.vcface.mone{background:linear-gradient(135deg,#f0c869,var(--gold));border:2px solid var(--gold-deep)}
+.vcface.mane{background:linear-gradient(135deg,#6ee7b7,var(--emerald));border:2px solid #065f46}
+.vc-name{font-size:10px;font-weight:800;margin-bottom:3px}
+.vc-name.mone{color:var(--gold-deep)}
+.vc-name.mane{color:#065f46}
+.vc-bubble{border-radius:4px 14px 14px 14px;padding:10px 13px;font-size:12px;color:#3d3a30}
+.vc-bubble.mone{background:#fbf3e1;border:1.5px solid #ecd5a0}
+.vc-bubble.mane{background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:14px 4px 14px 14px}
+
+/* ── COMPARISON ── */
+.compare-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:16px 0}
+@media(min-width:560px){.compare-grid{grid-template-columns:1fr 1fr}}
+.compare-card{
+  background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:16px;
+}
+.compare-card.jp{border-top:3px solid var(--emerald)}
+.compare-card.id{border-top:3px solid var(--batik-red)}
+.compare-card h4{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:800;margin-bottom:10px;
+}
+.compare-card.jp h4{color:var(--emerald)}
+.compare-card.id h4{color:var(--batik-red)}
+.compare-card p{font-size:12px;color:#4a4636;line-height:1.85}
+.compare-card p+p{margin-top:8px}
+
+/* ── QUOTE BLOCK ── */
+.quote-block{
+  background:#fff;border-left:3px solid var(--gold);
+  padding:16px 18px;margin:18px 0;border-radius:0 10px 10px 0;
+  font-size:12.5px;color:#4a4636;line-height:1.9;font-style:italic;
+}
+.quote-block .attrib{
+  display:block;margin-top:8px;font-style:normal;font-size:10.5px;
+  color:var(--muted);letter-spacing:.02em;
+}
+
+/* ── NOTE TO EKO ── */
+.note-section{
+  background:linear-gradient(135deg,#fbf3e1,#faf6ee);
+  border:1.5px solid #ecd5a0;border-radius:16px;
+  padding:22px 20px;margin:18px 0;
+}
+.note-title{font-size:13px;font-weight:900;color:var(--gold-deep);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px}
+.note-body{font-size:12.5px;color:#4a4636;line-height:1.95}
+.note-body p+p{margin-top:10px}
+.note-sign{margin-top:16px;font-size:11px;color:var(--muted);line-height:1.8}
+
+footer{
+  text-align:center;padding:20px;font-size:10px;color:#aaa;
+  border-top:2px dashed var(--line);margin-top:8px;background:#fff;line-height:2;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-eyebrow">Concept Sketch — Not for Publication</div>
+  <div class="hero-title">Sinyal yang <em>Diwariskan</em><br>Dari UMKM Keluarga ke Data Kepercayaan Daerah</div>
+  <div class="hero-sub">
+    <ruby>天然色漢字INDEX<rt>てんねんしょくかんじいんでっくす</rt></ruby>™ の思想（一字＋色で意味を直感化する）を、
+    インドネシアのMSME（UMKM）事業承継という文脈に置き換えたコンセプトスケッチです。
+  </div>
+  <div class="hero-note">
+    <b>For Eko Satrio, MTDS</b> — "When Talent Data Speaks" を拝読し、そこにある「信頼は宣言ではなく蓄積される」という視点を、私たちのVICKEYファミリー（生前贈与ガイド）の枠組みと重ねてみました。
+  </div>
+</div>
+
+<div class="origin-bar">
+  <b>ORIGIN</b><span>COLOURFUL JAPAN™ × VICKEY家 生前贈与ガイド（日本版）</span>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div class="section">
+  <div class="eyebrow">Bridge Concept</div>
+  <div class="sec-title">同じ骨格、違う土地</div>
+  <div class="sec-lead">
+    日本版のVICKEYシリーズは「祖父母 → 生前贈与 → 孫の運用 → 地域再生」という
+    DNA継承の流れを漢字4字で描きました。この骨格をそのままインドネシアのUMKM（中小零細企業）の
+    世代交代・事業承継の文脈に移すと、驚くほど自然に接続します。
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card jp">
+      <h4>日本版（既存）</h4>
+      <p><b>祖</b> — 東京で資産を築いた祖父母世代</p>
+      <p><b>贈</b> — 生前贈与という制度を通じた想いの継承</p>
+      <p><b>育</b> — 孫世代がNISAで長期運用</p>
+      <p><b>地</b> — 育った資産が地域経済に還元される</p>
+    </div>
+    <div class="compare-card id">
+      <h4>インドネシア版（提案）</h4>
+      <p><b>Perintis</b> — 一代で事業を築いたUMKM創業者</p>
+      <p><b>Wariskan</b> — 経営権・信頼・データを次世代へ渡す</p>
+      <p><b>Kembangkan</b> — 後継世代がデータを使って事業を拡張</p>
+      <p><b>Daerah</b> — 拡張した信頼が地域の産業として可視化される</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DNA FLOW ══ -->
+<div class="section" style="padding-top:0">
+  <div class="flow-panel">
+    <div class="flow-title">🧬 Alur Warisan — Data sebagai DNA Kepercayaan</div>
+    <div class="flow-track">
+      <div class="flow-node">
+        <div class="flow-kata">Perintis</div>
+        <div class="flow-label">Generasi pendiri<br>UMKM keluarga</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-kata">Wariskan</div>
+        <div class="flow-label">Kepercayaan &amp; data usaha<br>diserahkan, bukan sekadar aset</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-kata">Kembangkan</div>
+        <div class="flow-label">Generasi penerus memakai<br>Big Data MTDS untuk tumbuh</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">
+        <div class="flow-kata">Daerah</div>
+        <div class="flow-label">Pertumbuhan usaha terlihat<br>sebagai sinyal daerah</div>
+      </div>
+    </div>
+    <div class="flow-desc">
+      箱物（インフラ）は減価するが、信頼と知恵の継承は世代を超えて複利のように育つ——
+      これは動的平衡（dynamic equilibrium）という、私たちが一貫して大切にしている考え方です。
+      MTDSがMSME向けに構築しているデータの仕組みは、まさにこの「継承される信頼」を
+      定量的に可視化するインフラだと理解しています。
+    </div>
+  </div>
+</div>
+
+<!-- ══ SIGNAL DIAGRAM ══ -->
+<div class="section" style="padding-top:0">
+  <div class="eyebrow">Signature Concept</div>
+  <div class="sec-title">Sinyal Kecil, Diakumulasi Diam-Diam</div>
+  <div class="sec-lead">
+    Eko氏が書いていた「信頼は宣言されず、小さな確認の積み重ねで蓄積される」という一節を、
+    そのまま図にしてみました。UMKMの信頼データは、派手な発表ではなく、
+    毎年の一貫した小さなシグナルの積層として立ち上がっていきます。
+  </div>
+  <div class="signal-panel">
+    <div class="signal-row">
+      <span class="signal-year">Th. 1</span>
+      <span class="signal-dot on"></span><span class="signal-dot"></span><span class="signal-dot"></span><span class="signal-dot"></span><span class="signal-dot"></span>
+      <span class="signal-row-label">satu sinyal muncul</span>
+    </div>
+    <div class="signal-row">
+      <span class="signal-year">Th. 3</span>
+      <span class="signal-dot on"></span><span class="signal-dot on"></span><span class="signal-dot"></span><span class="signal-dot on"></span><span class="signal-dot"></span>
+      <span class="signal-row-label">pola mulai terlihat</span>
+    </div>
+    <div class="signal-row">
+      <span class="signal-year">Th. 7</span>
+      <span class="signal-dot on"></span><span class="signal-dot on strong"></span><span class="signal-dot on"></span><span class="signal-dot on"></span><span class="signal-dot on"></span>
+      <span class="signal-row-label">kepercayaan mengendap</span>
+    </div>
+    <div class="signal-caption">
+      漢字1字＋色で意味を直感化する天然色漢字INDEX™の手法は、UMKMの文脈では
+      「1つの指標語＋色」で信頼の蓄積段階を示す形に翻訳できそうです。
+    </div>
+  </div>
+</div>
+
+<!-- ══ VICKEY VOICES ══ -->
+<div class="section" style="padding-top:0">
+  <div class="bubble-wrap">
+    <div class="vcface mane">🌿</div>
+    <div style="flex:1">
+      <div class="vc-name mane">VICKEY-MANE 🌿</div>
+      <div class="vc-bubble mane">
+        まねき猫は日本だけのものじゃない。「福を招く」という考え方は、
+        インドネシアのUMKMが世代を超えて信頼を積み重ねる姿にも、そのまま重なるよ。
+      </div>
+    </div>
+  </div>
+  <div class="bubble-wrap bubble-right">
+    <div style="flex:1;text-align:right">
+      <div class="vc-name mone" style="text-align:right">VICKEY-MONE 💛</div>
+      <div class="vc-bubble mone">
+        大事なのは「誰がいくら継いだか」じゃなくて、「どんな信頼のパターンを継いだか」。
+        それを見える化するのが、私たちとMTDSに共通するミッションかもね。
+      </div>
+    </div>
+    <div class="vcface mone">🐱</div>
+  </div>
+</div>
+
+<!-- ══ NOTE TO EKO ══ -->
+<div class="section" style="padding-top:0">
+  <div class="note-section">
+    <div class="note-title">✉️ 覚え書き — Eko Satrio様へ</div>
+    <div class="note-body">
+      <p>
+        これは提案書ではなく、思考の途中経過をそのまま形にしたスケッチです。
+        貴殿の「When Talent Data Speaks」を読んで、地域の価値が宣言ではなく
+        時間をかけた信頼の蓄積によって形成されるという視点に、強く共感しました。
+      </p>
+      <p>
+        私たちが日本で作っているVICKEYファミリー（生前贈与ガイド）は、
+        同じ発想を「世代間の資産継承」という別の角度から可視化したものです。
+        骨格を抜き出せば、インドネシアのUMKM事業承継、
+        あるいはMTDSが取り組む信頼データの可視化にも自然に応用できるのではと考え、
+        このスケッチを作りました。
+      </p>
+      <p>
+        ご意見やツッコミをいただけたら、それ自体が一つの「信頼のシグナル」になると思っています。
+      </p>
+    </div>
+    <div class="note-sign">
+      星野晃一郎 / 株式会社ダンクソフト<br>
+      COLOURFUL JAPAN™ × 天然色漢字INDEX™ × VICKEY PROJECT
+    </div>
+  </div>
+</div>
+
+<footer>
+  ※ これはコンセプトスケッチであり、正式な提案資料ではありません。<br>
+  天然色漢字INDEX™ COLOURFUL KANJI INDEX® VICKEY PROJECT<br>
+  株式会社ダンクソフト DUNKSOFT Co., Ltd. ／ 制作: Claude (Anthropic)
+</footer>
+
+</body>
+</html>
