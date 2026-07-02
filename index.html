@@ -3,148 +3,334 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>digiterior</title>
-<meta name="description" content="デジタルで、楽を究める。digiterior — love your long life, love your long time.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<title>notes.digiterior.net</title>
 <style>
-  :root{
-    --paper:#F4F6F8;
-    --paper-deep:#E9ECF1;
-    --sumi:#181A20;
-    --sumi-soft:#71767F;
-    --hair:rgba(24,26,32,.10);
-    /* COLOURFUL JAPAN — 字の中に最初からある色 */
-    --c1:#1A237E; --c2:#378ADD; --c3:#1B6B5A;
-    --c4:#3B6D11; --c5:#BA7517; --c6:#534AB7;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    background:var(--paper);
-    color:var(--sumi);
-    font-family:"IBM Plex Mono",ui-monospace,monospace;
-    min-height:100dvh;
-    display:flex;flex-direction:column;
-    align-items:center;justify-content:center;
-    gap:clamp(1.6rem,4vh,2.6rem);
-    padding:6vh 1.5rem;
-    -webkit-font-smoothing:antialiased;
-    overflow:hidden;
+  :root {
+    --認: #378ADD;
+    --市: #BA7517;
+    --語: #534AB7;
+    --町: #3B6D11;
+    --bg: #FAFAF8;
+    --text: #1a1a18;
+    --muted: #6b6b66;
+    --border: rgba(0,0,0,0.08);
+    --card-bg: #ffffff;
   }
 
-  /* 署名: 究 ── 穴(深部)を究める。表は墨一色、触れると中の色が滲む */
-  .gate{
-    position:relative;display:inline-block;
-    text-decoration:none;line-height:1;
-    outline:none;cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .kiwa{
-    position:relative;display:block;
-    font-family:"Shippori Mincho B1",serif;
-    font-weight:700;
-    font-size:clamp(7.5rem,34vw,20rem);
-    color:var(--sumi);
-    letter-spacing:0;
-    transition:transform 1.1s cubic-bezier(.16,1,.3,1);
-    will-change:transform;
-  }
-  /* 字の中に潜んでいた色 ── hover/focus で奥から滲み出る */
-  .kiwa::after{
-    content:"究";
-    position:absolute;inset:0;
-    background:conic-gradient(from 210deg,
-      var(--c1),var(--c2),var(--c3),var(--c4),var(--c5),var(--c6),var(--c1));
-    -webkit-background-clip:text;background-clip:text;
-    color:transparent;
-    opacity:0;
-    transition:opacity 1.2s ease;
-  }
-  .gate:hover .kiwa::after,
-  .gate:focus-visible .kiwa::after{opacity:1}
-  .gate:hover .kiwa,
-  .gate:focus-visible .kiwa{transform:scale(1.015)}
-  .gate:focus-visible{outline:none}
-  .gate:focus-visible .kiwa{
-    text-shadow:0 0 0 transparent;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
   }
 
-  /* 楽を究める ── 触れた人だけに立ち上がる一行 */
-  .thesis{
-    font-family:"Shippori Mincho B1",serif;
-    font-weight:500;
-    font-size:clamp(.95rem,2.4vw,1.18rem);
-    letter-spacing:.18em;
-    color:var(--sumi-soft);
-    height:1.2em;
-    opacity:0;transform:translateY(6px);
-    transition:opacity .9s ease,transform .9s cubic-bezier(.16,1,.3,1);
-    pointer-events:none;text-align:center;
+  header {
+    padding: 2.5rem 2rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
-  .gate:hover ~ .meta .thesis,
-  .gate:focus-visible ~ .meta .thesis{opacity:1;transform:none}
 
-  .meta{
-    display:flex;flex-direction:column;align-items:center;
-    gap:.85rem;text-align:center;
+  .site-title {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 400;
   }
-  .wordmark{
-    font-size:clamp(.8rem,2.4vw,.95rem);
-    font-weight:400;letter-spacing:.42em;
-    text-indent:.42em;
-    color:var(--sumi);
-    text-transform:lowercase;
-  }
-  .tagline{
-    font-size:clamp(.62rem,1.8vw,.72rem);
-    font-style:italic;font-weight:300;
-    letter-spacing:.06em;
-    color:var(--sumi-soft);
-  }
-  .tagline sup{font-style:normal;font-size:.7em;letter-spacing:0;opacity:.7}
 
-  /* 静かな入口 ── notesへ。普段は気配だけ */
-  .enter{
-    position:fixed;left:50%;bottom:clamp(1.4rem,5vh,2.8rem);
-    transform:translateX(-50%);
-    font-size:.62rem;letter-spacing:.34em;text-indent:.34em;
-    text-transform:lowercase;text-decoration:none;
-    color:var(--sumi-soft);
-    opacity:.32;transition:opacity .6s ease,color .6s ease;
+  .site-name {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
   }
-  .enter:hover,.enter:focus-visible{opacity:1;color:var(--sumi);outline:none}
 
-  /* 登場: 究が奥から立ち上がる */
-  @keyframes rise{
-    from{opacity:0;transform:translateY(14px) scale(.985)}
-    to{opacity:1;transform:none}
+  .filter-bar {
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 0.5px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
   }
-  .gate{animation:rise 1.4s cubic-bezier(.16,1,.3,1) both}
-  .meta{animation:rise 1.4s .25s cubic-bezier(.16,1,.3,1) both}
 
-  @media (prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important}
-    .gate:hover .kiwa::after,.gate:focus-visible .kiwa::after,
-    .gate:hover ~ .meta .thesis,.gate:focus-visible ~ .meta .thesis{opacity:1;transform:none}
+  .filter-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-right: 4px;
+  }
+
+  .cat-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.35;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .cat-btn.active { opacity: 1; }
+  .cat-btn:hover { transform: scale(1.1); opacity: 0.85; }
+  .cat-btn.active:hover { opacity: 1; }
+
+  .btn-認 { background: var(--認); color: #E6F1FB; }
+  .btn-市 { background: var(--市); color: #FAEEDA; }
+  .btn-語 { background: var(--語); color: #EEEDFE; }
+  .btn-町 { background: var(--町); color: #EAF3DE; }
+
+  .btn-all {
+    padding: 0 14px;
+    height: 32px;
+    border-radius: 16px;
+    border: 0.5px solid var(--border);
+    background: var(--text);
+    color: var(--bg);
+    cursor: pointer;
+    font-size: 11px;
+    font-family: inherit;
+    letter-spacing: 0.06em;
+    transition: opacity 0.15s;
+  }
+  .btn-all:hover { opacity: 0.75; }
+
+  .count {
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+  }
+
+  .card {
+    background: var(--card-bg);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.1s;
+    position: relative;
+  }
+
+  .card:hover { background: #F5F5F2; }
+
+  .card-cats {
+    display: flex;
+    gap: 5px;
+  }
+
+  .cat-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .dot-認 { background: var(--認); color: #E6F1FB; }
+  .dot-市 { background: var(--市); color: #FAEEDA; }
+  .dot-語 { background: var(--語); color: #EEEDFE; }
+  .dot-町 { background: var(--町); color: #EAF3DE; }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+
+  .card-where {
+    font-size: 13px;
+  }
+
+  .card-keywords {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .coined-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: #EEEDFE;
+    color: #3C3489;
+    letter-spacing: 0.03em;
+    margin-top: 2px;
+    line-height: 1.6;
+  }
+
+  .card.hidden { display: none; }
+
+  footer {
+    padding: 2rem;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 0.5px solid var(--border);
+    margin-top: 1px;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 1.5rem 1rem 1rem; }
+    .filter-bar { padding: 1rem; }
+    .grid { grid-template-columns: 1fr; }
+    .card { padding: 1rem; }
   }
 </style>
 </head>
 <body>
 
-  <a class="gate" href="/home.html"
-     aria-label="究 — デジタルで、楽を究める。">
-    <span class="kiwa" aria-hidden="true">究</span>
-  </a>
-
-  <div class="meta">
-    <p class="thesis">デジタルで、楽を究める。</p>
-    <p class="wordmark">digiterior</p>
-    <p class="tagline">love your long life, love your long time<sup>™</sup></p>
+<header>
+  <div>
+    <div class="site-title">DIGITERIOR</div>
+    <div class="site-name">notes</div>
   </div>
+  <div style="font-size:11px; color:var(--muted); text-align:right; line-height:1.8;">
+    認 <span style="color:var(--認);">●</span> 技術・認証<br>
+    市 <span style="color:var(--市);">●</span> Marketing・市づくり<br>
+    語 <span style="color:var(--語);">●</span> コラム・物語<br>
+    町 <span style="color:var(--町);">●</span> 文化・コミュニティ
+  </div>
+</header>
 
-  <a class="enter" href="https://notes.digiterior.net">notes</a>
+<div class="filter-bar">
+  <span class="filter-label">絞り込み</span>
+  <button class="cat-btn btn-認 active" data-cat="認" onclick="toggleFilter('認')">認</button>
+  <button class="cat-btn btn-市 active" data-cat="市" onclick="toggleFilter('市')">市</button>
+  <button class="cat-btn btn-語 active" data-cat="語" onclick="toggleFilter('語')">語</button>
+  <button class="cat-btn btn-町 active" data-cat="町" onclick="toggleFilter('町')">町</button>
+  <button class="btn-all" onclick="resetFilter()">すべて</button>
+  <span class="count" id="count"></span>
+</div>
 
+<div class="grid" id="grid"></div>
+
+<footer>
+  notes.digiterior.net &nbsp;·&nbsp; COLOURFUL JAPAN
+</footer>
+
+<script>
+const CAT_COLORS = { '認':'dot-認', '市':'dot-市', '語':'dot-語', '町':'dot-町' };
+let allNotes = [];
+let activeFilters = new Set(['認','市','語','町']);
+
+async function init() {
+  try {
+    const res = await fetch('./notes-index.json');
+    allNotes = await res.json();
+    allNotes.sort((a, b) => (b.updated || b.created).localeCompare(a.updated || a.created));
+    applyUrlFilter();
+    render();
+  } catch(e) {
+    document.getElementById('grid').innerHTML = '<div style="padding:2rem;color:#999;">読み込み中...</div>';
+  }
+}
+
+function applyUrlFilter() {
+  const params = new URLSearchParams(location.search);
+  const cat = params.get('cat');
+  const valid = ['認','市','語','町'];
+  if (cat && valid.indexOf(cat) >= 0) {
+    activeFilters = new Set([cat]);
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.cat === cat);
+    });
+  }
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  const filtered = allNotes.filter(n => {
+    const cats = n.category.split('');
+    return cats.some(c => activeFilters.has(c));
+  });
+
+  document.getElementById('count').textContent = filtered.length + ' 件';
+
+  grid.innerHTML = filtered.map(n => {
+    const cats = n.category.split('');
+    const dots = cats.map(c => `<div class="cat-dot ${CAT_COLORS[c] || ''}" title="${c}">${c}</div>`).join('');
+    const where = n.where ? `<span class="card-where">${n.where}</span>` : '';
+    const date = (n.updated || n.created) || '';
+    const dateShort = date.length > 7 ? date.slice(0,7) : date;
+    const coined = n.coined ? `<div class="coined-badge">${n.coined}</div>` : '';
+    const keywords = n.keywords ? `<div class="card-keywords">${n.keywords.split('').join(' ')}</div>` : '';
+
+    return `<a class="card" href="./${n.file}">
+      <div class="card-cats">${dots}</div>
+      <div class="card-title">${n.title}</div>
+      <div class="card-meta">
+        ${where}
+        <span>${dateShort}</span>
+        <span>${n.author || ''}</span>
+      </div>
+      ${keywords}
+      ${coined}
+    </a>`;
+  }).join('');
+}
+
+function toggleFilter(cat) {
+  if (activeFilters.has(cat)) {
+    if (activeFilters.size === 1) return;
+    activeFilters.delete(cat);
+  } else {
+    activeFilters.add(cat);
+  }
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.classList.toggle('active', activeFilters.has(btn.dataset.cat));
+  });
+  render();
+}
+
+function resetFilter() {
+  activeFilters = new Set(['認','市','語','町']);
+  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.add('active'));
+  render();
+}
+
+init();
+</script>
 </body>
 </html>

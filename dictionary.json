@@ -1,0 +1,150 @@
+{
+  "categories": [
+    {
+      "char": "認",
+      "hex": "#378ADD",
+      "desc": "認証・技術・セキュリティ"
+    },
+    {
+      "char": "市",
+      "hex": "#BA7517",
+      "desc": "Marketing・市づくり・バザール"
+    },
+    {
+      "char": "語",
+      "hex": "#534AB7",
+      "desc": "コラム・物語・哲学"
+    },
+    {
+      "char": "町",
+      "hex": "#3B6D11",
+      "desc": "文化・コミュニティ・地域"
+    }
+  ],
+  "coined": [
+    {
+      "phrase": "Love your long life, love your long time!",
+      "file": "love-your-long-life.html",
+      "by": "星C",
+      "date": "2026-06-10"
+    },
+    {
+      "phrase": "dreaming needs an output format",
+      "file": "dreaming-needs-an-output-format.html",
+      "by": "Anthropic/Claude",
+      "date": "2026-06"
+    },
+    {
+      "phrase": "洒落ですしゃれ",
+      "file": "play-worldcup-june13.html",
+      "by": "山下達郎",
+      "date": "参照2026-06-13"
+    },
+    {
+      "phrase": "MARKETINGは市づくり",
+      "file": "html-notes-marketing.html",
+      "by": "星C",
+      "date": "2026-06"
+    }
+  ],
+  "concepts": [
+    {
+      "word": "ダンク",
+      "kanji": ["談駆", "断苦"],
+      "meaning": ["対話を楽しむ・物語好き", "楽・PLAYの心"],
+      "by": "星",
+      "note": "2文字のためINDEX非採用。ダンクソフト社名の思想的根拠。概念として保持。"
+    },
+    {
+      "word": "TAKT",
+      "kanji": "",
+      "meaning": "建築工程管理・リソース管理システムの原型",
+      "by": "星",
+      "note": "1996年大成建設×ダンクソフト。COLOURFUL JAPAN版として再構築予定。建築→汎用PROJECTへ展開。"
+    },
+    {
+      "word": "html-notes",
+      "meaning": "NOTEアプリを超える表現媒体。色・構造・言語を自在に扱える自己完結型ドキュメント。",
+      "by": "星C",
+      "note": "vision.html作成時に気づく。MEMORY-BANKの器として採用。紙でもアプリでもない第三の配布形式。"
+    },
+    {
+      "word": "発信媒体の変遷",
+      "meaning": "ブログ→NOTE→LinkedIn→html-notes",
+      "by": "星",
+      "note": "ブログはLOGで書きっぱなし。NOTEも反応鈍く停滞。LinkedInで市づくりが起きると気づく。html-notesは蓄積・更新・再利用できる器として到達。アクションして何が起こるかを見ることが本質。blog: https://robertoplay.seesaa.net/"
+    },
+    {
+      "word": "品詞色分け",
+      "meaning": "名詞・動詞・助詞など品詞ごとに色を付けて言語構造を可視化する手法",
+      "by": "星C",
+      "note": "百人一首で開発。マザーグース・ハンプティーダンプティーへ応用。教育出版社への展開検討。AIが読み手になるかるたシステムも構想中。"
+    },
+    {
+      "word": "問いを選ぶ",
+      "meaning": "答えより問いの質が人生と仕事を決める",
+      "by": "星C",
+      "note": "2002年W杯×法政大学PROJECTが起点。ポール・フルキエ、ジョルジュ・フリードマンとの出会い。ワークライフバランス・原発への気づきが今のダンクソフトの思想につながる。MEMORY-BANKらしい振り返りの一本。"
+    },
+    {
+      "word": "認証スタジアム",
+      "meaning": "ハッカーとセキュリティエンジニアが公開の場で技を競い、互いをリスペクトする世界",
+      "by": "星C",
+      "note": "Dreamingの分散認証思想を拡張。日本×オランダのW杯引き分けがメタファー。利害を超えて技術と心が進化する。PLAY×セキュリティ×市づくりの交差点。"
+    },
+    {
+      "word": "信頼の連鎖",
+      "meaning": "認証フェデレーションがCo-learningを生み、不和を減らし、戦争を避ける文明の知恵になる",
+      "by": "星C",
+      "note": "chromakey-auth-peace.htmlの核心。討論はしても喧嘩にはならない文化。デジタルに疎い人を排除せず成長させるCo-learningの場づくりが鍵。認証スタジアムの前段。"
+    },
+    {
+      "word": "叡智の継承",
+      "meaning": "お金より大切な知恵を、シニアが生きているうちにデジタルで資産として残す",
+      "by": "星C",
+      "note": "義母（2026年5月逝去）への手向け。50代からPC・スマホを使いコラムを楽しみにしていた。パスワードの壁と認知症で徐々に弱っていった。dreamingのような御用聞きサポートがあれば叡智を活かせた。love-your-long-lifeと深くつながる。"
+    },
+    {
+      "word": "html配布",
+      "meaning": "紙でもAirDropでもなく、QRコードでhtmlを手渡す新しい配布様式",
+      "by": "星C",
+      "note": "義母の葬儀で親族にhtml-notesをQRで配布。画像・QRコード付き。AirDropは開きっぱなしリスクあり。QRは日本人の偉大な発明。htmlが弔辞・デジタル遺影・配布手段を兼ねた初めての事例。"
+    },
+    {
+      "word": "古墳の鍵穴",
+      "meaning": "古代の石組みにメモリーアーキテクチャーの原型を見る",
+      "by": "星C",
+      "note": "長野の大型古墳訪問時にdreaming×メモリーアーキテクチャーのイベント後で触発。石垣・鍵穴形古墳からClaudeが発展させた。"
+    },
+    {
+      "word": "インデックスソート",
+      "meaning": "メモリー本体を並び替えずに配列の要素だけをソートする手法。RDB不要のフラットファイル設計の根拠。",
+      "by": "星C",
+      "note": "40年前の技術。notes-index.jsonの設計思想の原型。RDBなしで横断検索できる理由がここにある。"
+    },
+    {
+      "word": "市づくり＝MARKETING",
+      "meaning": "MARKETの語源に戻る。市場調査でなく物理の場をつくること。お金・モノだけでなく情報・知恵・対話の交換の場。",
+      "by": "星C",
+      "note": "パエリア祭り・百人一首・認証フェデレーションすべてが市づくりの実装例。COLOURFUL JAPANの中核思想。LinkedInで高インプレッション。"
+    },
+    {
+      "word": "archive",
+      "meaning": "GitHubのhistoryが自然なアーカイブ。index-archive/フォルダ不要。",
+      "by": "星C",
+      "note": "2026-06-16設計決定。notes-index.json・dictionary.jsonもGit管理で差分・履歴が自動保持される。"
+    },
+    {
+      "word": "動的平衡WEBサイト",
+      "meaning": "陳腐化せず成長し続けるWEBサイト。GitとJSON管理により自動更新・自動アーカイブ。",
+      "by": "星C",
+      "note": "notes.digiterior.netの設計思想。RDB不要、フラットファイル+INDEX、疎結合。COLOURFUL JAPANのキラーデモになる。"
+    }
+  ],
+  "delete_candidates": [
+    {
+      "file": "cipher-city-story.html",
+      "reason": "cypher-city.htmlと同一内容。日付付きの重複ファイル。"
+    }
+  ]
+}

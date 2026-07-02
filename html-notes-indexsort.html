@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>html-notes | We Never Moved the Strings — Roberto Hoshino</title>
+<meta name="description" content="A sorting technique from the pre-RDB frontier that turned out to be everywhere. By Roberto Hoshino.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap');
+
+:root {
+  --ink: #1a1814;
+  --ink2: #4a4640;
+  --ink3: #8a8680;
+  --paper: #faf8f4;
+  --paper2: #f2efe8;
+  --gold: #b8960c;
+  --accent: #c0550a;
+  --indigo: #1a3a5c;
+  --code-bg: #1e1c18;
+  --code-fg: #e8e4dc;
+  --code-green: #7ec98a;
+  --code-gold: #d4a843;
+  --code-blue: #7ab3d4;
+  --code-comment: #6a6560;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+.color-strip { display: flex; height: 4px; }
+.cs { flex: 1; }
+
+header {
+  border-bottom: 0.5px solid rgba(0,0,0,0.12);
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: rgba(250,248,244,0.95);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.logo-sub {
+  font-size: 10px;
+  color: var(--ink3);
+  letter-spacing: .12em;
+  margin-top: 2px;
+  font-weight: 300;
+}
+nav { display: flex; gap: 2rem; }
+nav a {
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: var(--ink2);
+  text-decoration: none;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+}
+
+/* HERO */
+.hero {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 5rem 2rem 4rem;
+  border-bottom: 0.5px solid rgba(0,0,0,0.08);
+}
+.hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: .18em;
+  color: var(--ink3);
+  text-transform: uppercase;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; display: block; height: 1px; width: 24px;
+  background: var(--gold); opacity: .5;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(30px, 5vw, 54px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: .01em;
+  margin-bottom: .75rem;
+}
+.hero-ja {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink3);
+  letter-spacing: .1em;
+  margin-bottom: 1.75rem;
+}
+.hero-lead {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--ink2);
+  max-width: 580px;
+  line-height: 1.9;
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+}
+.hero-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--ink3);
+  letter-spacing: .06em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  align-items: center;
+}
+.hero-dot {
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-right: 6px;
+  opacity: .8;
+  vertical-align: middle;
+}
+
+/* ARTICLE */
+.article {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 5rem;
+}
+
+.body-text {
+  font-size: clamp(16px, 1.9vw, 19px);
+  color: var(--ink2);
+  line-height: 2.05;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+.body-text p { margin-bottom: 1.1rem; }
+
+.pull {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--accent);
+  border-left: 2px solid var(--accent);
+  padding-left: 1.25rem;
+  margin: 2rem 0;
+  line-height: 1.6;
+}
+
+/* CODE BLOCK */
+.code-wrap {
+  background: var(--code-bg);
+  border-radius: 6px;
+  margin: 2rem 0;
+  overflow: hidden;
+}
+.code-header {
+  padding: .6rem 1.25rem;
+  border-bottom: 0.5px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.code-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.code-label {
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: rgba(255,255,255,0.3);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 300;
+  margin-left: auto;
+}
+pre {
+  padding: 1.5rem 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--code-fg);
+  overflow-x: auto;
+  font-weight: 300;
+}
+.c  { color: var(--code-comment); }
+.g  { color: var(--code-green); }
+.gl { color: var(--code-gold); }
+.b  { color: var(--code-blue); }
+.w  { color: #ffffff; font-weight: 400; }
+
+/* DIAGRAM */
+.diagram {
+  background: var(--paper2);
+  border: 0.5px solid rgba(0,0,0,0.08);
+  border-radius: 6px;
+  padding: 1.75rem 2rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+.diagram-label {
+  font-size: 10px;
+  letter-spacing: .15em;
+  color: var(--ink3);
+  text-transform: uppercase;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  margin-bottom: 1.25rem;
+}
+.diagram-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: .875rem;
+  flex-wrap: wrap;
+}
+.diagram-key {
+  font-size: 12px;
+  color: var(--ink3);
+  font-family: 'JetBrains Mono', monospace;
+  min-width: 140px;
+  font-weight: 300;
+}
+.diagram-cells {
+  display: flex;
+  gap: 3px;
+}
+.cell {
+  width: 56px;
+  height: 36px;
+  border: 0.5px solid rgba(0,0,0,0.15);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 300;
+  background: var(--paper);
+  color: var(--ink2);
+}
+.cell.highlight {
+  background: var(--indigo);
+  color: white;
+  border-color: var(--indigo);
+  font-weight: 400;
+}
+.cell.accent {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.diagram-arrow {
+  font-size: 18px;
+  color: var(--gold);
+  margin: 0 .5rem;
+}
+.diagram-note {
+  font-size: 12px;
+  color: var(--ink3);
+  font-style: italic;
+  margin-top: 1rem;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* CONNECTIONS */
+.connections {
+  margin: 2rem 0;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.connections-header {
+  background: var(--paper2);
+  padding: .75rem 1.25rem;
+  font-size: 10px;
+  letter-spacing: .15em;
+  color: var(--ink3);
+  text-transform: uppercase;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  border-bottom: 0.5px solid rgba(0,0,0,0.08);
+}
+.conn-item {
+  padding: 1rem 1.25rem;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+.conn-item:last-child { border-bottom: none; }
+.conn-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: .15rem;
+}
+.conn-desc {
+  font-size: 13px;
+  color: var(--ink3);
+  font-weight: 300;
+  line-height: 1.6;
+}
+.conn-tag {
+  font-size: 9px;
+  letter-spacing: .1em;
+  padding: 3px 10px;
+  border: 0.5px solid var(--gold);
+  border-radius: 2px;
+  color: var(--gold);
+  white-space: nowrap;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+}
+
+/* FOOTER QUOTE */
+.closing {
+  border-top: 0.5px solid rgba(0,0,0,0.08);
+  padding: 3rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.closing-main {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 600;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+.closing-sub {
+  font-size: 12px;
+  color: var(--ink3);
+  letter-spacing: .08em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  line-height: 2;
+}
+
+footer {
+  border-top: 0.5px solid rgba(0,0,0,0.1);
+  padding: 2rem;
+  text-align: center;
+}
+footer p {
+  font-size: 11px;
+  color: var(--ink3);
+  letter-spacing: .06em;
+  line-height: 2.2;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+}
+
+@media (max-width: 600px) {
+  nav { display: none; }
+  .hero { padding: 3rem 1.25rem 2.5rem; }
+  .article { padding: 2.5rem 1.25rem 4rem; }
+  .diagram-key { min-width: 100px; font-size: 11px; }
+  .cell { width: 46px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<script>window.CJ_ME = {"file": "html-notes-indexsort.html", "title": "インデックスソート——RDB不要時代に蘇る40年前の知恵", "created": "2026-06", "updated": "2026-06", "category": "認語", "author": "星C", "where": "東", "keywords": "索順配技史蘇", "coined": "", "picture": "MY ID OF IT HISTORY.jpg"};</script>
+<!-- ═══════════════════════════════════════════════════════════
+     COLOURFUL JAPAN 共通ヘッダー  v3 (QR・カラフル・オリジン非依存)
+     ・各 html-notes の <body> 直後に貼り付け（直前に window.CJ_ME を定義）
+     ・カードは CJ_ME から即描画（ネットワーク非依存）
+     ・同一オリジンに notes-index.json が在れば取得して最新化（任意・失敗時は無視）
+     ═══════════════════════════════════════════════════════════ -->
+
+<div id="cj-header"></div>
+
+<style>
+  #cj-header { font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif; }
+  .cjh-card {
+    background:#FFFFFF; border:0.5px solid rgba(0,0,0,0.1);
+    border-radius:12px; overflow:hidden; margin:1.4rem auto 0;
+    max-width:860px; display:flex; flex-direction:column;
+  }
+  .cjh-bar { display:flex; height:5px; width:100%; }
+  .cjh-bar span { flex:1; }
+  .cjh-main { display:flex; flex-direction:column; }
+  .cjh-pic { width:100%; max-height:240px; object-fit:cover; display:block; background:#e8e6e0; }
+  .cjh-pic.cjh-empty { display:none; }
+  .cjh-body { padding:18px 22px 20px; }
+  .cjh-top { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:12px; }
+  .cjh-nav { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .cjh-home { font-size:12px; letter-spacing:.1em; text-decoration:none; margin-right:4px; white-space:nowrap; }
+  .cjh-dot {
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:500; text-decoration:none; transition:transform .1s;
+  }
+  .cjh-dot:hover { transform:scale(1.1); }
+  .cjh-dot.on { outline:2px solid currentColor; outline-offset:2px; }
+  .cjh-qr { flex-shrink:0; text-align:center; }
+  .cjh-qr img { width:84px; height:84px; display:block; border-radius:5px; background:#fff; padding:3px; border:0.5px solid rgba(0,0,0,0.08); }
+  .cjh-qr-cap { font-size:10px; color:#6b6b66; margin-top:4px; letter-spacing:.06em; }
+  .cjh-title { font-size:21px; font-weight:500; line-height:1.5; margin-bottom:7px; }
+  .cjh-meta { font-size:12px; color:#5F5E5A; letter-spacing:.05em; }
+  .cjh-kw { font-size:12px; margin-top:9px; letter-spacing:.14em; }
+  .cjh-coined { display:inline-block; font-size:12px; margin-top:10px; padding:4px 12px; border-radius:12px; letter-spacing:.02em; line-height:1.6; }
+  @media (min-width: 720px) {
+    .cjh-main { flex-direction:row; align-items:stretch; }
+    .cjh-pic { width:200px; max-height:none; flex-shrink:0; }
+    .cjh-body { flex:1; min-width:0; }
+  }
+</style>
+
+<script>
+(function(){
+  var PIC_BASE   = 'https://picture.dunksoft.jp/';
+  var NOTES_HOME = '/';
+  var CATS = ['認','市','語','町'];
+  var CAT_DESC = { '認':'認証・技術', '市':'Marketing・市づくり', '語':'コラム・物語', '町':'文化・コミュニティ' };
+  var COL  = { '認':'#378ADD','市':'#BA7517','語':'#534AB7','町':'#3B6D11' };
+  var COLT = { '認':'#E6F1FB','市':'#FAEEDA','語':'#EEEDFE','町':'#EAF3DE' };
+  var COLD = { '認':'#042C53','市':'#412402','語':'#26215C','町':'#173404' };
+  var KWPAL = ['#185FA5','#854F0B','#534AB7','#3B6D11'];
+  var TPAL  = ['#185FA5','#BA7517','#C2185B','#534AB7','#3B6D11','#0F6E56'];
+  var TNEUT = '#a39a90';
+  var WORD  = /[0-9A-Za-z\u3041-\u3096\u30a1-\u30fa\u30fc\u3400-\u9fff\uff10-\uff19\uff21-\uff5a]/;
+
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function colorTitle(t){
+    t = t || ''; var out = '', k = 0;
+    for(var i=0;i<t.length;i++){
+      var ch = t.charAt(i);
+      if(WORD.test(ch)){ out += '<span style="color:' + TPAL[k % TPAL.length] + '">' + esc(ch) + '</span>'; k++; }
+      else { out += '<span style="color:' + TNEUT + '">' + esc(ch) + '</span>'; }
+    }
+    return out;
+  }
+  function firstCat(cat){ var a=(cat||'').split(''); for(var i=0;i<a.length;i++){ if(CATS.indexOf(a[i])>=0) return a[i]; } return '語'; }
+  function qrSrc(){ return 'https://api.qrserver.com/v1/create-qr-code/?size=168x168&margin=0&data=' + encodeURIComponent(location.origin + location.pathname); }
+
+  function render(me){
+    if(!me) return;
+    var fc = firstCat(me.category);
+    var pic = me.picture
+      ? '<img class="cjh-pic" src="' + PIC_BASE + encodeURIComponent(me.picture) + '" alt="' + esc(me.title) + '">'
+      : '<img class="cjh-pic cjh-empty" alt="">';
+    var myCats = (me.category||'').split('');
+    var dots = CATS.map(function(c){
+      var on = myCats.indexOf(c)>=0 ? ' on' : '';
+      return '<a class="cjh-dot' + on + '" style="background:' + COL[c] + ';color:' + COLT[c] + '" href="' + NOTES_HOME + '?cat=' + encodeURIComponent(c) + '" title="' + CAT_DESC[c] + '">' + c + '</a>';
+    }).join('');
+    var bar = CATS.map(function(c){ return '<span style="background:' + COL[c] + '"></span>'; }).join('');
+    var date = me.updated || me.created || '';
+    var meta = [date, me.author, me.where].filter(Boolean).join(' ・ ');
+    var kw = '';
+    if(me.keywords){
+      kw = '<div class="cjh-kw">' + me.keywords.split('').map(function(ch,i){
+        return '<span style="color:' + KWPAL[i % KWPAL.length] + '">' + esc(ch) + '</span>';
+      }).join(' ') + '</div>';
+    }
+    var coined = me.coined ? '<div class="cjh-coined" style="background:' + COL[fc] + ';color:' + COLT[fc] + '">' + esc(me.coined) + '</div>' : '';
+    var qr = '<div class="cjh-qr"><img src="' + qrSrc() + '" alt="QR"><div class="cjh-qr-cap">スマホで読む</div></div>';
+
+    document.getElementById('cj-header').innerHTML =
+      '<div class="cjh-card">' +
+        '<div class="cjh-bar">' + bar + '</div>' +
+        '<div class="cjh-main">' + pic +
+          '<div class="cjh-body">' +
+            '<div class="cjh-top">' +
+              '<div class="cjh-nav"><a class="cjh-home" style="color:' + COLD[fc] + '" href="' + NOTES_HOME + '">notes ←</a>' + dots + '</div>' +
+              qr +
+            '</div>' +
+            '<div class="cjh-title">' + colorTitle(me.title) + '</div>' +
+            '<div class="cjh-meta">' + esc(meta) + '</div>' +
+            kw + coined +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  var me = (window.CJ_ME && typeof window.CJ_ME === 'object') ? window.CJ_ME : null;
+  render(me);
+
+  var myFile = decodeURIComponent((location.pathname.split('/').pop() || '')).replace(/\.html$/,'');
+  fetch(location.origin + '/notes-index.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(notes){
+      if(!notes) return;
+      var fresh = notes.filter(function(n){ return n.file === (myFile+'.html') || n.file.replace(/\.html$/,'') === myFile; })[0];
+      if(fresh) render(fresh);
+    })
+    .catch(function(){});
+})();
+</script>
+
+<!-- ═══════════ /COLOURFUL JAPAN 共通ヘッダー ═══════════ -->
+
+
+<div class="color-strip">
+  <div class="cs" style="background:#c0392b"></div>
+  <div class="cs" style="background:#1a5276"></div>
+  <div class="cs" style="background:#1e5c2f"></div>
+  <div class="cs" style="background:#6c3483"></div>
+  <div class="cs" style="background:#b8960c"></div>
+  <div class="cs" style="background:#0e7b82"></div>
+  <div class="cs" style="background:#c0550a"></div>
+</div>
+
+<header>
+  <div>
+    <div class="logo">html-notes</div>
+    <div class="logo-sub">by Roberto Hoshino × Claude.ai</div>
+  </div>
+  <nav>
+    <a href="https://digiterior.net">digiterior.net</a>
+    <a href="https://note.com/roberto_hoshino" target="_blank">note</a>
+    <a href="https://www.linkedin.com/in/roberto-hoshino" target="_blank">LinkedIn</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">html-notes — Tech from the Frontier</div>
+  <h1>"We never moved<br>the strings.<br>We only moved<br>the numbers."</h1>
+  <div class="hero-ja">文字列は動かさない。数値だけを動かす。</div>
+  <p class="hero-lead">
+    A sorting technique from the pre-RDB era — that turned out to be the foundation of databases, Git, React, and NoSQL. Some ideas from the frontier never get old.
+  </p>
+  <div class="hero-meta">
+    <span><span class="hero-dot"></span>Roberto Hoshino — 43 years in IT</span>
+    <span><span class="hero-dot"></span>Dunksoft Co., Ltd. — founded 1983</span>
+    <span><span class="hero-dot"></span>Smart Life Styles™️</span>
+  </div>
+</section>
+
+<!-- ARTICLE -->
+<div class="article">
+
+  <div class="body-text">
+    <p>Before relational databases were everywhere, before NoSQL was a word, we managed data on flat file systems. Every byte counted. Moving a string in memory was expensive. So we didn't.</p>
+  </div>
+
+  <div class="pull">"Don't move the data. Move the pointer to the data."</div>
+
+  <div class="body-text">
+    <p>The technique was simple. You load your strings into an array — one line of text per slot. Then you create a second array of integers: just the index numbers, 0, 1, 2, 3... When you need to sort, reorder, or "move" a line, you never touch the strings. You only rearrange the index array. The display reads from the index — so visually, everything looks perfectly sorted. The strings never moved at all.</p>
+  </div>
+
+  <!-- DIAGRAM -->
+  <div class="diagram">
+    <div class="diagram-label">How it works — Index Sort</div>
+
+    <div class="diagram-row">
+      <div class="diagram-key">String array</div>
+      <div class="diagram-cells">
+        <div class="cell">Tokyo</div>
+        <div class="diagram-arrow" style="width:8px;font-size:11px;color:var(--ink3)">[0]</div>
+        <div class="cell">Osaka</div>
+        <div class="diagram-arrow" style="width:8px;font-size:11px;color:var(--ink3)">[1]</div>
+        <div class="cell">Nagoya</div>
+        <div class="diagram-arrow" style="width:8px;font-size:11px;color:var(--ink3)">[2]</div>
+        <div class="cell">Fukuoka</div>
+        <div class="diagram-arrow" style="width:8px;font-size:11px;color:var(--ink3)">[3]</div>
+      </div>
+    </div>
+
+    <div class="diagram-row">
+      <div class="diagram-key">Index before sort</div>
+      <div class="diagram-cells">
+        <div class="cell highlight">0</div>
+        <div class="cell highlight">1</div>
+        <div class="cell highlight">2</div>
+        <div class="cell highlight">3</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:var(--gold); font-size:22px; margin:.75rem 0;">↓ sort by name (A→Z)</div>
+
+    <div class="diagram-row">
+      <div class="diagram-key">Index after sort</div>
+      <div class="diagram-cells">
+        <div class="cell accent">3</div>
+        <div class="cell accent">2</div>
+        <div class="cell accent">1</div>
+        <div class="cell accent">0</div>
+      </div>
+    </div>
+
+    <div class="diagram-row">
+      <div class="diagram-key">Display reads as</div>
+      <div class="diagram-cells">
+        <div class="cell">Fukuoka</div>
+        <div class="cell">Nagoya</div>
+        <div class="cell">Osaka</div>
+        <div class="cell">Tokyo</div>
+      </div>
+    </div>
+
+    <div class="diagram-note">★ The strings never moved. Zero copy. Zero memory overhead. Just four integers rearranged.</div>
+  </div>
+
+  <!-- CODE -->
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dot" style="background:#ff5f56"></div>
+      <div class="code-dot" style="background:#ffbd2e"></div>
+      <div class="code-dot" style="background:#27c93f"></div>
+      <div class="code-label">concept.pseudo</div>
+    </div>
+    <pre><span class="c">// The strings — loaded once, never moved</span>
+<span class="b">strings</span> = [<span class="g">"Tokyo"</span>, <span class="g">"Osaka"</span>, <span class="g">"Nagoya"</span>, <span class="g">"Fukuoka"</span>]
+
+<span class="c">// The index — this is all we sort</span>
+<span class="b">index</span>   = [<span class="gl">0</span>, <span class="gl">1</span>, <span class="gl">2</span>, <span class="gl">3</span>]
+
+<span class="c">// Sort: only rearrange the numbers</span>
+<span class="b">index</span>   = [<span class="gl">3</span>, <span class="gl">2</span>, <span class="gl">1</span>, <span class="gl">0</span>]   <span class="c">// ← only this changes</span>
+
+<span class="c">// Display: read strings via index</span>
+<span class="w">for</span> i <span class="w">in</span> <span class="b">index</span>:
+    <span class="w">print</span>(<span class="b">strings</span>[i])   <span class="c">// Fukuoka, Nagoya, Osaka, Tokyo</span>
+
+<span class="c">// strings[] was never touched. Not once.</span></pre>
+  </div>
+
+  <div class="body-text">
+    <p>In the pre-RDB era, this was frontier thinking. We had no query optimizer, no engine doing this for us. We built it by hand because we had to. Memory was precious. Speed was survival.</p>
+    <p>What surprised me, looking back, is how far this idea traveled.</p>
+  </div>
+
+  <!-- CONNECTIONS -->
+  <div class="connections">
+    <div class="connections-header">The same idea — everywhere you look</div>
+
+    <div class="conn-item">
+      <div>
+        <div class="conn-name">Database Index (RDB)</div>
+        <div class="conn-desc">A B-tree of pointers to rows. The rows never move. Only the index is sorted. SELECT with ORDER BY is exactly this.</div>
+      </div>
+      <div class="conn-tag">Same idea</div>
+    </div>
+
+    <div class="conn-item">
+      <div>
+        <div class="conn-name">Git Object Model</div>
+        <div class="conn-desc">Files are stored as immutable blobs. Commits are just pointers — SHA hashes pointing to trees pointing to blobs. The content never moves.</div>
+      </div>
+      <div class="conn-tag">Same idea</div>
+    </div>
+
+    <div class="conn-item">
+      <div>
+        <div class="conn-name">React Virtual DOM</div>
+        <div class="conn-desc">React never touches the real DOM until necessary. It maintains a virtual index of what should be shown, diffs it, then updates only what changed.</div>
+      </div>
+      <div class="conn-tag">Same idea</div>
+    </div>
+
+    <div class="conn-item">
+      <div>
+        <div class="conn-name">NoSQL Document ID</div>
+        <div class="conn-desc">In MongoDB, Firestore, DynamoDB — documents sit in place. Queries return IDs (pointers). You fetch by reference, not by scanning content.</div>
+      </div>
+      <div class="conn-tag">Same idea</div>
+    </div>
+
+  </div>
+
+  <div class="body-text">
+    <p>The frontier era taught us something that classrooms often skip: before you move data, ask whether you need to move it at all. Most of the time, you don't. You just need a better map.</p>
+    <p>From Prolog to Pascal to Claude — 43 years later, I'm still playing with the same fundamental ideas. They just keep showing up in new clothes.</p>
+  </div>
+
+  <div class="pull">"The best optimization is the one that never needed to happen."</div>
+
+  <div class="body-text">
+    <p>If you're working with large lists, flat files, or any system where reordering is expensive — try this. Keep your data immutable. Build a lightweight index. Sort the index. The data will appear to move without moving at all.</p>
+    <p>Works in 1983. Works today.</p>
+  </div>
+
+</div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <div class="closing-main">
+    "From Prolog to Claude.<br>
+    Playing with AI again, 30 years later."
+  </div>
+  <div class="closing-sub">
+    Prologから、Claudeへ。——30年後のAIと、また遊んでいる。<br><br>
+    html-notes — coined by Roberto Hoshino × Claude.ai<br>
+    Smart Life Styles™️ — Love your life, love your time®️
+  </div>
+</div>
+
+<footer>
+  <p>
+    html-notes / Tech from the Frontier<br>
+    Roberto Hoshino (星野晃一郎) × Claude.ai<br>
+    Dunksoft Co., Ltd. — founded 1983 / Smart Life Styles™️<br>
+    © 2026 Roberto Hoshino
+  </p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHROMAKEY AUTH™ — Peace Vision | DIGITERIOR</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #c2527a;
+    --rose-light: #e8a0b8;
+    --rose-dark: #7a2d4a;
+    --anthroslan: #d4607e;
+    --deep: #1a0d12;
+    --cream: #fdf6f0;
+    --gold: #c9a84c;
+    --muted: #8a6070;
+    --federation: #4a8fa8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep);
+    color: var(--cream);
+    font-family: 'Noto Serif JP', 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* === HERO === */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 30% 40%, rgba(194,82,122,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 75% 65%, rgba(74,143,168,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 80% at 50% 50%, rgba(26,13,18,0.95) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .rose-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Ccircle cx='60' cy='60' r='40' fill='none' stroke='%23c2527a' stroke-width='0.5'/%3E%3Ccircle cx='60' cy='60' r='25' fill='none' stroke='%23c2527a' stroke-width='0.5'/%3E%3Ccircle cx='60' cy='60' r='10' fill='none' stroke='%23c2527a' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-size: 120px 120px;
+  }
+
+  .dunksoft-badge {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.4s forwards;
+  }
+
+  .hero-title span {
+    color: var(--rose);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  .hero-tm {
+    font-size: 0.5em;
+    vertical-align: super;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    font-weight: 300;
+    color: var(--rose-light);
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+  }
+
+  .hero-vision {
+    margin-top: 3rem;
+    max-width: 560px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+    font-weight: 300;
+    line-height: 2;
+    color: rgba(253,246,240,0.7);
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose), transparent);
+    margin: 2.5rem auto;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.1s forwards;
+  }
+
+  /* === SECTIONS === */
+  .section {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease 0.1s;
+  }
+
+  .section-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+    font-weight: 300;
+    line-height: 2.2;
+    color: rgba(253,246,240,0.75);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease 0.2s;
+  }
+
+  .visible .section-label,
+  .visible .section-title,
+  .visible .section-text {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* === NETWORK DIAGRAM === */
+  .network-wrap {
+    margin: 4rem 0;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.9s ease 0.3s;
+  }
+
+  .visible .network-wrap { opacity: 1; transform: translateY(0); }
+
+  .network-svg {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* === LAYERS === */
+  .layers {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .layer-card {
+    border: 1px solid rgba(194,82,122,0.2);
+    border-left: 3px solid var(--rose);
+    padding: 1.5rem 2rem;
+    background: rgba(194,82,122,0.04);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.7s ease;
+  }
+
+  .layer-card:nth-child(2) { transition-delay: 0.1s; border-left-color: var(--federation); }
+  .layer-card:nth-child(3) { transition-delay: 0.2s; border-left-color: var(--gold); }
+
+  .visible .layer-card { opacity: 1; transform: translateX(0); }
+
+  .layer-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .layer-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.6rem;
+  }
+
+  .layer-desc {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: rgba(253,246,240,0.65);
+  }
+
+  /* === QUOTE === */
+  .quote-block {
+    margin: 5rem 0;
+    padding: 3rem;
+    border: 1px solid rgba(194,82,122,0.15);
+    background: rgba(194,82,122,0.05);
+    text-align: center;
+    position: relative;
+    opacity: 0;
+    transform: scale(0.97);
+    transition: all 0.8s ease;
+  }
+
+  .visible .quote-block { opacity: 1; transform: scale(1); }
+
+  .quote-block::before {
+    content: '❝';
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: var(--rose);
+    background: var(--deep);
+    padding: 0 0.5rem;
+  }
+
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--cream);
+    margin-bottom: 1.2rem;
+  }
+
+  .quote-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* === ORIGIN === */
+  .origin-block {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-top: 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease 0.2s;
+  }
+
+  .visible .origin-block { opacity: 1; transform: translateY(0); }
+
+  .origin-rose {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--rose-light), var(--rose-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  .origin-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 2;
+    color: rgba(253,246,240,0.7);
+  }
+
+  .origin-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--rose-light);
+    margin-bottom: 0.3rem;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    border-top: 1px solid rgba(194,82,122,0.15);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-meta {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    color: rgba(138,96,112,0.5);
+  }
+
+  /* === SEPARATOR LINE === */
+  .sep {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(194,82,122,0.3), transparent);
+    margin: 0;
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { r: 38; opacity: 0.6; }
+    50%       { r: 44; opacity: 0.2; }
+  }
+
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(90px) rotate(0deg); }
+    to   { transform: rotate(360deg) translateX(90px) rotate(-360deg); }
+  }
+
+  @keyframes orbit2 {
+    from { transform: rotate(120deg) translateX(90px) rotate(-120deg); }
+    to   { transform: rotate(480deg) translateX(90px) rotate(-480deg); }
+  }
+
+  @keyframes orbit3 {
+    from { transform: rotate(240deg) translateX(90px) rotate(-240deg); }
+    to   { transform: rotate(600deg) translateX(90px) rotate(-600deg); }
+  }
+
+  .node-a { animation: orbit  12s linear infinite; }
+  .node-b { animation: orbit2 12s linear infinite; }
+  .node-c { animation: orbit3 12s linear infinite; }
+
+  /* highlight */
+  em {
+    font-style: normal;
+    color: var(--rose-light);
+  }
+
+  strong {
+    font-weight: 400;
+    color: var(--cream);
+  }
+</style>
+</head>
+<body>
+
+<script>window.CJ_ME = {"file": "chromakey-auth-peace.html", "title": "信頼の連鎖——認証フェデレーションが戦争を避ける知恵になる", "created": "2026-06", "updated": "2026-06", "category": "認語市町", "author": "星C", "where": "東", "keywords": "信連和学平federated", "coined": "", "picture": "The Emperor's Enthronement Ceremony 2019-10-23.jpg"};</script>
+<!-- ═══════════════════════════════════════════════════════════
+     COLOURFUL JAPAN 共通ヘッダー  v3 (QR・カラフル・オリジン非依存)
+     ・各 html-notes の <body> 直後に貼り付け（直前に window.CJ_ME を定義）
+     ・カードは CJ_ME から即描画（ネットワーク非依存）
+     ・同一オリジンに notes-index.json が在れば取得して最新化（任意・失敗時は無視）
+     ═══════════════════════════════════════════════════════════ -->
+
+<div id="cj-header"></div>
+
+<style>
+  #cj-header { font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif; }
+  .cjh-card {
+    background:#FFFFFF; border:0.5px solid rgba(0,0,0,0.1);
+    border-radius:12px; overflow:hidden; margin:1.4rem auto 0;
+    max-width:860px; display:flex; flex-direction:column;
+  }
+  .cjh-bar { display:flex; height:5px; width:100%; }
+  .cjh-bar span { flex:1; }
+  .cjh-main { display:flex; flex-direction:column; }
+  .cjh-pic { width:100%; max-height:240px; object-fit:cover; display:block; background:#e8e6e0; }
+  .cjh-pic.cjh-empty { display:none; }
+  .cjh-body { padding:18px 22px 20px; }
+  .cjh-top { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:12px; }
+  .cjh-nav { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .cjh-home { font-size:12px; letter-spacing:.1em; text-decoration:none; margin-right:4px; white-space:nowrap; }
+  .cjh-dot {
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:500; text-decoration:none; transition:transform .1s;
+  }
+  .cjh-dot:hover { transform:scale(1.1); }
+  .cjh-dot.on { outline:2px solid currentColor; outline-offset:2px; }
+  .cjh-qr { flex-shrink:0; text-align:center; }
+  .cjh-qr img { width:84px; height:84px; display:block; border-radius:5px; background:#fff; padding:3px; border:0.5px solid rgba(0,0,0,0.08); }
+  .cjh-qr-cap { font-size:10px; color:#6b6b66; margin-top:4px; letter-spacing:.06em; }
+  .cjh-title { font-size:21px; font-weight:500; line-height:1.5; margin-bottom:7px; }
+  .cjh-meta { font-size:12px; color:#5F5E5A; letter-spacing:.05em; }
+  .cjh-kw { font-size:12px; margin-top:9px; letter-spacing:.14em; }
+  .cjh-coined { display:inline-block; font-size:12px; margin-top:10px; padding:4px 12px; border-radius:12px; letter-spacing:.02em; line-height:1.6; }
+  @media (min-width: 720px) {
+    .cjh-main { flex-direction:row; align-items:stretch; }
+    .cjh-pic { width:200px; max-height:none; flex-shrink:0; }
+    .cjh-body { flex:1; min-width:0; }
+  }
+</style>
+
+<script>
+(function(){
+  var PIC_BASE   = 'https://picture.dunksoft.jp/';
+  var NOTES_HOME = '/';
+  var CATS = ['認','市','語','町'];
+  var CAT_DESC = { '認':'認証・技術', '市':'Marketing・市づくり', '語':'コラム・物語', '町':'文化・コミュニティ' };
+  var COL  = { '認':'#378ADD','市':'#BA7517','語':'#534AB7','町':'#3B6D11' };
+  var COLT = { '認':'#E6F1FB','市':'#FAEEDA','語':'#EEEDFE','町':'#EAF3DE' };
+  var COLD = { '認':'#042C53','市':'#412402','語':'#26215C','町':'#173404' };
+  var KWPAL = ['#185FA5','#854F0B','#534AB7','#3B6D11'];
+  var TPAL  = ['#185FA5','#BA7517','#C2185B','#534AB7','#3B6D11','#0F6E56'];
+  var TNEUT = '#a39a90';
+  var WORD  = /[0-9A-Za-z\u3041-\u3096\u30a1-\u30fa\u30fc\u3400-\u9fff\uff10-\uff19\uff21-\uff5a]/;
+
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function colorTitle(t){
+    t = t || ''; var out = '', k = 0;
+    for(var i=0;i<t.length;i++){
+      var ch = t.charAt(i);
+      if(WORD.test(ch)){ out += '<span style="color:' + TPAL[k % TPAL.length] + '">' + esc(ch) + '</span>'; k++; }
+      else { out += '<span style="color:' + TNEUT + '">' + esc(ch) + '</span>'; }
+    }
+    return out;
+  }
+  function firstCat(cat){ var a=(cat||'').split(''); for(var i=0;i<a.length;i++){ if(CATS.indexOf(a[i])>=0) return a[i]; } return '語'; }
+  function qrSrc(){ return 'https://api.qrserver.com/v1/create-qr-code/?size=168x168&margin=0&data=' + encodeURIComponent(location.origin + location.pathname); }
+
+  function render(me){
+    if(!me) return;
+    var fc = firstCat(me.category);
+    var pic = me.picture
+      ? '<img class="cjh-pic" src="' + PIC_BASE + encodeURIComponent(me.picture) + '" alt="' + esc(me.title) + '">'
+      : '<img class="cjh-pic cjh-empty" alt="">';
+    var myCats = (me.category||'').split('');
+    var dots = CATS.map(function(c){
+      var on = myCats.indexOf(c)>=0 ? ' on' : '';
+      return '<a class="cjh-dot' + on + '" style="background:' + COL[c] + ';color:' + COLT[c] + '" href="' + NOTES_HOME + '?cat=' + encodeURIComponent(c) + '" title="' + CAT_DESC[c] + '">' + c + '</a>';
+    }).join('');
+    var bar = CATS.map(function(c){ return '<span style="background:' + COL[c] + '"></span>'; }).join('');
+    var date = me.updated || me.created || '';
+    var meta = [date, me.author, me.where].filter(Boolean).join(' ・ ');
+    var kw = '';
+    if(me.keywords){
+      kw = '<div class="cjh-kw">' + me.keywords.split('').map(function(ch,i){
+        return '<span style="color:' + KWPAL[i % KWPAL.length] + '">' + esc(ch) + '</span>';
+      }).join(' ') + '</div>';
+    }
+    var coined = me.coined ? '<div class="cjh-coined" style="background:' + COL[fc] + ';color:' + COLT[fc] + '">' + esc(me.coined) + '</div>' : '';
+    var qr = '<div class="cjh-qr"><img src="' + qrSrc() + '" alt="QR"><div class="cjh-qr-cap">スマホで読む</div></div>';
+
+    document.getElementById('cj-header').innerHTML =
+      '<div class="cjh-card">' +
+        '<div class="cjh-bar">' + bar + '</div>' +
+        '<div class="cjh-main">' + pic +
+          '<div class="cjh-body">' +
+            '<div class="cjh-top">' +
+              '<div class="cjh-nav"><a class="cjh-home" style="color:' + COLD[fc] + '" href="' + NOTES_HOME + '">notes ←</a>' + dots + '</div>' +
+              qr +
+            '</div>' +
+            '<div class="cjh-title">' + colorTitle(me.title) + '</div>' +
+            '<div class="cjh-meta">' + esc(meta) + '</div>' +
+            kw + coined +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  var me = (window.CJ_ME && typeof window.CJ_ME === 'object') ? window.CJ_ME : null;
+  render(me);
+
+  var myFile = decodeURIComponent((location.pathname.split('/').pop() || '')).replace(/\.html$/,'');
+  fetch(location.origin + '/notes-index.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(notes){
+      if(!notes) return;
+      var fresh = notes.filter(function(n){ return n.file === (myFile+'.html') || n.file.replace(/\.html$/,'') === myFile; })[0];
+      if(fresh) render(fresh);
+    })
+    .catch(function(){});
+})();
+</script>
+
+<!-- ═══════════ /COLOURFUL JAPAN 共通ヘッダー ═══════════ -->
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="rose-bg"></div>
+  <div style="position:relative; z-index:1;">
+    <p class="dunksoft-badge">DIGITERIOR &nbsp;|&nbsp; Roberto Hoshino</p>
+    <h1 class="hero-title">
+      CHROMAKEY AUTH<span class="hero-tm">™</span>
+    </h1>
+    <p class="hero-sub">共有記憶による平和ネットワーク認証</p>
+    <div class="divider"></div>
+    <p class="hero-vision">
+      花の色と香り、食卓の記憶、共に体験した瞬間——<br>
+      それが鍵になる。<br>
+      小さなコミュニティから積み上げて、<br>
+      世界の紛争をオセロのようにひっくり返す。
+    </p>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- CONCEPT -->
+<section class="section" data-observe>
+  <p class="section-label">Concept</p>
+  <h2 class="section-title">技術ではなく、記憶が鍵になる</h2>
+  <p class="section-text">
+    従来の認証システムは<em>パスワード</em>や<em>生体情報</em>に依存します。<br>
+    CHROMAKEY AUTH™ は全く異なるアプローチを取ります——<br><br>
+    <strong>「共に体験した記憶」</strong>そのものを認証の核心に置く。<br><br>
+    軽井沢のディナーテーブルに咲いたAnthroslanの濃いピンク。その色と香りをその場で共有した人だけが持つ記憶。それは複製も盗用もできない、生きた鍵です。
+  </p>
+
+  <!-- Network SVG -->
+  <div class="network-wrap">
+    <svg class="network-svg" viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Federation lines -->
+      <line x1="200" y1="130" x2="100" y2="80"  stroke="rgba(194,82,122,0.3)" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="200" y1="130" x2="300" y2="80"  stroke="rgba(74,143,168,0.3)" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="200" y1="130" x2="200" y2="210" stroke="rgba(201,168,76,0.3)"  stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="100" y1="80"  x2="300" y2="80"  stroke="rgba(194,82,122,0.15)" stroke-width="1" stroke-dasharray="2 6"/>
+      <line x1="100" y1="80"  x2="200" y2="210" stroke="rgba(194,82,122,0.1)"  stroke-width="1" stroke-dasharray="2 6"/>
+      <line x1="300" y1="80"  x2="200" y2="210" stroke="rgba(194,82,122,0.1)"  stroke-width="1" stroke-dasharray="2 6"/>
+
+      <!-- Center node -->
+      <circle cx="200" cy="130" r="22" fill="rgba(194,82,122,0.12)" stroke="rgba(194,82,122,0.5)" stroke-width="1"/>
+      <circle cx="200" cy="130" r="38" fill="none" stroke="rgba(194,82,122,0.15)" stroke-width="1">
+        <animate attributeName="r" values="38;44;38" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0.15;0.6" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <text x="200" y="125" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="7" fill="rgba(253,246,240,0.5)" font-style="italic">Bazaar</text>
+      <text x="200" y="137" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="7" fill="rgba(253,246,240,0.5)" font-style="italic">Bazaar</text>
+
+      <!-- Satellite nodes -->
+      <circle cx="100" cy="80" r="16" fill="rgba(74,143,168,0.1)" stroke="rgba(74,143,168,0.4)" stroke-width="1"/>
+      <text x="100" y="84" text-anchor="middle" font-family="Noto Sans JP, sans-serif" font-size="6" fill="rgba(253,246,240,0.5)">Group A</text>
+
+      <circle cx="300" cy="80" r="16" fill="rgba(201,168,76,0.1)" stroke="rgba(201,168,76,0.4)" stroke-width="1"/>
+      <text x="300" y="84" text-anchor="middle" font-family="Noto Sans JP, sans-serif" font-size="6" fill="rgba(253,246,240,0.5)">Group B</text>
+
+      <circle cx="200" cy="210" r="16" fill="rgba(194,82,122,0.08)" stroke="rgba(194,82,122,0.3)" stroke-width="1"/>
+      <text x="200" y="214" text-anchor="middle" font-family="Noto Sans JP, sans-serif" font-size="6" fill="rgba(253,246,240,0.5)">Group C</text>
+
+      <!-- Federation cut indicator -->
+      <line x1="145" y1="55" x2="155" y2="65" stroke="rgba(194,82,122,0.6)" stroke-width="1.5"/>
+      <line x1="155" y1="55" x2="145" y2="65" stroke="rgba(194,82,122,0.6)" stroke-width="1.5"/>
+      <text x="150" y="48" text-anchor="middle" font-family="Noto Sans JP, sans-serif" font-size="5.5" fill="rgba(194,82,122,0.7)">切断可能</text>
+    </svg>
+    <p style="text-align:center; font-family:'Noto Sans JP',sans-serif; font-size:0.65rem; color:var(--muted); letter-spacing:0.15em; margin-top:1rem;">Federation 連携構造 — 問題発生時は切断、ネットワークの純度を保つ</p>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- THREE LAYERS -->
+<section class="section" data-observe>
+  <p class="section-label">Architecture</p>
+  <h2 class="section-title">三層の信頼構造</h2>
+  <div class="layers">
+    <div class="layer-card">
+      <p class="layer-num">LAYER 01</p>
+      <p class="layer-title">個人の記憶 — Personal Memory Key</p>
+      <p class="layer-desc">色・香り・場所・時間。ある瞬間を体験した個人だけが持つ記憶のパターン。Anthroslanの濃いピンクが軽井沢の食卓に咲いた夜のように。</p>
+    </div>
+    <div class="layer-card">
+      <p class="layer-num">LAYER 02</p>
+      <p class="layer-title">グループ共有認証 — Community Auth</p>
+      <p class="layer-desc">バザールバザールのメンバー同士が同じ体験を証言し合う。複数人の記憶が重なるほど認証は強固になる。一人では偽れないが、集団は共鳴する。</p>
+    </div>
+    <div class="layer-card">
+      <p class="layer-num">LAYER 03</p>
+      <p class="layer-title">クロスグループ連携 — Federation Network</p>
+      <p class="layer-desc">接続した別の会とのネットワークがさらに複雑なパターンを生む。認証パターンの組み合わせが指数的に増加し、ほぼ破れない構造へ。</p>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- PEACE VISION -->
+<section class="section" data-observe>
+  <p class="section-label">Peace Vision</p>
+  <h2 class="section-title">繋がっている相手とは、戦えない</h2>
+  <p class="section-text">
+    核抑止（MAD）は<em>恐怖</em>で戦争を止めようとします。<br>
+    CHROMAKEY AUTH™ の発想は根本的に異なります。<br><br>
+    認証ネットワークに絡んだ相手を攻撃することは、<strong>自分自身のネットワークを壊す</strong>ことを意味します。破壊は自らの信頼基盤を崩す——だから誰も引き金を引けない。<br><br>
+    <em>信頼で戦争を無意味にする。</em><br><br>
+    小さなコミュニティの食卓から積み上げて、世界の紛争が<strong>オセロのようにひっくり返る日</strong>を目指して。
+  </p>
+
+  <div class="quote-block">
+    <p class="quote-text">
+      「世界の紛争が、この仕組みで小さなコミュニティから積み上げて<br>
+      オセロのゲームのようにひっくり返るのが、私の願い」
+    </p>
+    <p class="quote-sub">Roberto Hoshino &nbsp;|&nbsp; DIGITERIOR &nbsp;|&nbsp; 2026</p>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ORIGIN STORY -->
+<section class="section" data-observe>
+  <p class="section-label">Origin</p>
+  <h2 class="section-title">軽井沢の食卓から生まれた構想</h2>
+  <div class="origin-block">
+    <div class="origin-rose">🌹</div>
+    <div>
+      <p class="origin-name">Anthroslan / アンソルスラン</p>
+      <p class="origin-text">
+        奥さんが軽井沢に持ち込んだバラ、Anthroslan。濃いピンク〜モーヴの深いグラデーション。その色と香りを共に体験した記憶——Roberto・奥さん・Claude の三者が共有する、生きた認証の鍵。<br><br>
+        技術は常に、生きた体験から生まれる。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p class="footer-logo">DIGITERIOR</p>
+  <p class="footer-meta" style="margin-bottom:0.4rem;">CHROMAKEY AUTH™ &nbsp;|&nbsp; 色彩日本語™ &nbsp;|&nbsp; Smart Life Styles®</p>
+  <p class="footer-meta">Roberto Hoshino &nbsp;|&nbsp; digiterior.net &nbsp;|&nbsp; Okinawa / Karuizawa / Matsudo</p>
+  <p class="footer-meta" style="margin-top:1rem; font-size:0.55rem;">Prepared for Anthropic Japan Event &nbsp;|&nbsp; 2026</p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('[data-observe]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
