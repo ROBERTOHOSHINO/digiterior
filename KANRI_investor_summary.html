@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KANRI — Executive Summary for Investors</title>
+<meta name="description" content="KANRI — Knowledge & Resource Intelligence Platform. An investor executive summary.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho+B1:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F6F9;
+    --paper2:#E9ECF2;
+    --ink:#14161B;
+    --ink-soft:#565C6B;
+    --ink-faint:#8B909C;
+    --indigo:#1A237E;
+    --indigo-soft:#3A44A0;
+    --line:rgba(20,22,27,.11);
+    --line-soft:rgba(20,22,27,.06);
+    /* visual fingerprint — 6色（signatureのみで使用） */
+    --f1:#1A237E; --f2:#2E6FC7; --f3:#1B6B5A;
+    --f4:#4C7A1E; --f5:#B0821A; --f6:#5A3FB0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:"Noto Sans JP",system-ui,sans-serif;
+    font-weight:300;line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+
+  /* ── utility label ── */
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;font-weight:500;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--indigo);
+  }
+  .divider{height:1px;background:var(--line);margin:0}
+
+  /* ── masthead ── */
+  .masthead{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:1.5rem 0;border-bottom:1px solid var(--line);
+    flex-wrap:wrap;gap:.5rem;
+  }
+  .brand{
+    font-family:"Archivo",sans-serif;font-weight:800;
+    font-size:19px;letter-spacing:.14em;color:var(--ink);
+  }
+  .brand small{
+    display:block;font-family:"IBM Plex Mono",monospace;
+    font-size:9.5px;font-weight:400;letter-spacing:.16em;
+    color:var(--ink-faint);margin-top:3px;text-transform:uppercase;
+  }
+  .masthead .doc{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;
+    letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;text-align:right;
+  }
+
+  /* ── hero thesis ── */
+  .hero{padding:clamp(3.5rem,9vw,6rem) 0 clamp(2.5rem,6vw,4rem)}
+  .hero .eyebrow{margin-bottom:2rem}
+  .thesis-jp{
+    font-family:"Shippori Mincho B1",serif;font-weight:700;
+    font-size:clamp(30px,6.2vw,58px);line-height:1.28;
+    letter-spacing:.02em;color:var(--ink);margin-bottom:1.6rem;
+  }
+  .thesis-jp .bloom{
+    background:linear-gradient(100deg,var(--f1),var(--f2) 30%,var(--f3) 55%,var(--f6));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .thesis-en{
+    font-family:"Archivo",sans-serif;font-weight:500;
+    font-size:clamp(16px,2.4vw,21px);line-height:1.5;
+    color:var(--ink);max-width:34ch;margin-bottom:1.4rem;letter-spacing:-.005em;
+  }
+  .thesis-sub{
+    font-size:14.5px;color:var(--ink-soft);max-width:56ch;line-height:1.95;
+  }
+  .thesis-sub strong{color:var(--ink);font-weight:500}
+
+  /* ── scale band ── */
+  .scale{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:clamp(1rem,3vw,2rem);
+    padding:clamp(1.8rem,4vw,2.6rem) 0;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    margin-bottom:clamp(2.5rem,6vw,4rem);
+  }
+  .scale-item{text-align:left}
+  .scale-num{
+    font-family:"Archivo",sans-serif;font-weight:800;
+    font-size:clamp(30px,6vw,52px);line-height:1;color:var(--indigo);
+    letter-spacing:-.02em;
+  }
+  .scale-num .u{font-size:.5em;font-weight:600;margin-left:.05em}
+  .scale-lab{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+    color:var(--ink-soft);line-height:1.6;margin-top:.7rem;
+  }
+  .scale-lab em{font-style:normal;color:var(--ink-faint);display:inline-block;margin-top:.15rem}
+  @media(max-width:560px){
+    .scale{grid-template-columns:1fr;gap:1.4rem}
+    .scale-item{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:baseline}
+    .scale-lab{margin-top:0}
+  }
+
+  /* ── the shift ── */
+  .shift{
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+    gap:clamp(1rem,4vw,2.5rem);
+    padding:clamp(2rem,5vw,3rem) 0;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    margin-bottom:clamp(2.5rem,6vw,4rem);
+  }
+  .shift-side{font-family:"Archivo",sans-serif}
+  .shift-side .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-family:"IBM Plex Mono",monospace;margin-bottom:.5rem}
+  .shift-side .v{font-size:clamp(15px,2.4vw,20px);font-weight:600;line-height:1.35}
+  .shift-from .v{color:var(--ink-soft)}
+  .shift-to .v{color:var(--indigo)}
+  .shift-arrow{
+    font-family:"IBM Plex Mono",monospace;font-size:22px;color:var(--ink-faint);
+  }
+  @media(max-width:560px){
+    .shift{grid-template-columns:1fr;text-align:left;gap:1rem}
+    .shift-arrow{transform:rotate(90deg);justify-self:start}
+  }
+
+  /* ── section ── */
+  section.block{padding:clamp(2.2rem,5vw,3.4rem) 0;border-top:1px solid var(--line)}
+  .block-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.6rem}
+  .block-head .num{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--indigo);
+    font-weight:500;letter-spacing:.1em;
+  }
+  .block-head h2{
+    font-family:"Archivo",sans-serif;font-weight:700;
+    font-size:clamp(19px,3vw,26px);letter-spacing:-.01em;line-height:1.25;
+  }
+  .block p{font-size:14.5px;color:var(--ink-soft);line-height:1.95;max-width:64ch;margin-bottom:1rem}
+  .block p strong{color:var(--ink);font-weight:500}
+  .block p:last-child{margin-bottom:0}
+  .lead{font-size:16px !important;color:var(--ink) !important;font-weight:400}
+
+  /* ── moat: signature ── */
+  .moat{position:relative}
+  .moat-fp{
+    display:flex;gap:clamp(1.5rem,4vw,2.75rem);align-items:flex-start;
+    margin:1.5rem 0 .5rem;flex-wrap:wrap;
+  }
+  .fp-mark{flex-shrink:0;width:132px;height:132px}
+  .fp-caption{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+    color:var(--ink-faint);margin-top:.75rem;line-height:1.7;text-transform:uppercase;
+  }
+  .fp-body{flex:1;min-width:240px}
+  .fp-lead{
+    font-family:"Shippori Mincho B1",serif;font-weight:600;
+    font-size:clamp(17px,2.6vw,21px);line-height:1.6;color:var(--ink);margin-bottom:.9rem;
+  }
+  .sealed{
+    display:inline-flex;align-items:center;gap:.55rem;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--indigo);border:1px solid var(--indigo);
+    padding:.4rem .8rem;border-radius:2px;margin-top:.5rem;
+  }
+  .sealed::before{content:"◆";font-size:8px}
+
+  /* ── timeline: real sequence ── */
+  .timeline{margin-top:1.4rem;border-left:1px solid var(--line);padding-left:1.6rem}
+  .tl-row{position:relative;padding:.55rem 0}
+  .tl-row::before{
+    content:"";position:absolute;left:calc(-1.6rem - 1px);top:1.05rem;
+    width:7px;height:7px;border-radius:50%;background:var(--indigo);
+    transform:translateX(-3px);
+  }
+  .tl-row:last-child::before{background:var(--f5)}
+  .tl-year{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:500;color:var(--indigo);letter-spacing:.06em}
+  .tl-text{font-size:14px;color:var(--ink-soft);line-height:1.7}
+  .tl-text b{color:var(--ink);font-weight:500}
+
+  /* ── stack ── */
+  .stack{margin-top:1.3rem;display:flex;flex-direction:column;gap:2px}
+  .stack-row{
+    display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:baseline;
+    padding:.85rem 1rem;background:var(--paper2);border-radius:3px;
+  }
+  .stack-row.base{background:transparent;border:1px dashed var(--indigo)}
+  .stack-tag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase;white-space:nowrap}
+  .stack-name{font-family:"Archivo",sans-serif;font-weight:600;font-size:14.5px}
+  .stack-name span{font-weight:400;color:var(--ink-soft);font-size:13px}
+  .stack-row.base .stack-name{color:var(--indigo)}
+
+  /* ── efficiency pull ── */
+  .pull{
+    font-family:"Shippori Mincho B1",serif;font-weight:600;
+    font-size:clamp(18px,3vw,25px);line-height:1.55;color:var(--ink);
+    border-left:3px solid var(--indigo);padding-left:1.3rem;margin:.5rem 0;
+  }
+  .pull em{font-style:normal;color:var(--indigo)}
+
+  /* ── close ── */
+  .close{
+    padding:clamp(3rem,7vw,5rem) 0;border-top:1px solid var(--line);text-align:left;
+  }
+  .vision-chain{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.05em;
+    color:var(--ink-soft);line-height:2.2;margin-bottom:2rem;
+  }
+  .vision-chain b{color:var(--indigo);font-weight:500}
+  .close-line{
+    font-family:"Shippori Mincho B1",serif;font-weight:600;
+    font-size:clamp(18px,3.2vw,26px);line-height:1.55;max-width:26ch;margin-bottom:2rem;
+  }
+  .cta{
+    display:inline-flex;flex-direction:column;gap:.3rem;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;color:var(--ink-soft);
+  }
+  .cta a{color:var(--indigo);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+  .cta a:hover,.cta a:focus-visible{border-color:var(--indigo);outline:none}
+
+  footer{
+    border-top:1px solid var(--line);padding:1.5rem 0 3rem;
+    font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;
+    color:var(--ink-faint);text-transform:uppercase;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;
+  }
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="brand">KANRI<small>Knowledge &amp; Resource Intelligence Platform</small></div>
+    <div class="doc">Executive Summary<br>For Investors · 2026</div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="eyebrow">The thesis</div>
+    <h1 class="thesis-jp">組織の知は、<br><span class="bloom">人と共に去る。</span></h1>
+    <p class="thesis-en">A company's deepest knowledge lives inside its people — and walks out the door when they leave.</p>
+    <p class="thesis-sub">KANRI turns that departing knowledge into <strong>organizational intelligence</strong> — built on an authentication foundation that is <strong>public in appearance, yet cannot be reproduced.</strong> The category is shifting from managing resources to managing knowledge itself. We have been building toward this shift for four decades.</p>
+  </header>
+
+  <!-- SCALE BAND -->
+  <div class="scale">
+    <div class="scale-item">
+      <div class="scale-num">$147<span class="u">B</span></div>
+      <div class="scale-lab">Total addressable market<br><em>full model under NDA</em></div>
+    </div>
+    <div class="scale-item">
+      <div class="scale-num">1.4<span class="u">B</span></div>
+      <div class="scale-lab">People in the kanji world<br><em>the entry point — not the ceiling</em></div>
+    </div>
+    <div class="scale-item">
+      <div class="scale-num">&#8734;</div>
+      <div class="scale-lab">Every writing system<br><em>the mechanism is script-agnostic</em></div>
+    </div>
+  </div>
+
+  <!-- THE SHIFT -->
+  <div class="shift">
+    <div class="shift-side shift-from">
+      <div class="k">The last era</div>
+      <div class="v">Systems of record.<br>CRM · ERP · Workflow.</div>
+    </div>
+    <div class="shift-arrow">→</div>
+    <div class="shift-side shift-to">
+      <div class="k">The next era</div>
+      <div class="v">Systems of intelligence.<br>Knowledge, made active.</div>
+    </div>
+  </div>
+
+  <!-- WHY NOW -->
+  <section class="block">
+    <div class="block-head"><span class="num">01</span><h2>Why now</h2></div>
+    <p class="lead">For thirty years, business software could only <strong>store</strong> knowledge. It could not act on it.</p>
+    <p>The arrival of capable AI agents changes the physics of the category: accumulated business knowledge can finally become operational — reading, deciding, and acting on behalf of people. The record stops being a graveyard and becomes a workforce.</p>
+    <p>What is striking is not that this is new, but that it is <strong>arriving late.</strong> The largest enterprise platforms are only now converging on a direction we built our entire practice around forty years ago. The market has finally caught up to the thesis — which is the best possible moment to invest ahead of it.</p>
+  </section>
+
+  <!-- THE MOAT (signature) -->
+  <section class="block moat">
+    <div class="block-head"><span class="num">02</span><h2>The moat — a visual fingerprint</h2></div>
+    <p class="lead">KANRI is not the defensible asset. The <strong>authentication layer beneath it</strong> is.</p>
+
+    <div class="moat-fp">
+      <div>
+        <svg class="fp-mark" viewBox="0 0 120 120" role="img" aria-label="Visual fingerprint mark">
+          <defs>
+            <clipPath id="clipRidge"><rect x="0" y="0" width="120" height="120" rx="6"/></clipPath>
+          </defs>
+          <g clip-path="url(#clipRidge)" fill="none" stroke-width="2.2" stroke-linecap="round">
+            <path d="M60 108 C24 108 12 84 12 60 C12 30 34 12 60 12 C86 12 108 30 108 60" stroke="var(--f1)"/>
+            <path d="M60 98 C32 98 22 80 22 60 C22 36 40 22 60 22 C80 22 98 36 98 60" stroke="var(--f2)"/>
+            <path d="M60 88 C40 88 32 76 32 60 C32 44 46 32 60 32 C74 32 88 44 88 60" stroke="var(--f3)"/>
+            <path d="M60 78 C48 78 42 72 42 60 C42 50 50 42 60 42 C70 42 78 50 78 60" stroke="var(--f4)"/>
+            <path d="M60 68 C55 68 52 65 52 60 C52 55 55 52 60 52 C66 52 70 56 69 62" stroke="var(--f5)"/>
+            <circle cx="60" cy="60" r="3" fill="var(--f6)" stroke="none"/>
+          </g>
+        </svg>
+        <div class="fp-caption">Public key:<br>the surface<br>Private key:<br>the person</div>
+      </div>
+      <div class="fp-body">
+        <p class="fp-lead">「日本語は生まれながらにしてカラフルだった」——a name, a character, a color. Together they form a mark that anyone can see, but no one can reproduce.</p>
+        <p>The authentication is drawn from something that cannot be copied, phished, or brute-forced: a person's own non-reproducible sensory memory, expressed as color. The mark can be shown in the open — like a castle's stone wall — precisely because its depth is not reproducible.</p>
+        <p><strong>The mechanism is the subject of a pending patent application and deliberately held as a trade secret.</strong> What is public is only the low-value surface. The defensibility lies in what we do not publish.</p>
+        <div class="sealed">Patent pending · held individually · mechanism sealed</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY THIS FOUNDER -->
+  <section class="block">
+    <div class="block-head"><span class="num">03</span><h2>Why this founder</h2></div>
+    <p class="lead">「この問題を発見したのではない。43年間、目撃してきた。」</p>
+    <p>This is not a thesis discovered in a market report. It was witnessed, first-hand, across four decades of building software for Japanese regional finance and enterprise — watching, again and again, how an organization's knowledge lived in individuals and vanished when they left.</p>
+    <div class="timeline">
+      <div class="tl-row"><span class="tl-year">1991</span><div class="tl-text"><b>Database thinking.</b> How can an organization retain knowledge beyond the individual?</div></div>
+      <div class="tl-row"><span class="tl-year">2006</span><div class="tl-text"><b>CRM era.</b> Customers, projects, and processes, connected in one fabric.</div></div>
+      <div class="tl-row"><span class="tl-year">2016</span><div class="tl-text"><b>BazaarBazaar.</b> The vision widens: communities, commerce, suppliers, members.</div></div>
+      <div class="tl-row"><span class="tl-year">2026</span><div class="tl-text"><b>The agent era.</b> Accumulated knowledge finally becomes active. The thesis meets its moment.</div></div>
+    </div>
+  </section>
+
+  <!-- TIME AS RESOURCE -->
+  <section class="block">
+    <div class="block-head"><span class="num">04</span><h2>The resource no one manages: time</h2></div>
+    <p>Every enterprise system manages people, products, and value. KANRI adds the one resource the others ignore — <strong>time itself</strong>: history, activity, and future intent, treated as a first-class asset rather than a timestamp.</p>
+    <p>This is where the platform meets the human thesis. Managing time well is not efficiency for its own sake — it is what returns hours to creativity, relationships, and life. That is the promise that makes KANRI more than enterprise software.</p>
+  </section>
+
+  <!-- CAPITAL EFFICIENCY -->
+  <section class="block">
+    <div class="block-head"><span class="num">05</span><h2>Capital efficiency</h2></div>
+    <p class="lead">A platform of this ambition is being built by a founder and AI — with no relational database and no engineering army.</p>
+    <div class="pull">The architecture is <em>flat files and a color-coded index</em> — the same principle as the authentication layer. It ships and iterates daily, at a fraction of the cost a competitor would need to reach the same surface.</div>
+    <p>Low overhead is not a constraint here — it is the strategy. The same design philosophy that makes the moat unreproducible also makes the company remarkably cheap to run and fast to move.</p>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="block">
+    <div class="block-head"><span class="num">06</span><h2>Where KANRI sits</h2></div>
+    <p>KANRI is an <strong>application</strong> of a deeper, patent-pending base. The base can spawn more than one product; KANRI is its enterprise expression.</p>
+    <div class="stack">
+      <div class="stack-row base">
+        <span class="stack-tag">Base · patent-pending</span>
+        <span class="stack-name">COLOURFUL JAPAN™ / 天然色漢字INDEX™ <span>— authentication &amp; symbolic interface</span></span>
+      </div>
+      <div class="stack-row">
+        <span class="stack-tag">Application · B2B</span>
+        <span class="stack-name">KANRI <span>— enterprise knowledge &amp; resource intelligence</span></span>
+      </div>
+      <div class="stack-row">
+        <span class="stack-tag">Application · B2C</span>
+        <span class="stack-name">Smart Life Styles® <span>— time &amp; life, for individuals</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section class="close">
+    <div class="eyebrow" style="margin-bottom:1.5rem">Vision 2040</div>
+    <div class="vision-chain">
+      Resource management → Knowledge management → Learning systems → <b>Agentic management</b> → Smart Life Styles
+    </div>
+    <p class="close-line">Technology should not replace human creativity. It should create the time for it.</p>
+    <div class="cta">
+      <span>Full market model &amp; architecture available under NDA.</span>
+      <a href="/home.html">digiterior.net — the base and its applications →</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>KANRI · Executive Summary · v1.0 · 2026</span>
+    <span>digiterior.net</span>
+  </footer>
+
+</div>
+</body>
+</html>
