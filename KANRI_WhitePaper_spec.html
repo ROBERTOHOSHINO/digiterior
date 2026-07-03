@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KANRI White Paper 2026 — System Specification</title>
+<meta name="description" content="KANRI — Knowledge & Resource Intelligence Platform. A system specification built with Claude.ai, without a relational database.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho+B1:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F6F9; --paper2:#E9ECF2; --paper3:#DFE3EC;
+    --ink:#14161B; --ink-soft:#565C6B; --ink-faint:#8B909C;
+    --indigo:#1A237E; --indigo-soft:#3A44A0;
+    --line:rgba(20,22,27,.11); --line-soft:rgba(20,22,27,.06);
+    --f1:#1A237E; --f2:#2E6FC7; --f3:#1B6B5A; --f4:#4C7A1E; --f5:#B0821A; --f6:#5A3FB0;
+    --code-bg:#181A22; --code-ink:#D6DAE4;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-weight:300;line-height:1.9;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 clamp(1.25rem,5vw,3rem)}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--indigo)}
+
+  /* masthead */
+  .masthead{display:flex;justify-content:space-between;align-items:baseline;padding:1.5rem 0;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:.5rem}
+  .brand{font-family:"Archivo",sans-serif;font-weight:800;font-size:19px;letter-spacing:.14em}
+  .brand small{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:400;letter-spacing:.16em;color:var(--ink-faint);margin-top:3px;text-transform:uppercase}
+  .masthead .doc{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;text-align:right}
+
+  /* hero */
+  .hero{padding:clamp(3.5rem,9vw,6rem) 0 clamp(2rem,5vw,3.5rem)}
+  .hero .eyebrow{margin-bottom:2rem}
+  .thesis-jp{font-family:"Shippori Mincho B1",serif;font-weight:700;font-size:clamp(27px,5.6vw,50px);line-height:1.32;letter-spacing:.02em;margin-bottom:1.5rem}
+  .thesis-jp .bloom{background:linear-gradient(100deg,var(--f1),var(--f2) 35%,var(--f3) 60%,var(--f6));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .thesis-en{font-family:"Archivo",sans-serif;font-weight:500;font-size:clamp(15px,2.3vw,20px);line-height:1.55;max-width:40ch;margin-bottom:1.4rem;letter-spacing:-.005em}
+  .thesis-sub{font-size:14.5px;color:var(--ink-soft);max-width:60ch;line-height:1.95}
+  .thesis-sub strong{color:var(--ink);font-weight:500}
+
+  /* origin band */
+  .origin{border:1px solid var(--line);border-radius:4px;padding:clamp(1.4rem,4vw,2rem);margin:0 0 clamp(2.5rem,6vw,4rem);background:linear-gradient(180deg,var(--paper2),transparent)}
+  .origin .tag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--f5);margin-bottom:.8rem}
+  .origin .t{font-family:"Shippori Mincho B1",serif;font-weight:600;font-size:clamp(16px,2.6vw,21px);line-height:1.55;margin-bottom:.7rem}
+  .origin p{font-size:13.5px;color:var(--ink-soft);line-height:1.9}
+  .origin .credit{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--ink-faint);margin-top:.9rem;text-transform:uppercase}
+
+  /* signature diagram */
+  .diagram{margin:0 0 clamp(2.5rem,6vw,4rem)}
+  .diagram-cap{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase;text-align:center;margin-top:1rem}
+  .diagram svg{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:4px;background:#fff}
+
+  /* toc */
+  .toc{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.6rem 0;margin-bottom:clamp(2rem,5vw,3.5rem)}
+  .toc .eyebrow{margin-bottom:1rem}
+  .toc ol{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem 2rem}
+  .toc li{font-size:13px;color:var(--ink-soft);display:flex;gap:.7rem;padding:.25rem 0;border-bottom:1px solid var(--line-soft)}
+  .toc a{color:inherit;text-decoration:none;transition:color .2s}
+  .toc a:hover{color:var(--indigo)}
+  .toc .n{font-family:"IBM Plex Mono",monospace;color:var(--indigo);font-size:12px;min-width:1.6em}
+  @media(max-width:560px){.toc ol{grid-template-columns:1fr}}
+
+  /* section */
+  section.ch{padding:clamp(2.2rem,5vw,3.4rem) 0;border-top:1px solid var(--line)}
+  .ch-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.5rem}
+  .ch-head .num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--indigo);font-weight:500}
+  .ch-head h2{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(19px,3vw,26px);letter-spacing:-.01em;line-height:1.25}
+  .ch-head .jp{font-family:"Shippori Mincho B1",serif;font-weight:600}
+  .ch p{font-size:14.5px;color:var(--ink-soft);line-height:1.95;max-width:66ch;margin-bottom:1rem}
+  .ch p strong{color:var(--ink);font-weight:500}
+  .ch p:last-child{margin-bottom:0}
+  .lead{font-size:16px !important;color:var(--ink) !important;font-weight:400}
+  .from2016{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;color:var(--f5);text-transform:uppercase;display:inline-block;margin-bottom:.9rem}
+
+  /* code / index block */
+  pre{background:var(--code-bg);color:var(--code-ink);border-radius:5px;padding:1.1rem 1.25rem;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.75;margin:1.1rem 0;letter-spacing:.01em}
+  pre .c{color:#7C8598}
+  pre .k{color:#8FB4F0}
+  pre .s{color:#9AD0B0}
+  pre .a{color:#E0B978}
+
+  /* four resources */
+  .res{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:1.2rem}
+  .res-item{background:var(--paper2);padding:1rem 1.15rem;border-radius:3px}
+  .res-item h4{font-family:"Archivo",sans-serif;font-weight:700;font-size:14px;margin-bottom:.35rem;display:flex;align-items:center;gap:.5rem}
+  .res-item h4 .dot{width:9px;height:9px;border-radius:50%}
+  .res-item p{font-size:12px !important;margin:0 !important;color:var(--ink-soft) !important;line-height:1.7}
+  @media(max-width:560px){.res{grid-template-columns:1fr}}
+
+  /* flow states */
+  .states{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1.1rem 0}
+  .state{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;padding:.4rem .75rem;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--ink)}
+  .state.head{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+  .arrow{color:var(--ink-faint);font-family:"IBM Plex Mono",monospace}
+
+  /* loop */
+  .loop{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.03em;color:var(--ink);background:var(--paper2);border-radius:4px;padding:1rem 1.2rem;margin:1.1rem 0;line-height:2}
+  .loop b{color:var(--indigo)}
+
+  /* sealed */
+  .sealed{display:inline-flex;align-items:center;gap:.55rem;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;color:var(--indigo);border:1px solid var(--indigo);padding:.45rem .8rem;border-radius:2px;margin-top:.6rem}
+  .sealed::before{content:"\25C6";font-size:8px}
+
+  /* pull */
+  .pull{font-family:"Shippori Mincho B1",serif;font-weight:600;font-size:clamp(17px,2.8vw,23px);line-height:1.55;border-left:3px solid var(--indigo);padding-left:1.3rem;margin:1.2rem 0;color:var(--ink)}
+  .pull em{font-style:normal;color:var(--indigo)}
+
+  /* stack */
+  .stack{margin-top:1.2rem;display:flex;flex-direction:column;gap:2px}
+  .stack-row{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:baseline;padding:.8rem 1rem;background:var(--paper2);border-radius:3px}
+  .stack-row.base{background:transparent;border:1px dashed var(--indigo)}
+  .stack-tag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase;white-space:nowrap}
+  .stack-name{font-family:"Archivo",sans-serif;font-weight:600;font-size:14px}
+  .stack-name span{font-weight:400;color:var(--ink-soft);font-size:12.5px}
+  .stack-row.base .stack-name{color:var(--indigo)}
+
+  /* close */
+  .close{padding:clamp(3rem,7vw,5rem) 0;border-top:1px solid var(--line)}
+  .vision-chain{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;color:var(--ink-soft);line-height:2.2;margin-bottom:2rem}
+  .vision-chain b{color:var(--indigo);font-weight:500}
+  .close-line{font-family:"Shippori Mincho B1",serif;font-weight:600;font-size:clamp(18px,3.2vw,26px);line-height:1.55;max-width:28ch;margin-bottom:2rem}
+  .cta{display:inline-flex;flex-direction:column;gap:.3rem;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;color:var(--ink-soft)}
+  .cta a{color:var(--indigo);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+  .cta a:hover,.cta a:focus-visible{border-color:var(--indigo);outline:none}
+
+  footer{border-top:1px solid var(--line);padding:1.5rem 0 3rem;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="brand">KANRI<small>Knowledge &amp; Resource Intelligence Platform</small></div>
+    <div class="doc">White Paper 2026<br>System Specification · Draft</div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="eyebrow">The specification</div>
+    <h1 class="thesis-jp">10年前の設計図が、<br><span class="bloom">いま、実装できる。</span></h1>
+    <p class="thesis-en">A blueprint drawn in 2016. A way to build it that only arrived in 2026.</p>
+    <p class="thesis-sub">KANRI is not a new idea. Its architecture was drawn a decade ago — a platform to connect people, products, time, and value across every party in a business. What was missing was a way to build it without a large database and a large team. <strong>That is what changed.</strong> This document specifies how KANRI is built today: with an AI as its engine, and no relational database at its core.</p>
+  </header>
+
+  <!-- ORIGIN -->
+  <div class="origin">
+    <div class="tag">Origin · 2016</div>
+    <div class="t">BazaarBazaar — 複数の会合を連携する、会員情報共有プラットフォーム。</div>
+    <p>The original diagram already contained the whole thesis: prospects, sales, procurement, suppliers, and customers connected in one paperless, cashless fabric — B2B and B2C on a single canvas. At the bottom right, one line quietly stated the destination the industry is only now reaching: <strong>利益＝時間。品質＋付加価値。</strong> Profit is time. Quality plus added value. KANRI is that diagram, finally buildable.</p>
+    <div class="credit">© Digiterior 2016 — reproduced as the specification's foundation</div>
+  </div>
+
+  <!-- SIGNATURE DIAGRAM -->
+  <div class="diagram">
+    <svg viewBox="0 0 860 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KANRI resource flow, redrawn from the 2016 BazaarBazaar blueprint">
+      <defs>
+        <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#8B909C"/></marker>
+      </defs>
+      <!-- lane labels -->
+      <g font-family="'IBM Plex Mono',monospace" font-size="10" fill="#8B909C" letter-spacing="1">
+        <text x="16" y="70">B2C</text>
+        <text x="16" y="230">B2B</text>
+        <text x="16" y="360">SUPPLY</text>
+      </g>
+      <!-- B2C lane -->
+      <g font-family="'IBM Plex Mono',monospace" font-size="11.5">
+        <rect x="70" y="45" width="150" height="40" rx="4" fill="#EAF0FB" stroke="#2E6FC7"/><text x="145" y="70" text-anchor="middle" fill="#14161B">Member / 生活者</text>
+        <rect x="255" y="45" width="150" height="40" rx="4" fill="#EAF0FB" stroke="#2E6FC7"/><text x="330" y="70" text-anchor="middle" fill="#14161B">Event / 需要喚起</text>
+        <rect x="440" y="45" width="150" height="40" rx="4" fill="#EAF0FB" stroke="#2E6FC7"/><text x="515" y="70" text-anchor="middle" fill="#14161B">WEB / EC 販売</text>
+        <rect x="625" y="45" width="150" height="40" rx="4" fill="#EAF0FB" stroke="#2E6FC7"/><text x="700" y="70" text-anchor="middle" fill="#14161B">Customer / 顧客</text>
+        <line x1="220" y1="65" x2="253" y2="65" stroke="#8B909C" marker-end="url(#ah)"/>
+        <line x1="405" y1="65" x2="438" y2="65" stroke="#8B909C" marker-end="url(#ah)"/>
+        <line x1="590" y1="65" x2="623" y2="65" stroke="#8B909C" marker-end="url(#ah)"/>
+      </g>
+      <!-- B2B lane -->
+      <g font-family="'IBM Plex Mono',monospace" font-size="11">
+        <rect x="70" y="185" width="120" height="38" rx="4" fill="#ECEBF8" stroke="#5A3FB0"/><text x="130" y="209" text-anchor="middle" fill="#14161B">Prospect</text>
+        <rect x="205" y="185" width="120" height="38" rx="4" fill="#ECEBF8" stroke="#5A3FB0"/><text x="265" y="209" text-anchor="middle" fill="#14161B">Estimate</text>
+        <rect x="340" y="185" width="120" height="38" rx="4" fill="#ECEBF8" stroke="#5A3FB0"/><text x="400" y="209" text-anchor="middle" fill="#14161B">Order</text>
+        <rect x="475" y="185" width="120" height="38" rx="4" fill="#ECEBF8" stroke="#5A3FB0"/><text x="535" y="209" text-anchor="middle" fill="#14161B">Delivery</text>
+        <rect x="610" y="185" width="120" height="38" rx="4" fill="#ECEBF8" stroke="#5A3FB0"/><text x="670" y="209" text-anchor="middle" fill="#14161B">Invoice</text>
+        <rect x="745" y="185" width="95" height="38" rx="4" fill="#ECEBF8" stroke="#5A3FB0"/><text x="792" y="209" text-anchor="middle" fill="#14161B">Profit</text>
+        <g stroke="#8B909C">
+          <line x1="190" y1="204" x2="203" y2="204" marker-end="url(#ah)"/>
+          <line x1="325" y1="204" x2="338" y2="204" marker-end="url(#ah)"/>
+          <line x1="460" y1="204" x2="473" y2="204" marker-end="url(#ah)"/>
+          <line x1="595" y1="204" x2="608" y2="204" marker-end="url(#ah)"/>
+          <line x1="730" y1="204" x2="743" y2="204" marker-end="url(#ah)"/>
+        </g>
+      </g>
+      <!-- SUPPLY lane -->
+      <g font-family="'IBM Plex Mono',monospace" font-size="11">
+        <rect x="205" y="320" width="120" height="38" rx="4" fill="#E8F0E4" stroke="#4C7A1E"/><text x="265" y="344" text-anchor="middle" fill="#14161B">PRE-ORDER</text>
+        <rect x="340" y="320" width="120" height="38" rx="4" fill="#E8F0E4" stroke="#4C7A1E"/><text x="400" y="344" text-anchor="middle" fill="#14161B">Jobs</text>
+        <rect x="475" y="320" width="120" height="38" rx="4" fill="#E8F0E4" stroke="#4C7A1E"/><text x="535" y="344" text-anchor="middle" fill="#14161B">検収</text>
+        <rect x="610" y="320" width="120" height="38" rx="4" fill="#E8F0E4" stroke="#4C7A1E"/><text x="670" y="344" text-anchor="middle" fill="#14161B">評価ランク</text>
+        <g stroke="#8B909C">
+          <line x1="325" y1="339" x2="338" y2="339" marker-end="url(#ah)"/>
+          <line x1="460" y1="339" x2="473" y2="339" marker-end="url(#ah)"/>
+          <line x1="595" y1="339" x2="608" y2="339" marker-end="url(#ah)"/>
+        </g>
+        <!-- supply feeds delivery -->
+        <line x1="535" y1="318" x2="535" y2="225" stroke="#8B909C" stroke-dasharray="3 3" marker-end="url(#ah)"/>
+      </g>
+      <!-- center value node -->
+      <g>
+        <rect x="330" y="115" width="200" height="50" rx="25" fill="#1A237E"/>
+        <text x="430" y="138" text-anchor="middle" font-family="'Shippori Mincho B1',serif" font-size="15" font-weight="700" fill="#fff">利益 ＝ 時間</text>
+        <text x="430" y="155" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#B7C0E8" letter-spacing="1">VALUE = TIME</text>
+      </g>
+    </svg>
+    <div class="diagram-cap">KANRI resource flow — the 2016 blueprint, redrawn. B2C · B2B · Supply, converging on time as value.</div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="eyebrow">Contents</div>
+    <ol>
+      <li><span class="n">00</span><a href="#c0">設計思想 — Why no database</a></li>
+      <li><span class="n">01</span><a href="#c1">4つの資源 — the data model</a></li>
+      <li><span class="n">02</span><a href="#c2">Master Data First</a></li>
+      <li><span class="n">03</span><a href="#c3">業務フロー — states &amp; INDEX</a></li>
+      <li><span class="n">04</span><a href="#c4">記号インターフェース</a></li>
+      <li><span class="n">05</span><a href="#c5">Learning Loop</a></li>
+      <li><span class="n">06</span><a href="#c6">Agentic layer — Claude.ai</a></li>
+      <li><span class="n">07</span><a href="#c7">時間 ＝ 価値</a></li>
+      <li><span class="n">08</span><a href="#c8">認証インターフェース</a></li>
+      <li><span class="n">09</span><a href="#c9">Where KANRI sits</a></li>
+    </ol>
+  </nav>
+
+  <!-- 00 -->
+  <section class="ch" id="c0">
+    <div class="ch-head"><span class="num">00</span><h2>設計思想 — <span class="jp">なぜ、データベースを持たないか</span></h2></div>
+    <p class="lead">KANRI has no relational database at its core. This is not a limitation. It is the design.</p>
+    <p>A traditional platform of this scope begins with schemas, servers, and a team to maintain them. KANRI begins instead with <strong>flat files and an index</strong> — plain, human-readable records, connected by a color-coded index rather than foreign keys. State lives in files; meaning lives in the index; relationships are resolved by reference, not by join.</p>
+    <p>The result is <strong>loose coupling</strong>: any part can be deployed, moved, or rebuilt without touching the rest. The same principle runs from the interface down to the authentication layer. It is also what makes KANRI buildable by a founder and an AI, and cheap to run — the architecture and the business model are the same shape.</p>
+    <pre><span class="c"># a resource is a flat record + an index entry — no schema, no server</span>
+<span class="k">people/</span>cust_0421.json      <span class="c">{ name, initials, history_ref, … }</span>
+<span class="k">index/</span>people.idx         <span class="c">cust_0421 → 顧 · #1A237E · active</span>
+<span class="k">index/</span>time.idx           <span class="c">cust_0421 → 2016-… → now → next</span></pre>
+  </section>
+
+  <!-- 01 -->
+  <section class="ch" id="c1">
+    <div class="ch-head"><span class="num">01</span><h2>4つの資源 — <span class="jp">the data model</span></h2></div>
+    <span class="from2016">From 2016 · the five actor lanes → four resources</span>
+    <p>The 2016 diagram organized a business into lanes of actors. KANRI generalizes those lanes into <strong>four resources</strong> — the four things every organization actually manages. Three are familiar. The fourth is the one other systems ignore.</p>
+    <div class="res">
+      <div class="res-item"><h4><span class="dot" style="background:var(--f2)"></span>People</h4><p>Customers, employees, members, partners, suppliers.</p></div>
+      <div class="res-item"><h4><span class="dot" style="background:var(--f4)"></span>Products</h4><p>Goods, services, projects, intellectual assets.</p></div>
+      <div class="res-item"><h4><span class="dot" style="background:var(--f1)"></span>Time</h4><p>History, activity, schedule, future intent — as an asset.</p></div>
+      <div class="res-item"><h4><span class="dot" style="background:var(--f5)"></span>Value</h4><p>Revenue, cost, profit, payment.</p></div>
+    </div>
+    <p style="margin-top:1rem">Each resource is a set of flat records with an index. There is no central schema binding them — they are joined at read time through the index, which is why the model can grow one resource at a time without migrations.</p>
+  </section>
+
+  <!-- 02 -->
+  <section class="ch" id="c2">
+    <div class="ch-head"><span class="num">02</span><h2>Master Data First</h2></div>
+    <p class="lead">KANRI begins with meaning, not process.</p>
+    <div class="loop">Master &#8594; <b>Relationship</b> &#8594; Knowledge &#8594; Process &#8594; Interface</div>
+    <p>Most enterprise projects fail upward: they wire processes on top of dirty master data, and the mess compounds. KANRI inverts the order. Clean, meaningful master data comes first — because it is the foundation for <strong>both human decisions and AI decisions</strong>. An agent is only as good as the master data it reasons over.</p>
+  </section>
+
+  <!-- 03 -->
+  <section class="ch" id="c3">
+    <div class="ch-head"><span class="num">03</span><h2>業務フロー — <span class="jp">states &amp; INDEX</span></h2></div>
+    <span class="from2016">From 2016 · PRE-ORDER → ORDER → 検収 → 評価</span>
+    <p>The business flows from the original diagram become explicit state machines. State transitions are recorded as dated flags in the index — the status of anything is knowable at any point in time, without a query engine.</p>
+    <div class="states"><span class="state head">B2B</span><span class="arrow">·</span><span class="state">Prospect</span><span class="arrow">&#8594;</span><span class="state">Estimate</span><span class="arrow">&#8594;</span><span class="state">Order</span><span class="arrow">&#8594;</span><span class="state">Delivery</span><span class="arrow">&#8594;</span><span class="state">Invoice</span><span class="arrow">&#8594;</span><span class="state">Profit</span></div>
+    <div class="states"><span class="state head">B2C</span><span class="arrow">·</span><span class="state">Member</span><span class="arrow">&#8594;</span><span class="state">Event</span><span class="arrow">&#8594;</span><span class="state">Participation</span><span class="arrow">&#8594;</span><span class="state">Subscription</span><span class="arrow">&#8594;</span><span class="state">Payment</span></div>
+    <pre><span class="c"># state lives as a dated flag in the index — not a DB row</span>
+<span class="k">index/</span>order.idx   ord_1180 → estimate:2026-06-30 → order:07-02 → <span class="a">delivery:pending</span></pre>
+  </section>
+
+  <!-- 04 -->
+  <section class="ch" id="c4">
+    <div class="ch-head"><span class="num">04</span><h2>記号インターフェース — <span class="jp">one character, one meaning</span></h2></div>
+    <p class="lead">「日本語は生まれながらにしてカラフルだった。」</p>
+    <p>KANRI's interface is built from single characters and color: 花・森・空・金・風. One character carries a meaning; a color carries a state. Together they let dense enterprise information be read at a glance on a mobile screen — the index is not just internal plumbing, it is the interface.</p>
+    <p>This is not decoration. It is <strong>information compression</strong>: the same principle that lets a haiku hold a world in seventeen syllables, applied to business data. It is also the visible surface of the authentication layer described in section 08.</p>
+  </section>
+
+  <!-- 05 -->
+  <section class="ch" id="c5">
+    <div class="ch-head"><span class="num">05</span><h2>Learning Loop</h2></div>
+    <span class="from2016">From 2016 · 評価ランク</span>
+    <div class="loop">Action &#8594; Result &#8594; <b>Review</b> &#8594; Learning &#8594; Improvement &#8594; Action</div>
+    <p>The 2016 diagram already ended each supply cycle in an evaluation rank. KANRI makes that loop the core mechanic: <strong>every business process is also a learning process.</strong> Each completed cycle writes back into the index as experience, so the next cycle — human or agent — starts from what the last one learned.</p>
+  </section>
+
+  <!-- 06 -->
+  <section class="ch" id="c6">
+    <div class="ch-head"><span class="num">06</span><h2>Agentic layer — <span class="jp">Claude.ai as the engine</span></h2></div>
+    <p class="lead">In KANRI, the AI is not a feature bolted on. It is the engine the system is built with and runs on.</p>
+    <p>Claude.ai reads the flat files and the index, reasons over the master data, and acts across the business flows — drafting an estimate, chasing an invoice, ranking a supplier, surfacing what a departing employee knew. The human sets intent; the agent operates on their behalf against the knowledge base.</p>
+    <div class="loop">Human &#8594; <b>Agent</b> &#8594; Knowledge base (files + INDEX) &#8594; Business flows &#8594; External parties</div>
+    <p>Because the knowledge base is plain files rather than a proprietary database, the agent needs no special connector to reason over the whole company. The architecture and the AI meet naturally — which is precisely why it can be built by a founder and an AI, iterating daily.</p>
+  </section>
+
+  <!-- 07 -->
+  <section class="ch" id="c7">
+    <div class="ch-head"><span class="num">07</span><h2>時間 ＝ 価値 — <span class="jp">the resource no one manages</span></h2></div>
+    <span class="from2016">From 2016 · 「利益＝時間。品質＋付加価値。」</span>
+    <p>The destination was written on the original diagram ten years ago. Every system manages people, products, and value; KANRI adds the one they omit — <strong>time itself</strong>, treated as a first-class resource with history, activity, and future intent.</p>
+    <div class="pull">Managing time well is not efficiency for its own sake. It is what returns hours to <em>creativity, relationships, and life.</em></div>
+    <p>This is where the platform meets the human thesis, and where KANRI becomes more than enterprise software.</p>
+  </section>
+
+  <!-- 08 -->
+  <section class="ch" id="c8">
+    <div class="ch-head"><span class="num">08</span><h2>認証インターフェース — <span class="jp">the sealed layer</span></h2></div>
+    <p class="lead">KANRI authenticates through the same symbolic surface it displays — a name, a character, a color: a mark that is <strong>public in appearance, yet cannot be reproduced.</strong></p>
+    <p>This specification describes only the <strong>interface</strong>: how the authentication mark is presented and consumed by KANRI. The mechanism that makes the mark unreproducible — drawn from something that cannot be copied, phished, or brute-forced — is filed as patent and <strong>deliberately held as a trade secret.</strong></p>
+    <p>What is public is only the low-value surface — like a castle's stone wall, shown openly because its depth is not reproducible. The defensibility of the platform lies in what this document does not describe.</p>
+    <div class="sealed">Interface specified · mechanism sealed · patent filed, held individually</div>
+  </section>
+
+  <!-- 09 -->
+  <section class="ch" id="c9">
+    <div class="ch-head"><span class="num">09</span><h2>Where KANRI sits</h2></div>
+    <p>KANRI is an <strong>application</strong> of a deeper, patented base. The base can spawn more than one product; KANRI is its enterprise expression.</p>
+    <div class="stack">
+      <div class="stack-row base"><span class="stack-tag">Base · patented</span><span class="stack-name">COLOURFUL JAPAN™ / 天然色漢字INDEX™ <span>— authentication &amp; symbolic interface</span></span></div>
+      <div class="stack-row"><span class="stack-tag">Application · B2B</span><span class="stack-name">KANRI <span>— enterprise knowledge &amp; resource intelligence</span></span></div>
+      <div class="stack-row"><span class="stack-tag">Application · B2C</span><span class="stack-name">Smart Life Styles® <span>— time &amp; life, for individuals</span></span></div>
+    </div>
+  </section>
+
+  <!-- CLOSE -->
+  <section class="close">
+    <div class="eyebrow" style="margin-bottom:1.5rem">Vision 2040</div>
+    <div class="vision-chain">Resource management &#8594; Knowledge management &#8594; Learning systems &#8594; <b>Agentic management</b> &#8594; Smart Life Styles</div>
+    <p class="close-line">Technology should not replace human creativity. It should create the time for it.</p>
+    <div class="cta">
+      <span>Full architecture &amp; the sealed layer — available under NDA.</span>
+      <a href="/home.html">digiterior.net — the base and its applications →</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>KANRI · White Paper · System Specification · Draft · 2026</span>
+    <span>© Koichiro Hoshino · digiterior.net</span>
+  </footer>
+
+</div>
+</body>
+</html>
