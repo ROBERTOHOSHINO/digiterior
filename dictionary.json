@@ -1,150 +1,898 @@
 {
-  "categories": [
+ "categories": [
+  {
+   "char": "認",
+   "hex": "#378ADD",
+   "desc": "認証・技術・セキュリティ"
+  },
+  {
+   "char": "市",
+   "hex": "#BA7517",
+   "desc": "Marketing・市づくり・バザール"
+  },
+  {
+   "char": "語",
+   "hex": "#534AB7",
+   "desc": "コラム・物語・哲学"
+  },
+  {
+   "char": "町",
+   "hex": "#3B6D11",
+   "desc": "文化・コミュニティ・地域"
+  }
+ ],
+ "coined": [
+  {
+   "phrase": "Love your long life, love your long time!",
+   "file": "love-your-long-life.html",
+   "by": "星C",
+   "date": "2026-06-10"
+  },
+  {
+   "phrase": "dreaming needs an output format",
+   "file": "dreaming-needs-an-output-format.html",
+   "by": "Anthropic/Claude",
+   "date": "2026-06"
+  },
+  {
+   "phrase": "洒落ですしゃれ",
+   "file": "play-worldcup-june13.html",
+   "by": "山下達郎",
+   "date": "参照2026-06-13"
+  },
+  {
+   "phrase": "MARKETINGは市づくり",
+   "file": "html-notes-marketing.html",
+   "by": "星C",
+   "date": "2026-06"
+  }
+ ],
+ "concepts": [
+  {
+   "word": "ダンク",
+   "kanji": [
+    "談駆",
+    "断苦"
+   ],
+   "meaning": [
+    "対話を楽しむ・物語好き",
+    "楽・PLAYの心"
+   ],
+   "by": "星",
+   "note": "2文字のためINDEX非採用。ダンクソフト社名の思想的根拠。概念として保持。"
+  },
+  {
+   "word": "TAKT",
+   "kanji": "",
+   "meaning": "建築工程管理・リソース管理システムの原型",
+   "by": "星",
+   "note": "1996年大成建設×ダンクソフト。COLOURFUL JAPAN版として再構築予定。建築→汎用PROJECTへ展開。"
+  },
+  {
+   "word": "html-notes",
+   "meaning": "NOTEアプリを超える表現媒体。色・構造・言語を自在に扱える自己完結型ドキュメント。",
+   "by": "星C",
+   "note": "vision.html作成時に気づく。MEMORY-BANKの器として採用。紙でもアプリでもない第三の配布形式。"
+  },
+  {
+   "word": "発信媒体の変遷",
+   "meaning": "ブログ→NOTE→LinkedIn→html-notes",
+   "by": "星",
+   "note": "ブログはLOGで書きっぱなし。NOTEも反応鈍く停滞。LinkedInで市づくりが起きると気づく。html-notesは蓄積・更新・再利用できる器として到達。アクションして何が起こるかを見ることが本質。blog: https://robertoplay.seesaa.net/"
+  },
+  {
+   "word": "品詞色分け",
+   "meaning": "名詞・動詞・助詞など品詞ごとに色を付けて言語構造を可視化する手法",
+   "by": "星C",
+   "note": "百人一首で開発。マザーグース・ハンプティーダンプティーへ応用。教育出版社への展開検討。AIが読み手になるかるたシステムも構想中。"
+  },
+  {
+   "word": "問いを選ぶ",
+   "meaning": "答えより問いの質が人生と仕事を決める",
+   "by": "星C",
+   "note": "2002年W杯×法政大学PROJECTが起点。ポール・フルキエ、ジョルジュ・フリードマンとの出会い。ワークライフバランス・原発への気づきが今のダンクソフトの思想につながる。MEMORY-BANKらしい振り返りの一本。"
+  },
+  {
+   "word": "認証スタジアム",
+   "meaning": "ハッカーとセキュリティエンジニアが公開の場で技を競い、互いをリスペクトする世界",
+   "by": "星C",
+   "note": "Dreamingの分散認証思想を拡張。日本×オランダのW杯引き分けがメタファー。利害を超えて技術と心が進化する。PLAY×セキュリティ×市づくりの交差点。"
+  },
+  {
+   "word": "信頼の連鎖",
+   "meaning": "認証フェデレーションがCo-learningを生み、不和を減らし、戦争を避ける文明の知恵になる",
+   "by": "星C",
+   "note": "chromakey-auth-peace.htmlの核心。討論はしても喧嘩にはならない文化。デジタルに疎い人を排除せず成長させるCo-learningの場づくりが鍵。認証スタジアムの前段。"
+  },
+  {
+   "word": "叡智の継承",
+   "meaning": "お金より大切な知恵を、シニアが生きているうちにデジタルで資産として残す",
+   "by": "星C",
+   "note": "義母（2026年5月逝去）への手向け。50代からPC・スマホを使いコラムを楽しみにしていた。パスワードの壁と認知症で徐々に弱っていった。dreamingのような御用聞きサポートがあれば叡智を活かせた。love-your-long-lifeと深くつながる。"
+  },
+  {
+   "word": "html配布",
+   "meaning": "紙でもAirDropでもなく、QRコードでhtmlを手渡す新しい配布様式",
+   "by": "星C",
+   "note": "義母の葬儀で親族にhtml-notesをQRで配布。画像・QRコード付き。AirDropは開きっぱなしリスクあり。QRは日本人の偉大な発明。htmlが弔辞・デジタル遺影・配布手段を兼ねた初めての事例。"
+  },
+  {
+   "word": "古墳の鍵穴",
+   "meaning": "古代の石組みにメモリーアーキテクチャーの原型を見る",
+   "by": "星C",
+   "note": "長野の大型古墳訪問時にdreaming×メモリーアーキテクチャーのイベント後で触発。石垣・鍵穴形古墳からClaudeが発展させた。"
+  },
+  {
+   "word": "インデックスソート",
+   "meaning": "メモリー本体を並び替えずに配列の要素だけをソートする手法。RDB不要のフラットファイル設計の根拠。",
+   "by": "星C",
+   "note": "40年前の技術。notes-index.jsonの設計思想の原型。RDBなしで横断検索できる理由がここにある。"
+  },
+  {
+   "word": "市づくり＝MARKETING",
+   "meaning": "MARKETの語源に戻る。市場調査でなく物理の場をつくること。お金・モノだけでなく情報・知恵・対話の交換の場。",
+   "by": "星C",
+   "note": "パエリア祭り・百人一首・認証フェデレーションすべてが市づくりの実装例。COLOURFUL JAPANの中核思想。LinkedInで高インプレッション。"
+  },
+  {
+   "word": "archive",
+   "meaning": "GitHubのhistoryが自然なアーカイブ。index-archive/フォルダ不要。",
+   "by": "星C",
+   "note": "2026-06-16設計決定。notes-index.json・dictionary.jsonもGit管理で差分・履歴が自動保持される。"
+  },
+  {
+   "word": "動的平衡WEBサイト",
+   "meaning": "陳腐化せず成長し続けるWEBサイト。GitとJSON管理により自動更新・自動アーカイブ。",
+   "by": "星C",
+   "note": "notes.digiterior.netの設計思想。RDB不要、フラットファイル+INDEX、疎結合。COLOURFUL JAPANのキラーデモになる。"
+  }
+ ],
+ "delete_candidates": [
+  {
+   "file": "cipher-city-story.html",
+   "reason": "cypher-city.htmlと同一内容。日付付きの重複ファイル。"
+  }
+ ],
+ "lexicon": [
+  {
+   "char": "相",
+   "hex": "#2E6FC7",
+   "yomi": "あい",
+   "en": "PARTNER",
+   "members": [
+    "Claude",
+    "claude.ai",
+    "agent",
+    "エージェント",
+    "AI"
+   ],
+   "def_ja": "相方。founder + Claude——AIと二人で、軽やかに深く。",
+   "def_en": "Partner — founder + Claude: two of us, moving lightly and deep.",
+   "count": 728,
+   "files": 37,
+   "top": [
     {
-      "char": "認",
-      "hex": "#378ADD",
-      "desc": "認証・技術・セキュリティ"
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
     },
     {
-      "char": "市",
-      "hex": "#BA7517",
-      "desc": "Marketing・市づくり・バザール"
+     "file": "vickey-project.html",
+     "title": "ビッキーPROJECT | DUNKSOFT®"
     },
     {
-      "char": "語",
-      "hex": "#534AB7",
-      "desc": "コラム・物語・哲学"
-    },
-    {
-      "char": "町",
-      "hex": "#3B6D11",
-      "desc": "文化・コミュニティ・地域"
+     "file": "html-notes-marketing-en.html",
+     "title": "MARKETING is Making a Market——Reclaiming Place, Wisdom and Dialogue"
     }
-  ],
-  "coined": [
+   ]
+  },
+  {
+   "char": "認",
+   "hex": "#378ADD",
+   "yomi": "にん",
+   "en": "AUTH",
+   "members": [
+    "認証",
+    "auth",
+    "authentication",
+    "パスワード",
+    "CHROMAKEY"
+   ],
+   "def_ja": "認証。パスワードの壁を越え、しるしで人を確かめる。",
+   "def_en": "Authentication — verifying a person by a mark, beyond passwords.",
+   "count": 576,
+   "files": 29,
+   "top": [
     {
-      "phrase": "Love your long life, love your long time!",
-      "file": "love-your-long-life.html",
-      "by": "星C",
-      "date": "2026-06-10"
+     "file": "colorful-kanji-auth-pitch-GATED.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
     },
     {
-      "phrase": "dreaming needs an output format",
-      "file": "dreaming-needs-an-output-format.html",
-      "by": "Anthropic/Claude",
-      "date": "2026-06"
+     "file": "colorful-kanji-auth-pitch20260514.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
     },
     {
-      "phrase": "洒落ですしゃれ",
-      "file": "play-worldcup-june13.html",
-      "by": "山下達郎",
-      "date": "参照2026-06-13"
-    },
-    {
-      "phrase": "MARKETINGは市づくり",
-      "file": "html-notes-marketing.html",
-      "by": "星C",
-      "date": "2026-06"
+     "file": "colorful-kanji-auth-pitch-v2.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
     }
-  ],
-  "concepts": [
+   ]
+  },
+  {
+   "char": "字",
+   "hex": "#4FC3F7",
+   "yomi": "じ",
+   "en": "CHARACTER",
+   "members": [
+    "漢字",
+    "文字",
+    "kanji",
+    "日本語",
+    "japanese",
+    "ふりがな",
+    "言語",
+    "言葉"
+   ],
+   "def_ja": "文字。一文字が一意味を運ぶ、情報圧縮の最小単位。",
+   "def_en": "Character — the smallest unit of compression: one character, one meaning.",
+   "count": 543,
+   "files": 41,
+   "top": [
     {
-      "word": "ダンク",
-      "kanji": ["談駆", "断苦"],
-      "meaning": ["対話を楽しむ・物語好き", "楽・PLAYの心"],
-      "by": "星",
-      "note": "2文字のためINDEX非採用。ダンクソフト社名の思想的根拠。概念として保持。"
+     "file": "colorful-kanji-auth-pitch-GATED.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
     },
     {
-      "word": "TAKT",
-      "kanji": "",
-      "meaning": "建築工程管理・リソース管理システムの原型",
-      "by": "星",
-      "note": "1996年大成建設×ダンクソフト。COLOURFUL JAPAN版として再構築予定。建築→汎用PROJECTへ展開。"
+     "file": "home.html",
+     "title": "Smart Life Styles® | DIGITERIOR"
     },
     {
-      "word": "html-notes",
-      "meaning": "NOTEアプリを超える表現媒体。色・構造・言語を自在に扱える自己完結型ドキュメント。",
-      "by": "星C",
-      "note": "vision.html作成時に気づく。MEMORY-BANKの器として採用。紙でもアプリでもない第三の配布形式。"
-    },
-    {
-      "word": "発信媒体の変遷",
-      "meaning": "ブログ→NOTE→LinkedIn→html-notes",
-      "by": "星",
-      "note": "ブログはLOGで書きっぱなし。NOTEも反応鈍く停滞。LinkedInで市づくりが起きると気づく。html-notesは蓄積・更新・再利用できる器として到達。アクションして何が起こるかを見ることが本質。blog: https://robertoplay.seesaa.net/"
-    },
-    {
-      "word": "品詞色分け",
-      "meaning": "名詞・動詞・助詞など品詞ごとに色を付けて言語構造を可視化する手法",
-      "by": "星C",
-      "note": "百人一首で開発。マザーグース・ハンプティーダンプティーへ応用。教育出版社への展開検討。AIが読み手になるかるたシステムも構想中。"
-    },
-    {
-      "word": "問いを選ぶ",
-      "meaning": "答えより問いの質が人生と仕事を決める",
-      "by": "星C",
-      "note": "2002年W杯×法政大学PROJECTが起点。ポール・フルキエ、ジョルジュ・フリードマンとの出会い。ワークライフバランス・原発への気づきが今のダンクソフトの思想につながる。MEMORY-BANKらしい振り返りの一本。"
-    },
-    {
-      "word": "認証スタジアム",
-      "meaning": "ハッカーとセキュリティエンジニアが公開の場で技を競い、互いをリスペクトする世界",
-      "by": "星C",
-      "note": "Dreamingの分散認証思想を拡張。日本×オランダのW杯引き分けがメタファー。利害を超えて技術と心が進化する。PLAY×セキュリティ×市づくりの交差点。"
-    },
-    {
-      "word": "信頼の連鎖",
-      "meaning": "認証フェデレーションがCo-learningを生み、不和を減らし、戦争を避ける文明の知恵になる",
-      "by": "星C",
-      "note": "chromakey-auth-peace.htmlの核心。討論はしても喧嘩にはならない文化。デジタルに疎い人を排除せず成長させるCo-learningの場づくりが鍵。認証スタジアムの前段。"
-    },
-    {
-      "word": "叡智の継承",
-      "meaning": "お金より大切な知恵を、シニアが生きているうちにデジタルで資産として残す",
-      "by": "星C",
-      "note": "義母（2026年5月逝去）への手向け。50代からPC・スマホを使いコラムを楽しみにしていた。パスワードの壁と認知症で徐々に弱っていった。dreamingのような御用聞きサポートがあれば叡智を活かせた。love-your-long-lifeと深くつながる。"
-    },
-    {
-      "word": "html配布",
-      "meaning": "紙でもAirDropでもなく、QRコードでhtmlを手渡す新しい配布様式",
-      "by": "星C",
-      "note": "義母の葬儀で親族にhtml-notesをQRで配布。画像・QRコード付き。AirDropは開きっぱなしリスクあり。QRは日本人の偉大な発明。htmlが弔辞・デジタル遺影・配布手段を兼ねた初めての事例。"
-    },
-    {
-      "word": "古墳の鍵穴",
-      "meaning": "古代の石組みにメモリーアーキテクチャーの原型を見る",
-      "by": "星C",
-      "note": "長野の大型古墳訪問時にdreaming×メモリーアーキテクチャーのイベント後で触発。石垣・鍵穴形古墳からClaudeが発展させた。"
-    },
-    {
-      "word": "インデックスソート",
-      "meaning": "メモリー本体を並び替えずに配列の要素だけをソートする手法。RDB不要のフラットファイル設計の根拠。",
-      "by": "星C",
-      "note": "40年前の技術。notes-index.jsonの設計思想の原型。RDBなしで横断検索できる理由がここにある。"
-    },
-    {
-      "word": "市づくり＝MARKETING",
-      "meaning": "MARKETの語源に戻る。市場調査でなく物理の場をつくること。お金・モノだけでなく情報・知恵・対話の交換の場。",
-      "by": "星C",
-      "note": "パエリア祭り・百人一首・認証フェデレーションすべてが市づくりの実装例。COLOURFUL JAPANの中核思想。LinkedInで高インプレッション。"
-    },
-    {
-      "word": "archive",
-      "meaning": "GitHubのhistoryが自然なアーカイブ。index-archive/フォルダ不要。",
-      "by": "星C",
-      "note": "2026-06-16設計決定。notes-index.json・dictionary.jsonもGit管理で差分・履歴が自動保持される。"
-    },
-    {
-      "word": "動的平衡WEBサイト",
-      "meaning": "陳腐化せず成長し続けるWEBサイト。GitとJSON管理により自動更新・自動アーカイブ。",
-      "by": "星C",
-      "note": "notes.digiterior.netの設計思想。RDB不要、フラットファイル+INDEX、疎結合。COLOURFUL JAPANのキラーデモになる。"
+     "file": "colorful-kanji-auth-pitch20260514.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
     }
-  ],
-  "delete_candidates": [
+   ]
+  },
+  {
+   "char": "色",
+   "hex": "#EC407A",
+   "yomi": "いろ",
+   "en": "COLOUR",
+   "members": [
+    "色彩",
+    "天然色",
+    "color",
+    "colour",
+    "colorful",
+    "colourful"
+   ],
+   "def_ja": "色。日本語は生まれながらにしてカラフルだった。",
+   "def_en": "Colour — Japanese was born colourful.",
+   "count": 425,
+   "files": 37,
+   "top": [
     {
-      "file": "cipher-city-story.html",
-      "reason": "cypher-city.htmlと同一内容。日付付きの重複ファイル。"
+     "file": "home.html",
+     "title": "Smart Life Styles® | DIGITERIOR"
+    },
+    {
+     "file": "colorful-kanji-auth-pitch-GATED.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
+    },
+    {
+     "file": "hyakunin-spring.html",
+     "title": "色彩日本語 — 百人一首 春の歌"
     }
-  ]
+   ]
+  },
+  {
+   "char": "憶",
+   "hex": "#8E24AA",
+   "yomi": "おく",
+   "en": "MEMORY",
+   "members": [
+    "記憶",
+    "memory",
+    "MEMORY-BANK"
+   ],
+   "def_ja": "記憶。人の中にだけある、再現不能な資産。",
+   "def_en": "Memory — the unreproducible asset that lives only in a person.",
+   "count": 338,
+   "files": 26,
+   "top": [
+    {
+     "file": "colorful-kanji-auth-pitch-v2.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
+    },
+    {
+     "file": "colorful-kanji-auth-pitch20260514.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
+    },
+    {
+     "file": "vision.html",
+     "title": "digiterior.net VISION LAYER 原型"
+    }
+   ]
+  },
+  {
+   "char": "星",
+   "hex": "#1A237E",
+   "yomi": "ほし",
+   "en": "IDENTITY",
+   "members": [
+    "星野",
+    "晃一郎",
+    "hoshino",
+    "roberto"
+   ],
+   "def_ja": "星。神田祭の半纏の深い藍——名の最初の一文字。",
+   "def_en": "Star — the deep indigo of a festival coat; the first character of a name.",
+   "count": 314,
+   "files": 33,
+   "top": [
+    {
+     "file": "html-notes-authentication.html",
+     "title": "パスワードの壁を越えて——義母と叡智の継承"
+    },
+    {
+     "file": "html-notes-paella-draft.html",
+     "title": "パエリア×防災×市づくり——薪で炊く理由"
+    },
+    {
+     "file": "html-notes-paella-draft.html",
+     "title": "html-notes Vol.06 DRAFT | パエリアと市の原理 / Paella and the Bazaar / Paella y el Principio del Mercado"
+    }
+   ]
+  },
+  {
+   "char": "理",
+   "hex": "#1B6B5A",
+   "yomi": "り",
+   "en": "KANRI",
+   "members": [
+    "管理",
+    "かんり",
+    "KANRI",
+    "management",
+    "経営"
+   ],
+   "def_ja": "かんり。管（Control）ではなく、理（やりくり・自律）。",
+   "def_en": "KANRI — not 管 (control), but 理: reason, autonomy, making things work.",
+   "count": 280,
+   "files": 21,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "TAKTシステム特許 1996"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "Vision Layer #0 — 建築業界のルーツ | DIGITERIOR"
+    }
+   ]
+  },
+  {
+   "char": "索",
+   "hex": "#9A7A2A",
+   "yomi": "さく",
+   "en": "INDEX",
+   "members": [
+    "INDEX",
+    "index",
+    "索引",
+    "辞書"
+   ],
+   "def_ja": "索引。意味をつなぐ配管であり、それ自体がUI。",
+   "def_en": "Index — the plumbing of meaning, and the interface itself.",
+   "count": 276,
+   "files": 34,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "html-notes-indexsort.html",
+     "title": "インデックスソート——RDB不要時代に蘇る40年前の知恵"
+    },
+    {
+     "file": "vickey-zoyo-chiiki.html",
+     "title": "VICKEYファミリーの生前贈与ガイド × Smart Life Styles™"
+    }
+   ]
+  },
+  {
+   "char": "時",
+   "hex": "#C0550A",
+   "yomi": "とき",
+   "en": "TIME",
+   "members": [
+    "時間",
+    "time",
+    "未来",
+    "時代",
+    "long"
+   ],
+   "def_ja": "時間。誰も管理しない第一級の資源。利益＝時間。",
+   "def_en": "Time — the first-class resource no system manages. Profit = time.",
+   "count": 271,
+   "files": 34,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "love-your-long-life.html",
+     "title": "Love your long life, love your long time!"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "TAKTシステム特許 1996"
+    }
+   ]
+  },
+  {
+   "char": "工",
+   "hex": "#B5401A",
+   "yomi": "こう",
+   "en": "CRAFT",
+   "members": [
+    "建築",
+    "建設",
+    "工程",
+    "タクト",
+    "construction",
+    "takt"
+   ],
+   "def_ja": "工。建築×AI×タクト工程——1996年特許の原点。",
+   "def_en": "Craft — construction × AI × takt: the 1996 patent origin.",
+   "count": 238,
+   "files": 10,
+   "top": [
+    {
+     "file": "takt_patent_1996.html",
+     "title": "Vision Layer #0 — 建築業界のルーツ | DIGITERIOR"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "TAKTシステム特許 1996"
+    },
+    {
+     "file": "narrative_linkedin.html",
+     "title": "開発PROJECT全体narrative——COLOURFUL JAPANの俯瞰"
+    }
+   ]
+  },
+  {
+   "char": "邸",
+   "hex": "#3A44A0",
+   "yomi": "てい",
+   "en": "DIGITERIOR",
+   "members": [
+    "digiterior",
+    "DIGITERIOR"
+   ],
+   "def_ja": "digiterior。2010年から個人が持つ、デジタルの邸。",
+   "def_en": "digiterior — a digital residence, held personally since 2010.",
+   "count": 182,
+   "files": 29,
+   "top": [
+    {
+     "file": "partnership.html",
+     "title": "パートナーシップ提案——安全な場で、この研究を"
+    },
+    {
+     "file": "home.html",
+     "title": "Smart Life Styles® | DIGITERIOR"
+    },
+    {
+     "file": "linkedin_post.html",
+     "title": "LinkedIn投稿版——narrative凝縮"
+    }
+   ]
+  },
+  {
+   "char": "語",
+   "hex": "#534AB7",
+   "yomi": "かたり",
+   "en": "STORY",
+   "members": [
+    "物語",
+    "コラム",
+    "note",
+    "narrative"
+   ],
+   "def_ja": "語り。html-notesの一枚一枚が、物語の器。",
+   "def_en": "Story — each html-note, a vessel of narrative.",
+   "count": 163,
+   "files": 34,
+   "top": [
+    {
+     "file": "html-notes-paella-draft.html",
+     "title": "パエリア×防災×市づくり——薪で炊く理由"
+    },
+    {
+     "file": "html-notes-authentication.html",
+     "title": "パスワードの壁を越えて——義母と叡智の継承"
+    },
+    {
+     "file": "collab-record.html",
+     "title": "Roberto Hoshino × Claude — 共同開発の軌跡"
+    }
+   ]
+  },
+  {
+   "char": "視",
+   "hex": "#E53935",
+   "yomi": "し",
+   "en": "VISION",
+   "members": [
+    "視覚",
+    "vision",
+    "指紋",
+    "VISION LAYER"
+   ],
+   "def_ja": "視覚。公開されていても再現できない、視覚的な指紋。",
+   "def_en": "Vision — the visual fingerprint: public, yet unreproducible.",
+   "count": 143,
+   "files": 19,
+   "top": [
+    {
+     "file": "takt_patent_1996.html",
+     "title": "TAKTシステム特許 1996"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "Vision Layer #0 — 建築業界のルーツ | DIGITERIOR"
+    },
+    {
+     "file": "html-notes-visionlayer0.html",
+     "title": "digiterior.net VISION LAYER notes版"
+    }
+   ]
+  },
+  {
+   "char": "町",
+   "hex": "#3B6D11",
+   "yomi": "まち",
+   "en": "COMMUNITY",
+   "members": [
+    "地域",
+    "神田",
+    "文化",
+    "community"
+   ],
+   "def_ja": "町。神田・柳森・地域——文化が育つ場所。",
+   "def_en": "Town — Kanda, Yanagimori, community: where culture grows.",
+   "count": 131,
+   "files": 25,
+   "top": [
+    {
+     "file": "vickey-zoyo-chiiki.html",
+     "title": "VICKEYファミリーの生前贈与ガイド × Smart Life Styles™"
+    },
+    {
+     "file": "vision.html",
+     "title": "digiterior.net VISION LAYER 原型"
+    },
+    {
+     "file": "vision.html",
+     "title": "Vision — Smart Life Styles® | DIGITERIOR"
+    }
+   ]
+  },
+  {
+   "char": "継",
+   "hex": "#AB47BC",
+   "yomi": "けい",
+   "en": "INHERIT",
+   "members": [
+    "継承",
+    "DNA",
+    "世代",
+    "generations"
+   ],
+   "def_ja": "継承。42億人の祖先から、次の世代へ。",
+   "def_en": "Inheritance — from 4.2 billion ancestors to the next generation.",
+   "count": 128,
+   "files": 18,
+   "top": [
+    {
+     "file": "vickey-zoyo-chiiki.html",
+     "title": "VICKEYファミリーの生前贈与ガイド × Smart Life Styles™"
+    },
+    {
+     "file": "vision.html",
+     "title": "digiterior.net VISION LAYER 原型"
+    },
+    {
+     "file": "vision.html",
+     "title": "Vision — Smart Life Styles® | DIGITERIOR"
+    }
+   ]
+  },
+  {
+   "char": "市",
+   "hex": "#BA7517",
+   "yomi": "いち",
+   "en": "BAZAAR",
+   "members": [
+    "バザール",
+    "bazaar",
+    "marketing",
+    "市場",
+    "販売"
+   ],
+   "def_ja": "市。MARKETINGは市づくり——場・知恵・対話を取り戻す。",
+   "def_en": "Bazaar — marketing as making a market: place, wisdom, dialogue.",
+   "count": 128,
+   "files": 22,
+   "top": [
+    {
+     "file": "html-notes-marketing.html",
+     "title": "MARKETINGは市づくり——物理の場・知恵・対話を取り戻す"
+    },
+    {
+     "file": "html-notes-marketing-en.html",
+     "title": "MARKETING is Making a Market——Reclaiming Place, Wisdom and Dialogue"
+    },
+    {
+     "file": "launcher-concept.html",
+     "title": "バザールバザール LAUNCHER™ — コンセプトシート v1.0"
+    }
+   ]
+  },
+  {
+   "char": "花",
+   "hex": "#C2185B",
+   "yomi": "はな",
+   "en": "FLORIST",
+   "members": [
+    "UI-FLORIST",
+    "結婚式",
+    "florist",
+    "薔薇",
+    "バラ"
+   ],
+   "def_ja": "花。結婚式場の花の原価管理から、すべては始まった。",
+   "def_en": "Flower — it all began with cost management for wedding flowers.",
+   "count": 123,
+   "files": 15,
+   "top": [
+    {
+     "file": "takt_patent_1996.html",
+     "title": "Vision Layer #0 — 建築業界のルーツ | DIGITERIOR"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "TAKTシステム特許 1996"
+    },
+    {
+     "file": "html-notes-visionlayer0.html",
+     "title": "digiterior.net VISION LAYER notes版"
+    }
+   ]
+  },
+  {
+   "char": "図",
+   "hex": "#1A3A5C",
+   "yomi": "ず",
+   "en": "BLUEPRINT",
+   "members": [
+    "設計",
+    "構造",
+    "architecture",
+    "blueprint",
+    "設計図"
+   ],
+   "def_ja": "設計図。2016年に描かれ、2026年に実装された。",
+   "def_en": "Blueprint — drawn in 2016, buildable in 2026.",
+   "count": 118,
+   "files": 29,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "colorful-kanji-auth-pitch-v2.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
+    },
+    {
+     "file": "colorful-kanji-auth-pitch20260514.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
+    }
+   ]
+  },
+  {
+   "char": "網",
+   "hex": "#4C7A1E",
+   "yomi": "あみ",
+   "en": "COVERAGE",
+   "members": [
+    "網羅",
+    "全体",
+    "scope",
+    "ERP"
+   ],
+   "def_ja": "網羅。覆われない資源は誤差項になり、ほころぶ。",
+   "def_en": "Coverage — any resource left out becomes an error term, and frays.",
+   "count": 83,
+   "files": 23,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "TAKTシステム特許 1996"
+    },
+    {
+     "file": "takt_patent_1996.html",
+     "title": "Vision Layer #0 — 建築業界のルーツ | DIGITERIOR"
+    }
+   ]
+  },
+  {
+   "char": "究",
+   "hex": "#5A3FB0",
+   "yomi": "きわめ",
+   "en": "MASTERY",
+   "members": [
+    "究",
+    "楽",
+    "play",
+    "デジタル"
+   ],
+   "def_ja": "究める。穴を掘り下げる字。デジタルで、楽を究める。",
+   "def_en": "Mastery — the character of digging deep. Mastering play, digitally.",
+   "count": 81,
+   "files": 20,
+   "top": [
+    {
+     "file": "roberto_profile.html",
+     "title": "ROBERTO HOSHINO — Smart Life Styles™"
+    },
+    {
+     "file": "play-worldcup-june13.html",
+     "title": "2026WC開幕——遊べない日本人と遊びすぎるヨーロッパ？"
+    },
+    {
+     "file": "html-notes-authentication.html",
+     "title": "パスワードの壁を越えて——義母と叡智の継承"
+    }
+   ]
+  },
+  {
+   "char": "金",
+   "hex": "#B8960C",
+   "yomi": "かね",
+   "en": "VALUE",
+   "members": [
+    "金融",
+    "利益",
+    "profit",
+    "value",
+    "finance",
+    "入金"
+   ],
+   "def_ja": "価値。売上・原価・利益・入金——そして利益＝時間。",
+   "def_en": "Value — revenue, cost, profit, payment. And profit = time.",
+   "count": 81,
+   "files": 18,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "vickey-project.html",
+     "title": "ビッキーPROJECT | DUNKSOFT®"
+    },
+    {
+     "file": "colorful-kanji-auth-pitch-GATED.html",
+     "title": "COLORFUL KANJI AUTH™ — Series B+ Pitch | DIGITERIOR"
+    }
+   ]
+  },
+  {
+   "char": "誠",
+   "hex": "#0F6E56",
+   "yomi": "まこと",
+   "en": "INTEGRITY",
+   "members": [
+    "integrity",
+    "誠実",
+    "誠"
+   ],
+   "def_ja": "Integrity。人の誠実さ・データの完全性・構造の一体性。",
+   "def_en": "Integrity — of people, of data, of the whole structure.",
+   "count": 43,
+   "files": 3,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "html-notes-authentication.html",
+     "title": "パスワードの壁を越えて——義母と叡智の継承"
+    },
+    {
+     "file": "html-notes-authentication-ja.html",
+     "title": "パスワードの壁を越えて——義母と叡智の継承（親族向け日本語版）"
+    }
+   ]
+  },
+  {
+   "char": "学",
+   "hex": "#66BB6A",
+   "yomi": "まなび",
+   "en": "LEARNING",
+   "members": [
+    "学習",
+    "learning",
+    "評価",
+    "Loop"
+   ],
+   "def_ja": "学び。すべての業務プロセスは、同時に学習プロセス。",
+   "def_en": "Learning — every business process is also a learning process.",
+   "count": 38,
+   "files": 11,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "vickey-project.html",
+     "title": "ビッキーPROJECT | DUNKSOFT®"
+    },
+    {
+     "file": "hyakunin-spring.html",
+     "title": "色彩日本語 — 百人一首 春の歌"
+    }
+   ]
+  },
+  {
+   "char": "緩",
+   "hex": "#8D6E63",
+   "yomi": "ゆるみ",
+   "en": "LOOSE",
+   "members": [
+    "疎結合",
+    "石垣",
+    "loose",
+    "レジリエンス"
+   ],
+   "def_ja": "緩さ。石垣と障子——緩くて、レジリエント。",
+   "def_en": "Looseness — stone wall and paper screen: loose, and resilient.",
+   "count": 14,
+   "files": 6,
+   "top": [
+    {
+     "file": "KANRI_WhitePaper_v11.html",
+     "title": "KANRI白書——10年前の設計図が、いま実装できる"
+    },
+    {
+     "file": "choosing-a-question.html",
+     "title": "問いを選ぶということ——2002年から今へ"
+    },
+    {
+     "file": "vision.html",
+     "title": "digiterior.net VISION LAYER 原型"
+    }
+   ]
+  }
+ ],
+ "lexicon_meta": {
+  "generated": "2026-07-06",
+  "corpus_files": 43,
+  "corpus_chars": 278562,
+  "method": "morphological frequency → semantic convergence to single kanji",
+  "note": "KANRI is not Control — 管理は『理』に収斂（管=Controlを退ける）"
+ }
 }
