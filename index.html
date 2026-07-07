@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>digiterior</title>
 <meta name="description" content="デジタルで、楽を究める。digiterior — love your long life, love your long time.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
@@ -90,6 +91,14 @@
     display:flex;flex-direction:column;align-items:center;
     gap:.85rem;text-align:center;
   }
+  /* 石垣の環 ── 普段は墨、究に触れると石にも色が滲む */
+  .ring{
+    width:clamp(26px,4.4vw,34px);height:auto;display:block;
+    filter:grayscale(1);opacity:.5;
+    transition:filter 1.2s ease,opacity 1.2s ease;
+  }
+  .gate:hover ~ .meta .ring,
+  .gate:focus-visible ~ .meta .ring{filter:grayscale(0);opacity:1}
   .wordmark{
     font-size:clamp(.8rem,2.4vw,.95rem);
     font-weight:400;letter-spacing:.42em;
@@ -140,6 +149,7 @@
 
   <div class="meta">
     <p class="thesis">デジタルで、楽を究める。</p>
+    <img class="ring" src="/logo-mark.svg" alt="" aria-hidden="true">
     <p class="wordmark">digiterior</p>
     <p class="tagline">love your long life, love your long time<sup>™</sup></p>
   </div>
