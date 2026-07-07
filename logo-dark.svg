@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="206 34 268 214" role="img" aria-label="digiterior">
+  <title>digiterior</title>
+  <desc>Ishigaki ring emblem with the digiterior wordmark, brightness-adjusted palette. For dark backgrounds.</desc>
+  <g>
+    <polygon points="406,110 390.6,152.4 372.2,137 382,110" fill="#7986CB"/>
+    <polygon points="383.8,153.8 345.4,171.8 343.5,149.8 368.3,138.3" fill="#d9b13b"/>
+    <polygon points="340,176 297.6,160.6 312.4,142.9 340,153" fill="#2e9d7f"/>
+    <polygon points="295.5,154.5 277.3,115.5 299.2,113.6 311,139" fill="#e07a3e"/>
+    <polygon points="274,110 289.4,67.6 307.8,83 298,110" fill="#faf8f4"/>
+    <polygon points="296.2,66.2 334.6,48.2 336.5,70.2 311.7,81.7" fill="#F9A825"/>
+    <polygon points="340,44 382.4,59.4 367.6,77.1 340,67" fill="#9FA8DA"/>
+    <polygon points="384.5,65.5 402.7,104.5 380.8,106.4 369,81" fill="#58b8a0"/>
+  </g>
+  <text x="340" y="228" text-anchor="middle" style="font-family:'Avenir Next','Helvetica Neue','Hiragino Sans',Arial,sans-serif;font-weight:500;font-size:44px;letter-spacing:3px"><tspan fill="#7986CB">d</tspan><tspan fill="#d9b13b">i</tspan><tspan fill="#2e9d7f">g</tspan><tspan fill="#e07a3e">i</tspan><tspan fill="#faf8f4">t</tspan><tspan fill="#F9A825">e</tspan><tspan fill="#9FA8DA">r</tspan><tspan fill="#58b8a0">i</tspan><tspan fill="#7986CB">o</tspan><tspan fill="#d9b13b">r</tspan></text>
+</svg>
