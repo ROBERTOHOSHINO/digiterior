@@ -2,6 +2,7 @@
 <html lang="ja" dir="ltr">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CHROMAKEY AUTH™ — Peace Vision | DIGITERIOR</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&family=Noto+Serif:wght@300;400&family=Noto+Naskh+Arabic:wght@300;400&display=swap" rel="stylesheet">
@@ -342,5 +343,10 @@ L('ja');
 const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')});},{threshold:.12});
 document.querySelectorAll('[data-obs]').forEach(el=>io.observe(el));
 </script>
+
+<div class="rakkan" style="display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:3.2rem 1rem 2.4rem">
+  <img src="logo-dark.svg" width="22" height="22" alt="digiterior" loading="lazy">
+  <span style="font-size:11px;letter-spacing:.3em;text-indent:.3em;color:#9a968e;font-family:'Noto Sans JP',sans-serif;text-transform:lowercase">digiterior</span>
+</div>
 </body>
 </html>

@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>索引 — digiterior.netが自分自身を読む</title>
 <meta name="description" content="digiterior.net 全43ページ・27.8万字から頻出語を抽出し、24の一文字漢字に収斂した索引。天然色漢字INDEX™の実演。">
@@ -344,5 +345,10 @@ function toggleLang(){var b=document.body,btn=document.getElementById("langBtn")
 if(b.classList.contains("lang-ja")){b.classList.remove("lang-ja");b.classList.add("lang-en");document.documentElement.lang="en";btn.textContent="日本語";document.title="The Index — a site that indexes itself";}
 else{b.classList.remove("lang-en");b.classList.add("lang-ja");document.documentElement.lang="ja";btn.textContent="EN";document.title="索引 — digiterior.netが自分自身を読む";}}
 </script>
+
+<div class="rakkan" style="display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:3.2rem 1rem 2.4rem">
+  <img src="logo-mark.svg" width="22" height="22" alt="digiterior" loading="lazy">
+  <span style="font-size:11px;letter-spacing:.3em;text-indent:.3em;color:#8a8680;font-family:'Noto Sans JP',sans-serif;text-transform:lowercase">digiterior</span>
+</div>
 </body>
 </html>
