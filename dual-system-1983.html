@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>双 ── Dual System、1983。 | html-notes | DIGITERIOR</title>
+<meta name="description" content="1983年、神田佐久間町。有限会社デュアルシステムを創業し、三年で駆け抜けた会田祥彦の物語。没後40年の7月26日に。">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1814;
+  --paper:#faf8f4;
+  --hoshi:#1a237e;   /* 星 · 神田の藍 */
+  --akira:#f9a825;   /* 晃 · 陽光 */
+  --gold:#b8960c;    /* 落款の金 */
+  --teal:#0f6e56;    /* 間の画素 */
+  --accent:#c0550a;  /* 石垣の朱 */
+  --muted:#8a8680;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif JP',serif;overflow-x:hidden}
+
+.langnav{position:sticky;top:0;z-index:10;display:flex;justify-content:center;gap:2.5rem;
+  padding:1rem 2rem;background:rgba(250,248,244,.92);backdrop-filter:blur(6px);
+  border-bottom:1px solid rgba(26,24,20,.08)}
+.langnav a{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;letter-spacing:.3em;
+  color:var(--muted);text-decoration:none;transition:color .3s ease}
+.langnav a:hover,.langnav a:focus-visible{color:var(--teal)}
+.langnav a:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+
+.hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:5rem 2rem 4rem}
+.hero-eyebrow{font-family:'Noto Sans JP',sans-serif;font-size:.62rem;letter-spacing:.45em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:2.8rem}
+.hero-kanji{font-size:clamp(6rem,22vw,11rem);font-weight:300;line-height:1;
+  color:var(--ink);margin-bottom:2.4rem}
+.hero-kanji span{background:linear-gradient(135deg,var(--hoshi) 0%,var(--hoshi) 46%,var(--teal) 54%,var(--teal) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1{font-size:clamp(1.2rem,3.6vw,1.7rem);font-weight:400;line-height:1.9;letter-spacing:.1em}
+.hero-en{margin-top:1.4rem;font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.95rem,2.4vw,1.2rem);font-style:italic;font-weight:300;color:var(--muted)}
+.hero-dates{margin-top:2.6rem;font-family:'Noto Sans JP',sans-serif;font-size:.7rem;
+  letter-spacing:.28em;color:var(--muted);line-height:2.2}
+
+.chapter{max-width:640px;margin:0 auto;padding:4.2rem 1.6rem}
+.eyebrow{font-family:'Noto Sans JP',sans-serif;font-size:.62rem;letter-spacing:.4em;
+  color:var(--muted);margin-bottom:1.6rem;text-transform:uppercase}
+.chapter h2{font-size:clamp(1.25rem,3.4vw,1.7rem);font-weight:400;line-height:1.7;margin-bottom:1.8rem}
+.body{font-size:.95rem;font-weight:300;line-height:2.3;letter-spacing:.03em}
+.body + .body{margin-top:1.6rem}
+.body em{font-style:normal;color:var(--accent)}
+.body strong{font-weight:400;color:var(--hoshi)}
+.pquote{margin:3rem auto;max-width:520px;text-align:center;
+  font-size:clamp(1.05rem,3vw,1.3rem);font-weight:400;line-height:2.1;letter-spacing:.06em}
+.pquote span{display:inline-block;border-bottom:1px solid var(--gold);padding-bottom:.35rem}
+.sep{width:3rem;height:1px;background:rgba(26,24,20,.22);margin:0 auto}
+.sep-lang{width:min(320px,70vw);height:2px;margin:4rem auto;
+  background:linear-gradient(90deg,var(--hoshi),var(--teal),var(--akira),var(--accent))}
+
+/* ── 社是の額 ── */
+.shaze-frame{max-width:560px;margin:3.4rem auto 0;padding:2.2rem;
+  border:1px solid rgba(26,24,20,.25);background:#fff;
+  box-shadow:0 1px 0 rgba(26,24,20,.08), inset 0 0 0 6px var(--paper), inset 0 0 0 7px rgba(184,150,12,.45)}
+.shaze-frame img{width:100%;display:block}
+.shaze-placeholder{min-height:220px;display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Sans JP',sans-serif;font-size:.75rem;letter-spacing:.2em;
+  color:var(--muted);text-align:center;line-height:2.4}
+.shaze-caption{margin-top:1.1rem;text-align:center;font-family:'Noto Sans JP',sans-serif;
+  font-size:.68rem;letter-spacing:.18em;color:var(--muted)}
+
+footer{max-width:640px;margin:0 auto;padding:3rem 1.6rem 1rem;text-align:center}
+.fmeta{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;line-height:2.2;
+  letter-spacing:.12em;color:var(--muted)}
+.rakkan{display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:3.2rem 1rem 2.4rem}
+.rakkan img{width:22px;height:22px}
+.rakkan span{font-family:'Noto Sans JP',sans-serif;font-size:11px;letter-spacing:.3em;
+  text-indent:.3em;color:var(--muted);text-transform:lowercase}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav class="langnav">
+  <a href="#ja">日本語</a>
+  <a href="#en">English</a>
+</nav>
+
+<!-- ═══════════ 日本語 ═══════════ -->
+<section class="hero" id="ja">
+  <p class="hero-eyebrow">html-notes / in memoriam · aida yoshihiko</p>
+  <div class="hero-kanji"><span>双</span></div>
+  <h1>Dual System、1983。<br>ハードとソフトを、双つ繋いだ人。</h1>
+  <p class="hero-en">He named it Dual System — hardware and software, joined.</p>
+  <p class="hero-dates">
+    1986.7.26 没後四十年<br>
+    1983.7.28 創業四十三年
+  </p>
+</section>
+
+<article class="chapter">
+  <p class="eyebrow">壱 ── 神田佐久間町、一九八三</p>
+  <h2>社名が、遺言だった。</h2>
+  <p class="body">一九八三年七月、千代田区神田佐久間町。会田祥彦は資本金四三〇万円で小さな会社を興した。名は<strong>有限会社デュアルシステム</strong>。ハードウェアとソフトウェア、双つを繋いでロボットを作りたい——マイコンキットの熱がまだ秋葉原の路地に残っていた時代に、彼はそう言った。</p>
+  <p class="body">四十三年後のいま、AIの身体性が、ロボティクスが、「情報は物理的である」という原理が、ようやく時代の中心に戻ってきた。ソフトはハードの外では機能しない。<em>双つで、ひとつ。</em>彼が社名に刻んだのは、事業計画ではなく思想だった。</p>
+</article>
+
+<div class="sep"></div>
+
+<article class="chapter">
+  <p class="eyebrow">弐 ── 走る人</p>
+  <h2>「自宅からPC持ってきて」</h2>
+  <p class="body">一九八四年七月十六日、私は社員番号四番として入社した(三人は役員だから、実質はじめての社員である)。買ったばかりのWALKMANで山下達郎と吉田美奈子を聴きながら、はじめての通勤定期で川崎の富士通の工場へ。メインフレームでアセンブルしなければ実行プログラムひとつできない時代だった。</p>
+  <p class="body">開発が遅い。中古のPC-9801と八インチのディスクドライブを、私費三十万円で揃えた。それを聞いた会田社長のひとことが「<em>自宅からPC持ってきて</em>」。一ヶ月後、私の私物は会社の開発マシンになっていた。あちこち走り回っては、勝手に仕事を取ってくる社長だった。未経験のアルバイトが瞬く間に一人前になり、あっという間に人が増えた。会議室が足りなくなって、近所に小さな社長室を借りたのが、亡くなる半年前のことである。</p>
+</article>
+
+<div class="sep"></div>
+
+<article class="chapter">
+  <p class="eyebrow">参 ── 一九八六年七月二十六日</p>
+  <h2>三年の疾走。</h2>
+  <p class="body">胃潰瘍の手術の失敗だった。三十六歳。創業から、まだ三年しか経っていなかった。社員は十五、六人。遺されたのは、社名と、手書きの社是と、走りかけの仕事だった。ご遺族から「後を継いでくれ」と言われ、私は株式をすべて引き取った。二十代の終わりのことである。</p>
+  <p class="body">直後に半導体不況が来て、主力の仕事が消えた。手を止めなかったのは、彼の走り方を見ていたからだと思う。琵琶湖のほとりの工場に納期を過ぎた自動倉庫の応援要請があり、五、六名で滋賀と東京に分かれて半年——複雑なマルチタスクの仕組みを、BASICインタプリタだけで動かし切った。</p>
+  <div class="shaze-frame">
+    <!-- 原本撮影後、下のプレースホルダを <img src="SHAZE-AIDA1983.jpg" alt="会田祥彦 手書きの社是"> に差し替え -->
+    <div class="shaze-placeholder">手書きの社是<br>原本より、近日掲載</div>
+    <p class="shaze-caption">会田祥彦の手による社是 ── 一九八三</p>
+  </div>
+</article>
+
+<div class="sep"></div>
+
+<article class="chapter">
+  <p class="eyebrow">四 ── 双は、続く</p>
+  <h2>線は途切れず、人を経由する。</h2>
+  <p class="body">彼のロボットの夢は、途切れた線ではなかった。当時ご縁のあった天才技術者は、のちにSONYでAIBO初号機に関わったと聞く。一九九四年、私たちは人脈という最も大切なデータを扱う製品を作り「<strong>義理かんり</strong>」と名付けた——三十二年後に「KANRI is not Control」と書くことになる言葉は、このときからずっと社内にいた。海外の仲間に呼ばれやすいようにと名乗った ROBERT は、いまの Roberto になった。</p>
+  <p class="body">そして二〇二六年七月、四十年の社歴を畳んで新しい屋号を選んだ週に、誰も意図しないまま気づいた。<em>Digiterior Studio——DS。</em>彼が一九八三年に置いた二文字と、同じ場所に着地していた。乱積みの石垣の中で、四十三年を隔てて、二つの石が噛み合った音がした。</p>
+  <p class="pquote"><span>双つで、ひとつ。外は、ない。</span></p>
+  <p class="body">七月二十六日は没後四十年の命日、二十八日は四十三年目の創業記念日。この二日のあいだに、この頁を架けておく。記録は曲がらない。会田さん、あなたの会社は、いまも動いています。</p>
+</article>
+
+<div class="sep-lang"></div>
+
+<!-- ═══════════ English ═══════════ -->
+<section class="hero" id="en" style="min-height:60vh">
+  <p class="hero-eyebrow">html-notes / english</p>
+  <h1 style="font-family:'Cormorant Garamond',serif;font-weight:300">Dual System, 1983.</h1>
+</section>
+
+<article class="chapter">
+  <p class="body" style="font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:2">In July 1983, in Kanda, Tokyo, Yoshihiko Aida founded a small company and named it <em style="color:var(--hoshi)">Dual System</em> — hardware and software, joined, to build robots. He ran everywhere, brought back work no one had asked him to find, and turned an employee's second-hand PC into the company's development machine within a month. Three years later, on July 26, 1986, he died at thirty-six, after a failed operation. Fifteen employees, a company name, and a handwritten company creed were what remained. His family asked me to carry it on. I was in my late twenties.</p>
+  <p class="body" style="font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:2">Forty years on, the industry has circled back to what he named: AI is reaching for a body, and information — we now say — is physical. Software does not run outside hardware. Two, joined as one. In 1994 we built a product for the most human of databases, personal ties, and called it <em style="color:var(--hoshi)">Giri-KANRI</em>; thirty-two years later I would write "KANRI is not Control." And in July 2026, the week we folded forty years of company history into a new name, we noticed what no one had planned: Digiterior Studio — DS. The same two letters he set down in 1983. In a dry-stone wall, two stones cut forty-three years apart had found each other's shape.</p>
+  <p class="body" style="font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:2">July 26 is the fortieth anniversary of his passing; July 28, the forty-third of the founding. This page is a bridge laid between the two days. Records do not bend. Aida-san — your company is still running.</p>
+</article>
+
+<footer>
+  <p class="fmeta">
+    html-notes ／ 双 ── Dual System、1983。<br>
+    Roberto Hoshino（<ruby>星野晃一郎<rt>ほしのこういちろう</rt></ruby>）× Claude.ai<br>
+    Digiterior Studio ／ 2026.07.26 — 07.28<br>
+    © 2026 Roberto Hoshino. Smart Life Styles™️ — Love your long life, love your long time™️
+  </p>
+</footer>
+
+<div class="rakkan">
+  <img src="logo-mark.svg" alt="digiterior" loading="lazy">
+  <span>digiterior</span>
+</div>
+
+</body>
+</html>
