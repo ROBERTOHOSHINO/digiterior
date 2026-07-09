@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>参照の索引 ── 反復する八つの言葉 | Philosophy | DIGITERIOR</title>
+<meta name="description" content="この数年、身近で反復している言葉の元を少し書き出す。荘子、ツヴァイク、フランクル、竹内整一、レヴィ=ストロース、エンデ、コエーリョ——扇の勾配の下に流れる、八つの水源。">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1814;
+  --paper:#faf8f4;
+  --hoshi:#1A237E;
+  --akira:#F9A825;
+  --gold:#b8960c;
+  --teal:#0f6e56;
+  --accent:#c0550a;
+  --green:#1B6B5A;
+  --plum:#7b3a52;
+  --slate:#4a5568;
+  --muted:#8a8680;
+  --line:rgba(26,24,20,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif JP',serif;line-height:1.9;overflow-x:hidden}
+
+.crumb{max-width:800px;margin:0 auto;padding:1.4rem 1.6rem 0}
+.crumb a{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;letter-spacing:.2em;
+  color:var(--muted);text-decoration:none}
+.crumb a:hover{color:var(--gold)}
+.crumb span{margin:0 .6rem;color:var(--line)}
+
+/* ── HERO: 水面 ── */
+.hero{max-width:800px;margin:0 auto;padding:3.5rem 1.6rem 2rem;text-align:center;position:relative}
+.hero-eyebrow{font-family:'Noto Sans JP',sans-serif;font-size:.62rem;letter-spacing:.45em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:2rem}
+.hero h1{font-size:clamp(1.6rem,4.4vw,2.2rem);font-weight:400;line-height:1.6;margin-bottom:1.4rem}
+.hero-en{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;
+  font-weight:300;color:var(--muted)}
+.hero-lede{font-size:.92rem;font-weight:300;line-height:2.3;margin-top:2rem;color:var(--ink);
+  max-width:600px;margin-left:auto;margin-right:auto;text-align:left}
+.hero-lede em{font-style:normal;color:var(--accent)}
+
+/* 水面のさざなみ SVG は視覚的なアクセント */
+.water{width:min(320px,60vw);margin:2.4rem auto 0;opacity:.55}
+
+/* ── 八つの石 ── */
+.stones{max-width:800px;margin:0 auto;padding:2rem 1.6rem 3rem;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.2rem}
+.card{background:#fff;border:1px solid var(--line);padding:2rem 1.8rem;
+  transition:all .35s cubic-bezier(.16,1,.3,1);cursor:default;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:var(--stone-color,var(--gold));
+  opacity:.65;transition:opacity .3s ease, width .3s ease}
+.card:hover{transform:translateY(-2px);border-color:var(--stone-color,var(--gold));box-shadow:0 8px 24px -12px rgba(26,24,20,.15)}
+.card:hover::before{opacity:1;width:5px}
+
+.card-num{font-family:'Cormorant Garamond',serif;font-size:.85rem;font-style:italic;
+  color:var(--muted);letter-spacing:.2em}
+.card-kanji{font-size:2.2rem;font-weight:300;line-height:1;margin:.6rem 0 .3rem;color:var(--stone-color,var(--ink))}
+.card-title{font-family:'Noto Serif JP',sans-serif;font-size:1.05rem;font-weight:500;
+  line-height:1.5;margin-bottom:.5rem;color:var(--ink)}
+.card-title small{display:block;font-size:.72rem;font-weight:300;color:var(--muted);
+  letter-spacing:.05em;margin-top:.35rem;font-family:'Cormorant Garamond',serif;font-style:italic}
+.card-source{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;letter-spacing:.12em;
+  color:var(--muted);margin-bottom:1.1rem;line-height:1.8}
+.card-body{font-size:.88rem;font-weight:300;line-height:2.1;letter-spacing:.02em}
+.card-body em{font-style:normal;color:var(--accent)}
+.card-body strong{font-weight:400;color:var(--hoshi)}
+.card-echo{margin-top:1.1rem;padding-top:1rem;border-top:1px dashed var(--line);
+  font-family:'Noto Sans JP',sans-serif;font-size:.7rem;letter-spacing:.05em;
+  color:var(--muted);line-height:2}
+.card-echo b{font-weight:400;color:var(--stone-color,var(--gold));font-family:'Noto Serif JP',sans-serif}
+
+/* 各カードの色 */
+.c1{--stone-color:var(--teal)}
+.c2{--stone-color:var(--hoshi)}
+.c3{--stone-color:var(--ink)}
+.c4{--stone-color:var(--gold)}
+.c5{--stone-color:var(--green)}
+.c6{--stone-color:var(--accent)}
+.c7{--stone-color:var(--plum)}
+.c8{--stone-color:var(--slate)}
+
+/* ── 締めの一節 ── */
+.coda{max-width:600px;margin:2rem auto;padding:3rem 1.6rem;text-align:center;
+  border-top:1px solid var(--line)}
+.coda-body{font-size:.92rem;font-weight:300;line-height:2.3;color:var(--ink)}
+.coda-body em{font-style:normal;color:var(--accent)}
+.pquote{margin:2rem auto 0;max-width:480px;text-align:center;
+  font-size:clamp(1rem,2.6vw,1.15rem);font-weight:400;line-height:2;letter-spacing:.05em}
+.pquote span{display:inline-block;border-bottom:1px solid var(--gold);padding-bottom:.35rem}
+
+.back{max-width:560px;margin:1rem auto 0;padding:2rem 1.6rem;text-align:center}
+.back a{font-family:'Noto Sans JP',sans-serif;font-size:.72rem;letter-spacing:.25em;
+  color:var(--muted);text-decoration:none;transition:color .3s ease}
+.back a:hover{color:var(--gold)}
+
+footer{max-width:640px;margin:0 auto;padding:2rem 1.6rem 1rem;text-align:center}
+.fmeta{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;line-height:2.2;
+  letter-spacing:.12em;color:var(--muted)}
+.rakkan{display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:3rem 1rem 2.4rem}
+.rakkan img{width:22px;height:22px}
+.rakkan span{font-family:'Noto Sans JP',sans-serif;font-size:11px;letter-spacing:.3em;
+  text-indent:.3em;color:var(--muted);text-transform:lowercase}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav class="crumb">
+  <a href="philosophy.html">Philosophy</a><span>／</span><span style="color:var(--ink)">参照の索引</span>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">reference index · eight recurring words</p>
+  <h1>参照の索引 ──<br>反復する八つの言葉</h1>
+  <p class="hero-en">Eight words that keep surfacing.</p>
+
+  <!-- 水面のさざなみ -->
+  <svg class="water" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="#b8960c" stroke-width="0.8" stroke-linecap="round">
+      <path d="M 20,40 Q 60,28 100,40 T 180,40 T 260,40 T 300,40" opacity="0.55"/>
+      <path d="M 15,52 Q 55,42 95,52 T 175,52 T 255,52 T 305,52" opacity="0.35"/>
+      <path d="M 25,28 Q 65,18 105,28 T 185,28 T 265,28 T 300,28" opacity="0.35"/>
+      <circle cx="80" cy="40" r="1.2" fill="#F9A825" stroke="none"/>
+      <circle cx="180" cy="40" r="1.5" fill="#F9A825" stroke="none"/>
+      <circle cx="240" cy="40" r="1" fill="#F9A825" stroke="none"/>
+    </g>
+  </svg>
+
+  <p class="hero-lede">この数年、身近で反復している言葉が幾つかある。時々薄れて、また浮かんでくる。<em>水面の光の反射によって、記憶に入ったり出たりする。</em>このタイミングでは、これ、というのを八つ書き出しておく。扇の勾配の下に流れる水源、あるいは石垣の下の暗渠。読み返した時にまた光が当たるように。</p>
+</section>
+
+<!-- ═══════════ 八つの石 ═══════════ -->
+<div class="stones">
+
+  <article class="card c1">
+    <div class="card-num">i</div>
+    <div class="card-kanji">遊</div>
+    <h2 class="card-title">不測に立ちて無有に遊ぶ<small>Standing in the unknowable, playing in the void.</small></h2>
+    <p class="card-source">荘子・応帝王篇</p>
+    <p class="card-body">予測不能の場所に立って、何もない中で遊ぶ。二千数百年前の東洋古典が、<em>digiterior の "あいだに立つ"</em> を先に言っていた。しかもここには「遊ぶ」の一字がある。緩さと究めるが、荘子の中では最初から一つだった。</p>
+    <div class="card-echo">
+      <b>echo:</b> 扇の要「楽」 · Heuristic · KANRI is not Control
+    </div>
+  </article>
+
+  <article class="card c2">
+    <div class="card-num">ii</div>
+    <div class="card-kanji">時</div>
+    <h2 class="card-title">星の時間<small>Sternstunden der Menschheit / Decisive Moments</small></h2>
+    <p class="card-source">シュテファン・ツヴァイク『人類の星の時間』</p>
+    <p class="card-body">歴史が凝縮する決定的な瞬間の記録。ツヴァイクが集めたのは、後から見て「あの瞬間に世界の向きが変わった」と分かる十二の場面。<em>会田祥彦が一九八三年に社名を刻んだ瞬間、株を引き取った一九八六年の夏、そして Digiterior Studio が着地したこの週</em>——後から振り返れば全部が星の時間である。</p>
+    <div class="card-echo">
+      <b>echo:</b> 双 - Dual System 1983 · 螺旋の索引
+    </div>
+  </article>
+
+  <article class="card c3">
+    <div class="card-num">iii</div>
+    <div class="card-kanji">意</div>
+    <h2 class="card-title">究極の意味<small>The Ultimate Meaning</small></h2>
+    <p class="card-source">ヴィクトール・フランクル『夜と霧』</p>
+    <p class="card-body">強制収容所という極限の場で、それでも人が意味を失わない条件は何か。<em>「なぜ生きるかを持つ者は、どのように生きるかにも耐えられる」</em>(ニーチェをフランクルが引く)。楽 = PLAY の極限状態からの照射。プロセスにこだわる、というテーマの背骨に、いつもこの一冊がいる。</p>
+    <div class="card-echo">
+      <b>echo:</b> 扇の要「楽」 · 持田盛二の遺訓
+    </div>
+  </article>
+
+  <article class="card c4">
+    <div class="card-num">iv</div>
+    <div class="card-kanji">自</div>
+    <h2 class="card-title">自らと自ずから<small>The Self, and the Self-So</small></h2>
+    <p class="card-source">竹内整一(日本倫理思想史)</p>
+    <p class="card-body">「自分でやる(自ら)」と「自然と起こる(自ずから)」は、日本語では同じ「自」の字を使う。この重なりは偶然ではなく、日本語がずっと保ってきた微妙な文法である。<em>意志と自然の"あいだ"。</em>digiterior が interior と exterior の間に立つのと、同じ場所に、この文法がある。</p>
+    <div class="card-echo">
+      <b>echo:</b> 間 · 動的平衡 · KANRI
+    </div>
+  </article>
+
+  <article class="card c5">
+    <div class="card-num">v</div>
+    <div class="card-kanji">組</div>
+    <h2 class="card-title">ブリコラージュ<small>Bricolage / The Savage Mind</small></h2>
+    <p class="card-source">クロード・レヴィ=ストロース『野生の思考』</p>
+    <p class="card-body">手元にある材料で、その場で組み立てる。設計図から作るのではなく、拾ってきた石で家を建てる。<em>今週やった全部——ロゴの環、43ページの落款、扇の勾配のSVG、螺旋の索引——ブリコラージュだった。</em>そして石垣は、ブリコラージュの結晶である。抽象を経ずに具体の中で緻密に思考する方法、それが野生の思考。</p>
+    <div class="card-echo">
+      <b>echo:</b> 石垣・落款・扇 · sakuin.html · MEMORY-BANK
+    </div>
+  </article>
+
+  <article class="card c6">
+    <div class="card-num">vi</div>
+    <div class="card-kanji">盗</div>
+    <h2 class="card-title">MOMO / モモ<small>Momo and the Time Thieves</small></h2>
+    <p class="card-source">ミヒャエル・エンデ</p>
+    <p class="card-body">時間泥棒に対して、灰色の男たちに対して。<em>効率の名の下に人の時間を吸い上げるものへの、児童文学からの静かな反乱。</em>Love your long time™️ は、この物語のもう一つの読み方かもしれない。時間は人生のためにある——DUNKSOFT の社是と、モモが立っていた場所は、同じ場所である。</p>
+    <div class="card-echo">
+      <b>echo:</b> Smart Life Styles · Love your long time™
+    </div>
+  </article>
+
+  <article class="card c7">
+    <div class="card-num">vii</div>
+    <div class="card-kanji">具</div>
+    <h2 class="card-title">野生の思考<small>La Pensée Sauvage / The Science of the Concrete</small></h2>
+    <p class="card-source">クロード・レヴィ=ストロース</p>
+    <p class="card-body">「未開の思考」ではない。抽象概念を経由せず、具体そのものの中で緻密に思考する方法。<em>色付き漢字の四本の針(形・音・色・意味)は、まさに具体の科学である。</em>抽象化してからカテゴリで管理するRDBに対して、フラットファイル+INDEXは野生の思考の実装。sakuin.html も螺旋の索引も、同じ系譜に属している。</p>
+    <div class="card-echo">
+      <b>echo:</b> 天然色漢字INDEX™ · sakuin.html · 螺旋の索引
+    </div>
+  </article>
+
+  <article class="card c8">
+    <div class="card-num">viii</div>
+    <div class="card-kanji">弓</div>
+    <h2 class="card-title">弓を引く人<small>O Caminho do Arco / The Archer</small></h2>
+    <p class="card-source">パウロ・コエーリョ</p>
+    <p class="card-body">日本人の弓道家を主人公にした、コエーリョ最新作。ブラジルの作家が遠く離れた場所から日本の道を書く——外側からの視点が、内側で当たり前だったものを言葉に結晶させる。ヘリゲル『弓と禅』が半世紀前にドイツから同じことをやっている。<em>あいだに立つ書き手</em>の系譜。今週、パエリア協会の栗原事務局長へ貸した。母が弓道を追求した人だという。</p>
+    <div class="card-echo">
+      <b>echo:</b> 持田盛二 · 心で剣道する · Play を究める
+    </div>
+  </article>
+
+</div>
+
+<!-- ═══════════ 締め ═══════════ -->
+<section class="coda">
+  <p class="coda-body">これらの言葉は、どれも一度で意味を掴み切ることができない。<em>時々薄れ、また浮かんでくる。</em>読んだ時と、いま思い出す時と、来年また戻ってくる時とで、光の当たり方が違う。だから索引にしておく——固定した用語集としてではなく、水面のさざなみが揺れるたびに、また違う輝きで浮かび上がってくるための、八つの標識として。</p>
+  <p class="pquote"><span>反復するもの、こそが、記憶である。</span></p>
+</section>
+
+<div class="back">
+  <a href="philosophy.html">← Philosophy · 扇の勾配 へ戻る</a>
+</div>
+
+<footer>
+  <p class="fmeta">
+    Philosophy ／ 参照の索引 ── 反復する八つの言葉<br>
+    Roberto Hoshino（<ruby>星野晃一郎<rt>ほしのこういちろう</rt></ruby>）× Claude.ai<br>
+    Digiterior Studio ／ 2026.07.09<br>
+    © 2026 Roberto Hoshino. Smart Life Styles™️ — Love your long life, love your long time™️
+  </p>
+</footer>
+
+<div class="rakkan">
+  <img src="logo-mark.svg" alt="digiterior" loading="lazy">
+  <span>digiterior</span>
+</div>
+
+</body>
+</html>
