@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>扇の勾配 ── Philosophy | DIGITERIOR</title>
+<meta name="description" content="麓は緩く、上は峻烈。江戸城の石垣に倣った、digiterior の思想の入口。あいだ、多様、緩さ、螺旋、そして楽。">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1814;
+  --paper:#faf8f4;
+  --hoshi:#1A237E;
+  --akira:#F9A825;
+  --gold:#b8960c;
+  --teal:#0f6e56;
+  --accent:#c0550a;
+  --green:#1B6B5A;
+  --muted:#8a8680;
+  --line:rgba(26,24,20,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif JP',serif;line-height:1.9;overflow-x:hidden}
+
+/* ── HERO: 扇の勾配 ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:5rem 1.6rem 4rem;position:relative}
+.hero-eyebrow{font-family:'Noto Sans JP',sans-serif;font-size:.62rem;letter-spacing:.45em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:2.8rem}
+.fan-svg{width:min(420px,80vw);height:auto;margin-bottom:3rem;display:block}
+.hero h1{font-size:clamp(1.4rem,4vw,2rem);font-weight:400;line-height:1.7;letter-spacing:.08em;
+  margin-bottom:1.4rem}
+.hero-en{font-family:'Cormorant Garamond',serif;font-size:clamp(.95rem,2.2vw,1.15rem);
+  font-style:italic;font-weight:300;color:var(--muted)}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-family:'Noto Sans JP',sans-serif;font-size:.6rem;letter-spacing:.4em;color:var(--muted);
+  writing-mode:vertical-rl;text-orientation:upright}
+
+/* ── 各段のセクション ── */
+.stone{max-width:640px;margin:0 auto;padding:5rem 1.6rem 2rem;position:relative}
+.stone-num{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;
+  color:var(--muted);letter-spacing:.2em;margin-bottom:.8rem;text-align:center}
+.stone-kanji{font-size:clamp(3.8rem,10vw,5.6rem);font-weight:300;line-height:1;
+  text-align:center;margin-bottom:1.8rem}
+.stone-title{font-family:'Noto Sans JP',sans-serif;font-size:.72rem;letter-spacing:.4em;
+  color:var(--muted);text-align:center;text-transform:uppercase;margin-bottom:2.4rem}
+.stone-body{font-size:.95rem;font-weight:300;line-height:2.3;letter-spacing:.03em}
+.stone-body + .stone-body{margin-top:1.4rem}
+.stone-body em{font-style:normal;color:var(--accent)}
+.stone-body strong{font-weight:400;color:var(--hoshi)}
+.stone-quote{margin:2rem 0;padding:1.4rem 1.6rem;border-left:2px solid var(--gold);
+  background:rgba(184,150,12,.04);font-size:.9rem;line-height:2.1;font-weight:300}
+.stone-quote cite{display:block;margin-top:.6rem;font-family:'Noto Sans JP',sans-serif;
+  font-size:.68rem;letter-spacing:.15em;color:var(--muted);font-style:normal;text-align:right}
+.stone-sep{width:2rem;height:1px;background:var(--line);margin:3.5rem auto 0}
+
+/* 色: 麓は緩く、上は峻烈 */
+.s1 .stone-kanji{color:var(--hoshi)}
+.s2 .stone-kanji{color:var(--teal)}
+.s3 .stone-kanji{color:var(--gold)}
+.s4 .stone-kanji{color:var(--accent)}
+.s5 .stone-kanji{color:var(--ink)}
+
+/* ── 要 ── */
+.kaname{max-width:640px;margin:0 auto;padding:6rem 1.6rem 4rem;text-align:center}
+.kaname-num{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;
+  color:var(--muted);letter-spacing:.2em;margin-bottom:.8rem}
+.kaname-kanji{font-size:clamp(7rem,20vw,11rem);font-weight:300;line-height:1;color:var(--ink);
+  margin-bottom:1.4rem;text-shadow:0 1px 0 rgba(184,150,12,.15)}
+.kaname-title{font-family:'Noto Sans JP',sans-serif;font-size:.75rem;letter-spacing:.4em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:3rem}
+.kaname-body{font-size:1rem;font-weight:300;line-height:2.4;letter-spacing:.04em;text-align:left}
+.kaname-body + .kaname-body{margin-top:1.4rem}
+.kaname-body em{font-style:normal;color:var(--accent)}
+.kaname-body strong{font-weight:400;color:var(--hoshi)}
+.kaname-quote{margin:2.4rem 0;padding:1.6rem 1.8rem;border:1px solid var(--gold);
+  background:#fff;font-size:.92rem;line-height:2.2;font-weight:300;text-align:left}
+.kaname-quote cite{display:block;margin-top:.8rem;font-family:'Noto Sans JP',sans-serif;
+  font-size:.68rem;letter-spacing:.15em;color:var(--muted);font-style:normal;text-align:right}
+
+/* ── 暗渠(対談へのリンク) ── */
+.underground{max-width:520px;margin:2rem auto 0;padding:2.4rem 1.6rem;text-align:center;
+  border-top:1px solid var(--line)}
+.underground a{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;letter-spacing:.2em;
+  color:var(--muted);text-decoration:none;line-height:2.2;transition:color .3s ease;display:inline-block}
+.underground a:hover{color:var(--gold)}
+.underground a small{display:block;font-size:.62rem;letter-spacing:.28em;margin-top:.4rem;opacity:.7}
+
+footer{max-width:640px;margin:0 auto;padding:3rem 1.6rem 1rem;text-align:center}
+.fmeta{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;line-height:2.2;
+  letter-spacing:.12em;color:var(--muted)}
+.rakkan{display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:3.2rem 1rem 2.4rem}
+.rakkan img{width:22px;height:22px}
+.rakkan span{font-family:'Noto Sans JP',sans-serif;font-size:11px;letter-spacing:.3em;
+  text-indent:.3em;color:var(--muted);text-transform:lowercase}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO: 扇の勾配 ═══════════ -->
+<section class="hero">
+  <p class="hero-eyebrow">philosophy · the slope of a fan</p>
+
+  <!-- 江戸城の石垣を思わせる扇の勾配。麓は緩く、上へ峻烈に。 -->
+  <svg class="fan-svg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" aria-label="扇の勾配">
+    <!-- 空 -->
+    <rect width="400" height="320" fill="#faf8f4"/>
+    <!-- 石垣の輪郭: 麓は緩やか、上に向かって反り返る -->
+    <path d="M 40,320 Q 60,180 130,60 L 270,60 Q 340,180 360,320 Z" fill="none" stroke="#1a1814" stroke-width="1"/>
+    <!-- 石一つずつ (乱積み風) -->
+    <g fill="none" stroke="#1a1814" stroke-width="0.6" opacity="0.35">
+      <!-- 下段 -->
+      <path d="M 40,320 L 88,320 L 96,290 L 44,285 Z"/>
+      <path d="M 96,290 L 44,285 L 50,255 L 108,258 Z"/>
+      <path d="M 88,320 L 150,320 L 158,288 L 96,290 Z"/>
+      <path d="M 150,320 L 210,320 L 214,286 L 158,288 Z"/>
+      <path d="M 210,320 L 268,320 L 262,286 L 214,286 Z"/>
+      <path d="M 268,320 L 320,320 L 310,288 L 262,286 Z"/>
+      <path d="M 320,320 L 360,320 L 348,285 L 310,288 Z"/>
+      <!-- 二段目 -->
+      <path d="M 50,255 L 108,258 L 118,225 L 60,220 Z"/>
+      <path d="M 108,258 L 158,288 L 214,286 L 220,254 L 168,230 Z"/>
+      <path d="M 220,254 L 262,286 L 310,288 L 300,254 L 244,230 Z"/>
+      <path d="M 300,254 L 348,285 L 340,250 L 288,224 Z"/>
+      <!-- 三段目 -->
+      <path d="M 60,220 L 118,225 L 128,190 L 74,184 Z"/>
+      <path d="M 118,225 L 168,230 L 220,254 L 226,220 L 172,196 Z"/>
+      <path d="M 172,196 L 226,220 L 288,224 L 280,192 L 226,178 Z"/>
+      <path d="M 280,192 L 288,224 L 340,250 L 328,215 L 274,192 Z"/>
+      <!-- 四段目 -->
+      <path d="M 74,184 L 128,190 L 138,152 L 88,146 Z"/>
+      <path d="M 128,190 L 172,196 L 226,178 L 232,145 L 180,138 Z"/>
+      <path d="M 232,145 L 226,178 L 274,192 L 280,192 L 296,152 L 246,142 Z"/>
+      <!-- 五段目 -->
+      <path d="M 88,146 L 138,152 L 150,110 L 102,108 Z"/>
+      <path d="M 138,152 L 180,138 L 232,145 L 240,108 L 194,102 Z"/>
+      <path d="M 240,108 L 232,145 L 296,152 L 314,112 L 260,105 Z"/>
+      <!-- 六段目 (要付近) -->
+      <path d="M 102,108 L 150,110 L 158,78 L 116,74 Z"/>
+      <path d="M 150,110 L 194,102 L 240,108 L 244,75 L 200,68 L 158,78 Z"/>
+      <path d="M 244,75 L 240,108 L 314,112 L 300,80 Z"/>
+      <!-- 天端 -->
+      <path d="M 116,74 L 158,78 L 200,68 L 244,75 L 300,80 L 270,60 L 130,60 Z"/>
+    </g>
+    <!-- 要石(頂点)の一石だけ色 -->
+    <path d="M 158,78 L 200,68 L 244,75 L 240,108 L 194,102 Z" fill="#F9A825" opacity="0.75" stroke="#1a1814" stroke-width="0.6"/>
+    <!-- 楽の一字 -->
+    <text x="200" y="94" text-anchor="middle" font-family="Noto Serif JP,serif" font-size="26" font-weight="400" fill="#1a1814">楽</text>
+  </svg>
+
+  <h1>麓は、緩く。<br>上は、峻烈に。</h1>
+  <p class="hero-en">Loose at the base. Steep at the crown.</p>
+  <div class="scroll-hint">登</div>
+</section>
+
+<!-- ═══════════ 五段の石 ═══════════ -->
+
+<section class="stone s1">
+  <p class="stone-num">i</p>
+  <div class="stone-kanji">間</div>
+  <p class="stone-title">the between</p>
+  <p class="stone-body"><strong>digiterior</strong> という名前は、interior と exterior の"あいだ"にある。デジタルは実体の外側の超越ではなく、内側の内蔵でもない。<em>あいだに立つ媒質(medium)である。</em></p>
+  <p class="stone-body">スピノザは、神即ち自然と言った。実体の外側は存在しない。あらゆるものは唯一の実体の変状であって、外から眺める視点はない。ソフトウェアもハードウェアの外では機能しない。<em>情報は、物理的である。</em></p>
+  <p class="stone-body">だから私たちは、内側にも外側にも立たない。"あいだ"に立つ。障子は内でも外でもなく、光を通す膜。石垣は石と石の隙間で力を逃がす。<em>あいだは、弱い場所ではなく、生きた場所である。</em></p>
+  <div class="stone-sep"></div>
+</section>
+
+<section class="stone s2">
+  <p class="stone-num">ii</p>
+  <div class="stone-kanji">多</div>
+  <p class="stone-title">the many within one</p>
+  <p class="stone-body">サッカー用語で <strong>Polyvalent</strong> というのがある。色々なポジションを楽しめる人はチャンスが広がる。器用貧乏ではない——自分の中にすでに多様性が内在していて、それを引き出す環境と出会いがあるかどうか、という話である。</p>
+  <p class="stone-body">DNAを遡っていくと、三十二世代で自分の中に四十二億人の人がいる。「私はこんな人間だ」という固定した自己像は、この数字の前で崩れる。<em>自分は一人ではなく、四十二億の可能性の束だった。</em></p>
+  <p class="stone-body">Epigenetic——DNAは固定されているが、何が発現するかは環境と関係によって変わる。日本語が生まれながらにしてカラフルだったように、人もまた、生まれながらにして多色である。</p>
+  <div class="stone-sep"></div>
+</section>
+
+<section class="stone s3">
+  <p class="stone-num">iii</p>
+  <div class="stone-kanji">緩</div>
+  <p class="stone-title">the looseness</p>
+  <p class="stone-body">情報処理から来た <strong>Heuristic</strong> という考え方——結果をプロットしていくと、このあたりに収束はするが一点にはならない。突き詰めるとそこから拡散したり、ぼんやりそのあたりという落ち着きどころもある。<em>正解とはちょっと違う緩さを許容する。</em>そこからまた次に進んでいく。</p>
+  <p class="stone-body">乱積みの石垣は、隙間を残すから崩れない。モルタルで固めた壁は一点の亀裂が全体に走る。緩さは弱さではなく、複雑さを受け止めるための構造である。KANRIとControlの違いは、ここにある。</p>
+  <div class="stone-sep"></div>
+</section>
+
+<section class="stone s4">
+  <p class="stone-num">iv</p>
+  <div class="stone-kanji">螺</div>
+  <p class="stone-title">the spiral</p>
+  <p class="stone-body">同じ主題が、少しずつ角度を変えて戻ってくる。持田盛二十段の遺訓——「基礎に五十年かかった」「五十を過ぎてから本当の修行に入った」「心で剣道しようとしたから」。<em>五十年かけて基礎に収束していったと思ったら、そこからさらに新しい拡散が始まる。</em></p>
+  <p class="stone-body">書きっぱなしのブログに二十年後に索引を振ると、螺旋が見えた。段取り、集中、緩さ、遊び——若い頃に書いた一本の記事が、二十一年後の自分の言葉と同じ場所を歩いていた。<em>螺旋は、上から見て初めて円に見える。</em></p>
+  <p class="stone-body">動的平衡(福岡伸一)——記憶も細胞も書き換わり続ける。それでも一貫している何かがある。書き換わりの中の一貫性、それが螺旋の正体である。</p>
+  <div class="stone-sep"></div>
+</section>
+
+<!-- ═══════════ 要 ═══════════ -->
+<section class="kaname">
+  <p class="kaname-num">v · the keystone</p>
+  <div class="kaname-kanji">楽</div>
+  <p class="kaname-title">to play, to enjoy, to master</p>
+
+  <p class="kaname-body">扇のいちばん上、要の位置に、<strong>楽</strong> の一字を置く。楽 = PLAY。遊ぶこと、楽しむこと、そして究めること。この一字が、下段のあいだ・多様・緩さ・螺旋のすべてを説明する。</p>
+
+  <p class="kaname-body">孔子は言った——<em>知之者、不如好之者。好之者、不如楽之者。</em>知る者は好む者に及ばず、好む者は楽しむ者に及ばず。楽しむことは、知や愛好の上位にある到達点である。</p>
+
+  <p class="kaname-body">そしてスピノザは、それを賢者の条件として書き残した——</p>
+
+  <div class="kaname-quote">
+    もろもろの物を利用してそれをできる限り楽しむ〔……〕ことは賢者にふさわしい。たしかに、ほどよくとられた味のよい食物および飲料によって、さらにまた芳香、緑なす植物の快い美、装飾、音楽、運動競技、演劇、そのほか<em style="color:var(--accent);font-style:normal">他人を害することなしに</em>各人の利用しうるこの種の事柄によって、自らを爽快にし元気づけることは、賢者にふさわしいのである。
+    <cite>スピノザ『エチカ』第四部定理四十五備考</cite>
+  </div>
+
+  <p class="kaname-body">十七世紀に書かれたこの言葉は、まったく古びていない。楽しむことを追求する人間が、最も知性的な人間だという逆転の発想。「他人を害することなしに」という条件が、Smart Life Styles™ の骨格そのものになっている。</p>
+
+  <p class="kaname-body">楽しめるレベルになる高い技術の獲得には、時間がかかる。上達できず苦しい時もある。<em>次のレベルへ上げていくための失敗や挫折を楽しむこと</em>——それが Play の精神であり、究めるということである。</p>
+
+  <p class="kaname-body">要は、扇のいちばん狭い一点である。しかしそこを留めれば、扇はどれだけでも広がる。<em>Digiterior のすべての活動は、この一点から広がっていく。</em></p>
+</section>
+
+<!-- ═══════════ 暗渠 ═══════════ -->
+<div class="underground">
+  <a href="philosophy-dialogue-2026-03.html">
+    3月の対談 ── 楽 = PLAY をめぐって
+    <small>roberto hoshino × claude, march 2026</small>
+  </a>
+</div>
+
+<footer>
+  <p class="fmeta">
+    Philosophy ／ 扇の勾配 ── 楽を、究める。<br>
+    Roberto Hoshino（<ruby>星野晃一郎<rt>ほしのこういちろう</rt></ruby>）× Claude.ai<br>
+    Digiterior Studio ／ 2026.07.08<br>
+    © 2026 Roberto Hoshino. Smart Life Styles™️ — Love your long life, love your long time™️
+  </p>
+</footer>
+
+<div class="rakkan">
+  <img src="logo-mark.svg" alt="digiterior" loading="lazy">
+  <span>digiterior</span>
+</div>
+
+</body>
+</html>
