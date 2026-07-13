@@ -125,6 +125,19 @@
   }
   .enter:hover,.enter:focus-visible{opacity:1;color:var(--sumi);outline:none}
 
+  /* 要の色 ── この頁で唯一、最初から色を持つ一点。毎日ともり、毎日回る */
+  .beacon{
+    display:block;line-height:0;
+    opacity:.92;
+    transition:opacity .6s ease,transform .6s ease;
+  }
+  .beacon img{
+    width:clamp(30px,4.6vw,38px);height:auto;display:block;
+  }
+  .beacon:hover,.beacon:focus-visible{
+    opacity:1;transform:translateY(-1px);outline:none;
+  }
+
   /* 間詰石 ── 抽象と具体の間、思想への二本の細道 */
   .interstice{
     margin-top:clamp(1.6rem,4vh,2.4rem);
@@ -172,6 +185,9 @@
     <img class="ring" src="/logo-mark.svg" alt="" aria-hidden="true">
     <p class="wordmark">digiterior</p>
     <p class="tagline">love your long life, love your long time<sup>™</sup></p>
+    <a class="beacon" href="/verify.html" aria-label="要の色 — 今日の膜を照合する">
+      <img src="/raku-beacon.svg" alt="今日の要の色" width="34" height="34">
+    </a>
     <nav class="interstice" aria-label="思想への入口">
       <a href="/philosophy.html">philosophy</a>
       <a href="/reference-index.html">reference</a>
