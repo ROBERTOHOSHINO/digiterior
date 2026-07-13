@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>要の色 ── Verify | DIGITERIOR</title>
+<meta name="description" content="扇の要の色による分散色認証の検証。合言葉から今日あるべき色を導出し、公開された膜と照合します。">
+<style>
+:root{
+  --washi:#F5F2E9; --ink:#1F1D1A; --faded:#8A857B; --line:#DDD8CB;
+  --day:#8A857B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--washi); color:var(--ink);
+  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  line-height:1.9; font-size:16px;
+  min-height:100vh; display:flex; justify-content:center;
+}
+main{width:100%; max-width:540px; padding:9vh 24px 12vh}
+.eyebrow{font-size:12px; letter-spacing:0.35em; color:var(--faded); text-transform:lowercase}
+h1{font-size:26px; font-weight:500; letter-spacing:0.12em; margin:10px 0 4px}
+.sub{font-size:13px; color:var(--faded); letter-spacing:0.05em}
+.fan{display:block; margin:44px auto 40px; width:220px; height:auto}
+.fan .rib{stroke:var(--ink); stroke-opacity:0.5; stroke-width:1; fill:none}
+.fan .rib.soft{stroke-opacity:0.25}
+#keystone{fill:var(--day); transition:fill 0.6s ease}
+@media (prefers-reduced-motion: reduce){#keystone{transition:none}}
+label{display:block; font-size:13px; color:var(--faded); letter-spacing:0.1em; margin-bottom:6px}
+input{
+  width:100%; border:none; border-bottom:1px solid var(--line);
+  background:transparent; font:inherit; font-size:17px; color:var(--ink);
+  padding:6px 2px 8px; border-radius:0;
+}
+input:focus{outline:none; border-bottom-color:var(--ink)}
+.field{margin-bottom:26px}
+.field.small input{font-size:13px; color:var(--faded)}
+button{
+  display:block; width:100%; margin-top:6px;
+  background:var(--ink); color:var(--washi);
+  border:1px solid var(--ink); border-radius:0;
+  font:inherit; font-size:15px; letter-spacing:0.3em; text-indent:0.3em;
+  padding:13px 0; cursor:pointer;
+}
+button:hover{background:transparent; color:var(--ink)}
+button:focus-visible{outline:2px solid var(--ink); outline-offset:3px}
+#result{margin-top:44px; border-top:1px solid var(--line); padding-top:28px; display:none}
+#verdict{font-size:20px; letter-spacing:0.15em; margin-bottom:14px}
+#verdict .mark{color:var(--day)}
+.pair{display:flex; gap:36px; margin:18px 0 10px}
+.pair div{text-align:center}
+.dot{width:44px; height:44px; border-radius:50%; margin:0 auto 8px; border:1px solid var(--line)}
+.pair p{font-size:12px; color:var(--faded); letter-spacing:0.08em}
+#note{font-size:13px; color:var(--faded)}
+footer{margin-top:64px; font-size:12px; color:var(--faded); letter-spacing:0.05em}
+footer a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">verify · the color of the keystone</p>
+  <h1>要の色</h1>
+  <p class="sub">合言葉から今日あるべき色を導き、公開された膜と照らします。色は毎日、螺旋のように回ります。</p>
+
+  <svg class="fan" viewBox="0 0 120 96" role="img" aria-label="扇の要">
+    <g transform="translate(0,-14)">
+      <path class="rib" d="M 60 100 L 12 44"/>
+      <path class="rib" d="M 60 100 L 38 32"/>
+      <path class="rib" d="M 60 100 L 60 28"/>
+      <path class="rib" d="M 60 100 L 82 32"/>
+      <path class="rib" d="M 60 100 L 108 44"/>
+      <path class="rib" d="M 12 44 A 72 72 0 0 1 108 44"/>
+      <path class="rib soft" d="M 26 60 A 50 50 0 0 1 94 60"/>
+      <circle id="keystone" cx="60" cy="100" r="15"/>
+      <text x="60" y="105" text-anchor="middle" font-family="serif" font-size="13" fill="#F5F2E9">楽</text>
+    </g>
+  </svg>
+
+  <div class="field">
+    <label for="secret">合言葉</label>
+    <input type="password" id="secret" autocomplete="off" placeholder="鍵を知る者だけが、今日の色を知る">
+  </div>
+  <div class="field small">
+    <label for="url">膜の在処</label>
+    <input type="text" id="url" value="raku-beacon.svg">
+  </div>
+  <button id="check">照合する</button>
+
+  <section id="result" aria-live="polite">
+    <p id="verdict"></p>
+    <div class="pair">
+      <div><div class="dot" id="dot-expected"></div><p id="label-expected">期待</p></div>
+      <div><div class="dot" id="dot-observed"></div><p id="label-observed">読取</p></div>
+    </div>
+    <p id="note"></p>
+  </section>
+
+  <footer>
+    麓は緩く、上は峻烈に。 <a href="https://digiterior.net/philosophy">扇の勾配 ── Philosophy</a><br>
+    © 2026 Roberto Hoshino. Smart Life Styles™
+  </footer>
+</main>
+
+<script>
+const SURFACE_ID = "dgt";
+const PALETTE = ["#A63030","#A66B30","#A6A630","#6BA630","#30A630","#30A66B",
+                 "#30A6A6","#306BA6","#3030A6","#6B30A6","#A630A6","#A6306B"];
+const HUE_NAMES = ["紅","橙","黄","黄緑","緑","青碧","浅葱","空","瑠璃","菫","紫","躑躅"];
+const enc = new TextEncoder();
+
+function jstToday(){
+  return new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Tokyo"}).format(new Date());
+}
+async function deriveHue(secret, surface, dateStr){
+  const key = await crypto.subtle.importKey("raw", enc.encode(secret),
+    {name:"HMAC", hash:"SHA-256"}, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(surface + "|" + dateStr));
+  return new Uint8Array(sig)[0] % 12;
+}
+function hueOfHex(hex){
+  const i = PALETTE.indexOf(hex.toUpperCase());
+  if (i >= 0) return i;
+  const n = h => [1,3,5].map(j => parseInt(h.slice(j, j+2), 16));
+  const c = n(hex);
+  let best = 0, bd = Infinity;
+  PALETTE.forEach((p, idx) => {
+    const q = n(p);
+    const d = (q[0]-c[0])**2 + (q[1]-c[1])**2 + (q[2]-c[2])**2;
+    if (d < bd){ bd = d; best = idx; }
+  });
+  return best;
+}
+function show(verdict, mark, expected, observed, note, dayColor){
+  document.documentElement.style.setProperty("--day", dayColor);
+  document.getElementById("result").style.display = "block";
+  document.getElementById("verdict").innerHTML =
+    '<span class="mark">' + mark + "</span>　" + verdict;
+  const de = document.getElementById("dot-expected");
+  const dob = document.getElementById("dot-observed");
+  de.style.background = expected === null ? "transparent" : PALETTE[expected];
+  dob.style.background = observed === null ? "transparent" : PALETTE[observed];
+  document.getElementById("label-expected").textContent =
+    expected === null ? "期待" : "期待 · " + HUE_NAMES[expected];
+  document.getElementById("label-observed").textContent =
+    observed === null ? "読取" : "読取 · " + HUE_NAMES[observed];
+  document.getElementById("note").textContent = note;
+}
+async function verify(){
+  const secret = document.getElementById("secret").value;
+  if (!secret){
+    show("合言葉が要ります", "…", null, null, "膜は誰にでも見えますが、読み方は鍵を持つ者のものです。", "#8A857B");
+    return;
+  }
+  let text;
+  try{
+    const res = await fetch(document.getElementById("url").value, {cache:"no-store"});
+    if (!res.ok) throw new Error(res.status);
+    text = await res.text();
+  }catch(e){
+    show("膜に届きません", "✕", null, null,
+      "ビーコンを取得できませんでした。raku-beacon.svg が同じサイトに置かれているか確認してください。", "#8A857B");
+    return;
+  }
+  const mFill = text.match(/id="keystone"[^>]*fill="(#[0-9A-Fa-f]{6})"/);
+  const mDate = text.match(/data-date="(\d{4}-\d{2}-\d{2})"/);
+  if (!mFill || !mDate){
+    show("膜の形が読めません", "✕", null, null, "SVGに要の色または日付が見つかりませんでした。", "#8A857B");
+    return;
+  }
+  const observed = hueOfHex(mFill[1]);
+  const beaconDate = mDate[1];
+  const today = jstToday();
+  const expectedToday = await deriveHue(secret, SURFACE_ID, today);
+  const dayColor = PALETTE[expectedToday];
+
+  if (beaconDate === today && observed === expectedToday){
+    show("認証、成立", "◯", expectedToday, observed,
+      today + " の色が一致しました。書き換えは続いている——膜は生きています。", dayColor);
+  } else if (beaconDate !== today){
+    const expectedThen = await deriveHue(secret, SURFACE_ID, beaconDate);
+    if (observed === expectedThen){
+      show("未更新の膜", "△", expectedToday, observed,
+        beaconDate + " の色としては本人のものですが、今日 (" + today + ") の色ではありません。書き換えが止まっています。", dayColor);
+    } else {
+      show("認証、不成立", "✕", expectedToday, observed,
+        "日付も色も合いません。この膜は本人性を通しません。", dayColor);
+    }
+  } else {
+    show("認証、不成立", "✕", expectedToday, observed,
+      "今日の色と一致しません。合言葉が違うか、膜が偽物です。", dayColor);
+  }
+}
+document.getElementById("check").addEventListener("click", verify);
+document.getElementById("secret").addEventListener("keydown", e => {
+  if (e.key === "Enter") verify();
+});
+</script>
+</body>
+</html>
