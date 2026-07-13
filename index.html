@@ -125,6 +125,26 @@
   }
   .enter:hover,.enter:focus-visible{opacity:1;color:var(--sumi);outline:none}
 
+  /* 間詰石 ── 抽象と具体の間、思想への二本の細道 */
+  .interstice{
+    margin-top:clamp(1.6rem,4vh,2.4rem);
+    display:flex;justify-content:center;gap:clamp(1.4rem,4vw,2.2rem);
+    opacity:.42;transition:opacity .8s ease;
+  }
+  .gate:hover ~ .meta .interstice,
+  .gate:focus-visible ~ .meta .interstice{opacity:.85}
+  .interstice a{
+    font-size:.6rem;letter-spacing:.32em;text-indent:.32em;
+    text-transform:lowercase;text-decoration:none;
+    color:var(--sumi-soft);
+    padding:.3rem .1rem;
+    border-bottom:1px solid transparent;
+    transition:color .5s ease, border-color .5s ease;
+  }
+  .interstice a:hover,.interstice a:focus-visible{
+    color:var(--sumi);border-bottom-color:var(--sumi-soft);outline:none;
+  }
+
   /* 登場: 究が奥から立ち上がる */
   @keyframes rise{
     from{opacity:0;transform:translateY(14px) scale(.985)}
@@ -152,6 +172,10 @@
     <img class="ring" src="/logo-mark.svg" alt="" aria-hidden="true">
     <p class="wordmark">digiterior</p>
     <p class="tagline">love your long life, love your long time<sup>™</sup></p>
+    <nav class="interstice" aria-label="思想への入口">
+      <a href="/philosophy.html">philosophy</a>
+      <a href="/reference-index.html">reference</a>
+    </nav>
   </div>
 
   <a class="enter" href="https://notes.digiterior.net">notes</a>
