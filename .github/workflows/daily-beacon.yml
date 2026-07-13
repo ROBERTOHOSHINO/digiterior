@@ -1,0 +1,65 @@
+# raku beacon — 毎日 00:05 JST に扇の要の色を書き換える
+#
+# 設置手順:
+#   1. このファイルをリポジトリの .github/workflows/daily-beacon.yml に置く
+#   2. リポジトリの Settings → Secrets and variables → Actions →
+#      New repository secret で
+#        Name:  BEACON_SECRET
+#        Value: 合言葉
+#      を登録する(合言葉はリポジトリ内のどこにも書かない)
+#   3. make_beacon.py と verify.html をリポジトリのルートに置く
+#   4. GitHub Pages を有効化(Deploy from branch / main / root)
+#
+# 動作:
+#   毎日 00:05 JST(= 15:05 UTC 前日)に make_beacon.py を実行し、
+#   raku-beacon.svg の色が変わっていればコミット & プッシュする。
+#   手動実行(workflow_dispatch)も可能。
+
+name: daily-beacon
+
+on:
+  schedule:
+    - cron: "5 15 * * *"   # 15:05 UTC = 00:05 JST 翌日
+  workflow_dispatch: {}     # 手動でも回せる(初回テスト用)
+
+permissions:
+  contents: write           # SVG をコミットするために必要
+
+concurrency:
+  group: daily-beacon
+  cancel-in-progress: false
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate today's beacon
+        env:
+          BEACON_SECRET: ${{ secrets.BEACON_SECRET }}
+        run: |
+          if [ -z "$BEACON_SECRET" ]; then
+            echo "::error::BEACON_SECRET が未設定です。Settings → Secrets → Actions で登録してください。"
+            exit 1
+          fi
+          python3 make_beacon.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "raku-beacon"
+          git config user.email "beacon@users.noreply.github.com"
+          if git diff --quiet -- raku-beacon.svg; then
+            echo "色に変化なし(同日再実行など)。コミットしません。"
+          else
+            DATE=$(grep -o 'data-date="[0-9-]*"' raku-beacon.svg | grep -o '[0-9-]*')
+            git add raku-beacon.svg
+            git commit -m "beacon: ${DATE}"
+            git push
+          fi
