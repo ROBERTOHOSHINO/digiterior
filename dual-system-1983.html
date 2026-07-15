@@ -69,6 +69,17 @@ body{background:var(--paper);color:var(--ink);font-family:'Noto Serif JP',serif;
   color:var(--muted);text-align:center;line-height:2.4}
 .shaze-caption{margin-top:1.1rem;text-align:center;font-family:'Noto Sans JP',sans-serif;
   font-size:.68rem;letter-spacing:.18em;color:var(--muted)}
+.shaze-text{max-width:560px;margin:1.6rem auto 0;padding:0 .4rem}
+.shaze-h{font-family:'Noto Sans JP',sans-serif;font-size:.72rem;letter-spacing:.3em;
+  color:var(--muted);text-align:center;margin-bottom:1.1rem}
+.shaze-ol{list-style:none;counter-reset:shaze;padding:0;margin:0}
+.shaze-ol li{counter-increment:shaze;position:relative;padding-left:2.1rem;
+  font-size:.92rem;font-weight:300;line-height:2.05;letter-spacing:.03em;margin-bottom:.9rem}
+.shaze-ol li::before{content:counter(shaze);position:absolute;left:0;top:0;
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--hoshi);
+  font-weight:400;line-height:1.9}
+.shaze-sign{margin-top:1.4rem;text-align:right;font-size:.86rem;font-weight:300;
+  letter-spacing:.08em;color:var(--ink)}
 
 footer{max-width:640px;margin:0 auto;padding:3rem 1.6rem 1rem;text-align:center}
 .fmeta{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;line-height:2.2;
@@ -123,9 +134,17 @@ footer{max-width:640px;margin:0 auto;padding:3rem 1.6rem 1rem;text-align:center}
   <p class="body">胃潰瘍の手術の失敗だった。三十六歳。創業から、まだ三年しか経っていなかった。社員は十五、六人。遺されたのは、社名と、手書きの社是と、走りかけの仕事だった。ご遺族から「後を継いでくれ」と言われ、私は株式をすべて引き取った。二十代の終わりのことである。</p>
   <p class="body">直後に半導体不況が来て、主力の仕事が消えた。手を止めなかったのは、彼の走り方を見ていたからだと思う。琵琶湖のほとりの工場に納期を過ぎた自動倉庫の応援要請があり、五、六名で滋賀と東京に分かれて半年——複雑なマルチタスクの仕組みを、BASICインタプリタだけで動かし切った。</p>
   <div class="shaze-frame">
-    <!-- 原本撮影後、下のプレースホルダを <img src="SHAZE-AIDA1983.jpg" alt="会田祥彦 手書きの社是"> に差し替え -->
-    <div class="shaze-placeholder">手書きの社是<br>原本より、近日掲載</div>
-    <p class="shaze-caption">会田祥彦の手による社是 ── 一九八三</p>
+    <img src="SHAZE-AIDA1983.jpg" alt="会田祥彦 手書きの経営3原則 一九八三">
+    <p class="shaze-caption">会田祥彦の手による「経営3原則」── 一九八三年七月二十八日</p>
+  </div>
+  <div class="shaze-text">
+    <p class="shaze-h">経営3原則</p>
+    <ol class="shaze-ol">
+      <li>企業は社会へ貢献することである</li>
+      <li>自らの力で技術体系を持ち、自らの力でセールスする独自性のある企業であること</li>
+      <li>世界に通用する技術と商品づくりに全力をあげ、第一にインターナショナルな企業であること</li>
+    </ol>
+    <p class="shaze-sign">株式会社 デュアルシステム</p>
   </div>
 </article>
 
@@ -144,14 +163,63 @@ footer{max-width:640px;margin:0 auto;padding:3rem 1.6rem 1rem;text-align:center}
 
 <!-- ═══════════ English ═══════════ -->
 <section class="hero" id="en" style="min-height:60vh">
-  <p class="hero-eyebrow">html-notes / english</p>
-  <h1 style="font-family:'Cormorant Garamond',serif;font-weight:300">Dual System, 1983.</h1>
+  <p class="hero-eyebrow">html-notes / english · in memoriam · aida yoshihiko</p>
+  <div class="hero-kanji"><span>双</span></div>
+  <h1 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic">Dual System, 1983.<br>The man who joined two things: hardware and software.</h1>
+  <p class="hero-en" style="font-style:normal;font-family:'Noto Sans JP',sans-serif;font-size:.7rem;letter-spacing:.28em">He named it Dual System — hardware and software, joined.</p>
+  <p class="hero-dates">
+    1986.7.26 &#183; forty years since his passing<br>
+    1983.7.28 &#183; forty-three years since the founding
+  </p>
 </section>
 
 <article class="chapter">
-  <p class="body" style="font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:2">In July 1983, in Kanda, Tokyo, Yoshihiko Aida founded a small company and named it <em style="color:var(--hoshi)">Dual System</em> — hardware and software, joined, to build robots. He ran everywhere, brought back work no one had asked him to find, and turned an employee's second-hand PC into the company's development machine within a month. Three years later, on July 26, 1986, he died at thirty-six, after a failed operation. Fifteen employees, a company name, and a handwritten company creed were what remained. His family asked me to carry it on. I was in my late twenties.</p>
-  <p class="body" style="font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:2">Forty years on, the industry has circled back to what he named: AI is reaching for a body, and information — we now say — is physical. Software does not run outside hardware. Two, joined as one. In 1994 we built a product for the most human of databases, personal ties, and called it <em style="color:var(--hoshi)">Giri-KANRI</em>; thirty-two years later I would write "KANRI is not Control." And in July 2026, the week we folded forty years of company history into a new name, we noticed what no one had planned: Digiterior Studio — DS. The same two letters he set down in 1983. In a dry-stone wall, two stones cut forty-three years apart had found each other's shape.</p>
-  <p class="body" style="font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:2">July 26 is the fortieth anniversary of his passing; July 28, the forty-third of the founding. This page is a bridge laid between the two days. Records do not bend. Aida-san — your company is still running.</p>
+  <p class="eyebrow">I &#8212; Kanda-Sakumacho, 1983</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400">The company name was a last will.</h2>
+  <p class="body">In July 1983, in Kanda-Sakumacho, Chiyoda, Tokyo, Yoshihiko Aida raised a small company on 4.3 million yen of capital. He named it <strong>Dual System, Ltd.</strong> Hardware and software, joined &#8212; he wanted to build robots. He said this in an age when the heat of microcomputer kits still lingered in the back streets of Akihabara.</p>
+  <p class="body">Forty-three years on, the embodiment of AI, robotics, and the principle that <em>information is physical</em> have finally come back to the center of the times. Software does not run outside hardware. <em>Two, joined as one.</em> What he carved into the company name was not a business plan but a philosophy.</p>
+</article>
+
+<div class="sep"></div>
+
+<article class="chapter">
+  <p class="eyebrow">II &#8212; A man who ran</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400">&#8220;Bring your PC from home.&#8221;</h2>
+  <p class="body">On July 16, 1984, I joined as employee number four (the other three were officers, so I was in truth the first real employee). Listening to Tatsuro Yamashita and Minako Yoshida on a brand-new WALKMAN, I rode my first commuter pass out to the Fujitsu plant in Kawasaki. It was an age when you could not produce a single executable without assembling it on a mainframe.</p>
+  <p class="body">Development was slow. So I bought a used PC-9801 and an eight-inch disk drive with 300,000 yen of my own money. When Aida heard, his one remark was: <em>&#8220;Bring your PC from home.&#8221;</em> A month later, my personal machine had become the company&#8217;s development computer. He was a president who ran everywhere and came back with work he had won on his own. Inexperienced part-timers became professionals in the blink of an eye, and people multiplied just as fast. When the meeting room ran out of space, he rented a small president&#8217;s office nearby &#8212; that was half a year before he died.</p>
+</article>
+
+<div class="sep"></div>
+
+<article class="chapter">
+  <p class="eyebrow">III &#8212; July 26, 1986</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400">Three years at a sprint.</h2>
+  <p class="body">It was a failed operation for a stomach ulcer. Thirty-six years old. Only three years had passed since the founding. There were fifteen or sixteen employees. What remained was a company name, a handwritten creed, and work still in mid-stride. His family asked me to carry it on, and I took over all the shares. I was at the end of my twenties.</p>
+  <p class="body">A semiconductor recession came right after, and our mainstay work vanished. What kept my hands moving, I think, was having watched the way he ran. A factory on the shore of Lake Biwa sent an urgent call for help with an automated warehouse already past its deadline; five or six of us split between Shiga and Tokyo for half a year &#8212; and drove a complex multitasking system to completion on nothing but a BASIC interpreter.</p>
+  <div class="shaze-frame">
+    <img src="SHAZE-AIDA1983.jpg" alt="The Three Management Principles in Yoshihiko Aida's hand, 1983">
+    <p class="shaze-caption">The &#8220;Three Management Principles&#8221; in Yoshihiko Aida&#8217;s own hand &#8212; July 28, 1983</p>
+  </div>
+  <div class="shaze-text">
+    <p class="shaze-h">The Three Management Principles</p>
+    <ol class="shaze-ol">
+      <li>An enterprise exists to contribute to society.</li>
+      <li>Be an enterprise with its own identity &#8212; holding its technical foundations by its own strength, and selling by its own strength.</li>
+      <li>Give everything to technology and products that hold up in the world; be, above all, an international enterprise.</li>
+    </ol>
+    <p class="shaze-sign">Dual System, Ltd.</p>
+  </div>
+</article>
+
+<div class="sep"></div>
+
+<article class="chapter">
+  <p class="eyebrow">IV &#8212; The dual continues</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400">The line never broke; it passed through people.</h2>
+  <p class="body">His dream of robots was not a severed line. A brilliant engineer we knew in those days later took part, I heard, in the first AIBO at SONY. In 1994, we built a product that handled the most precious data of all &#8212; the human connections of personal ties &#8212; and named it <strong>Giri-KANRI</strong>. The words I would write thirty-two years later, &#8220;KANRI is not Control,&#8221; had been inside the company from that moment on. The name ROBERT, taken so friends abroad could call me easily, became today&#8217;s Roberto.</p>
+  <p class="body">And in July 2026, the week we folded forty years of company history and chose a new name, we realized what no one had intended. <em>Digiterior Studio &#8212; DS.</em> It had landed in the same place as the two letters he set down in 1983. Within the dry-stone wall, across a span of forty-three years, came the sound of two stones locking into each other.</p>
+  <p class="pquote"><span>Two, joined as one. There is no outside.</span></p>
+  <p class="body">July 26 is the fortieth anniversary of his passing; July 28, the forty-third of the founding. Between these two days, I lay this page as a bridge. Records do not bend. Aida-san &#8212; your company is still running.</p>
 </article>
 
 <footer>
