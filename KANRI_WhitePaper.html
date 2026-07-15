@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KANRI白書 2026 — 10年前の設計図が、いま実装できる</title>
+<meta name="description" content="KANRI — Knowledge & Resource Intelligence Platform. Claude.aiと、RDB無しで作るシステム仕様書。KANRI is not Control.">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1814; --ink2:#4a4640; --ink3:#8a8680;
+  --paper:#faf8f4; --paper2:#f2efe8;
+  --gold:#b8960c; --indigo:#1a3a5c; --teal:#0f6e56; --accent:#c0550a;
+  --line:rgba(0,0,0,.12); --line-soft:rgba(0,0,0,.07);
+  --code-bg:#211f1a; --code-ink:#e6e1d6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:"Noto Sans JP",sans-serif;font-weight:300;line-height:1.95;-webkit-font-smoothing:antialiased}
+.wrap{max-width:780px;margin:0 auto;padding:0 clamp(1.25rem,5vw,2.5rem)}
+body.lang-ja .only-en{display:none !important}
+body.lang-en .only-ja{display:none !important}
+body.lang-ja span.only-ja,body.lang-en span.only-en{display:inline}
+body.lang-ja div.only-ja,body.lang-en div.only-en{display:block}
+body.lang-ja p.only-ja,body.lang-en p.only-en{display:block}
+body.lang-ja ol.only-ja,body.lang-en ol.only-en{display:grid}
+.toc .tt{flex:1;display:inline-block}
+body.lang-ja h1.only-ja,body.lang-en h1.only-en{display:block}
+body.lang-ja h2.only-ja,body.lang-en h2.only-en{display:block}
+
+header{border-bottom:.5px solid var(--line);padding:1.15rem 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(250,248,244,.95);backdrop-filter:blur(8px);z-index:100}
+.logo-block .logo{font-family:"Noto Serif JP",serif;font-weight:700;font-size:15px;letter-spacing:.04em}
+.logo-block .logo-sub{font-size:9.5px;color:var(--ink3);letter-spacing:.06em;margin-top:1px}
+nav{display:flex;gap:1.4rem;align-items:center}
+nav a{font-size:12px;letter-spacing:.06em;color:var(--ink2);text-decoration:none;transition:color .2s}
+nav a:hover{color:var(--accent)}
+.lang-toggle{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;border:.5px solid var(--ink);background:transparent;color:var(--ink);padding:.28rem .7rem;border-radius:3px;cursor:pointer;transition:all .2s}
+.lang-toggle:hover{background:var(--ink);color:var(--paper)}
+@media(max-width:560px){nav a:not(.lang-toggle){display:none}}
+
+.eyebrow{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:400}
+.hero{padding:clamp(3rem,8vw,5rem) 0 clamp(2rem,5vw,3rem)}
+.hero .eyebrow{margin-bottom:1.8rem}
+.hero-title{font-family:"Noto Serif JP",serif;font-weight:700;font-size:clamp(26px,5.2vw,44px);line-height:1.42;letter-spacing:.02em;margin-bottom:1.4rem}
+.hero-title .em{color:var(--accent)}
+.hero-lead{font-size:14.5px;color:var(--ink2);max-width:56ch;line-height:2}
+.hero-lead strong{color:var(--ink);font-weight:500}
+
+.origin{border:.5px solid rgba(184,150,12,.45);border-radius:6px;padding:clamp(1.4rem,4vw,2rem);margin:clamp(1.5rem,4vw,2.5rem) 0;background:linear-gradient(160deg,#f6f1e3,var(--paper2))}
+.origin .tag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+.origin .t{font-family:"Noto Serif JP",serif;font-weight:600;font-size:clamp(16px,2.6vw,20px);line-height:1.6;margin-bottom:.7rem}
+.origin p{font-size:13px;color:var(--ink2);line-height:1.95}
+.origin .credit{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--ink3);margin-top:.9rem;text-transform:uppercase}
+
+.diagram{margin:0 0 clamp(2rem,5vw,3rem)}
+.diagram svg{width:100%;height:auto;display:block;border:.5px solid var(--line);border-radius:6px;background:#fff}
+.diagram-cap{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--ink3);text-transform:uppercase;text-align:center;margin-top:.8rem}
+
+.toc{border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);padding:1.5rem 0;margin-bottom:clamp(1.5rem,4vw,2.5rem)}
+.toc .sec-label{margin-bottom:.9rem}
+.toc ol{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:.35rem 1.8rem}
+.toc li{font-size:12.5px;color:var(--ink2);display:flex;gap:.65rem;padding:.22rem 0;border-bottom:.5px solid var(--line-soft)}
+.toc a{color:inherit;text-decoration:none;transition:color .2s;flex:1;display:block}
+.toc a:hover{color:var(--accent)}
+.toc .n{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:11.5px;min-width:1.7em}
+@media(max-width:560px){.toc ol{grid-template-columns:1fr}}
+
+section.ch{padding:clamp(2rem,5vw,3rem) 0;border-top:.5px solid var(--line)}
+.sec-label{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:1.2rem}
+.ch-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.3rem}
+.ch-head .num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--accent);font-weight:500}
+.ch h2{font-family:"Noto Serif JP",serif;font-weight:600;font-size:clamp(18px,3vw,24px);line-height:1.5;letter-spacing:.02em}
+.ch p{font-size:14px;color:var(--ink2);line-height:2;max-width:62ch;margin-bottom:1rem}
+.ch p strong{color:var(--ink);font-weight:500}
+.ch p:last-child{margin-bottom:0}
+.lead{font-size:15.5px !important;color:var(--ink) !important;font-weight:400}
+.from2016{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--gold);text-transform:uppercase;display:inline-block;margin-bottom:.9rem}
+
+.integ{display:inline-flex;align-items:center;gap:.4rem;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;color:var(--teal);border:1px solid rgba(15,110,86,.45);padding:.15rem .55rem;border-radius:2px;vertical-align:middle;margin-right:.5rem;text-transform:uppercase}
+.integ::before{content:"\25C6";font-size:7px}
+.coin{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;color:var(--ink3)}
+.dig{border-left:2px solid rgba(184,150,12,.55);background:var(--paper2);padding:.8rem 1.1rem;margin:1.3rem 0;max-width:62ch;border-radius:0 4px 4px 0}
+.dig .yr{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.35rem}
+.dig .yr::before{content:"\2299";margin-right:.45rem;font-size:9px}
+.dig p{font-size:12.5px;color:var(--ink2);line-height:1.9;margin:0}
+
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:6px;padding:1rem 1.2rem;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;line-height:1.75;margin:1rem 0}
+pre .c{color:#9a917f}
+pre .k{color:#c9a86a}
+pre .a{color:#7fbf9e}
+
+.res{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:1rem}
+.res-item{background:var(--paper2);padding:1rem 1.1rem;border-radius:4px}
+.res-item h4{font-family:"Noto Serif JP",serif;font-weight:600;font-size:14px;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.res-item h4 .dot{width:9px;height:9px;border-radius:50%}
+.res-item p{font-size:11.5px !important;margin:0 !important;line-height:1.7 !important}
+@media(max-width:560px){.res{grid-template-columns:1fr}}
+
+.states{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:1rem 0}
+.state{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:.35rem .7rem;border:.5px solid var(--line);border-radius:3px;background:#fff}
+.state.head{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.arrow{color:var(--ink3);font-family:"IBM Plex Mono",monospace;font-size:11px}
+
+.loop{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink);background:var(--paper2);border-radius:5px;padding:.95rem 1.15rem;margin:1rem 0;line-height:2}
+.loop b{color:var(--accent)}
+
+.pull{font-family:"Noto Serif JP",serif;font-weight:600;font-size:clamp(17px,2.8vw,22px);line-height:1.65;border-left:3px solid var(--gold);padding-left:1.2rem;margin:1rem 0;color:var(--ink)}
+.pull em{font-style:normal;color:var(--accent)}
+
+.sealed{display:inline-flex;align-items:center;gap:.55rem;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;color:var(--indigo);border:.5px solid var(--indigo);padding:.42rem .8rem;border-radius:3px;margin-top:.5rem}
+.sealed::before{content:"\25C6";font-size:8px}
+
+.stack{margin-top:1rem;display:flex;flex-direction:column;gap:2px}
+.stack-row{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:baseline;padding:.75rem 1rem;background:var(--paper2);border-radius:4px}
+.stack-row.base{background:transparent;border:1px dashed var(--gold)}
+.stack-tag{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;color:var(--ink3);text-transform:uppercase;white-space:nowrap}
+.stack-name{font-family:"Noto Serif JP",serif;font-weight:600;font-size:13.5px}
+.stack-name span{font-weight:300;color:var(--ink2);font-size:12px}
+.stack-row.base .stack-name{color:var(--accent)}
+
+.cta-block{padding:clamp(2.5rem,6vw,4rem) 0;border-top:.5px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:clamp(1.5rem,4vw,3rem);align-items:center}
+@media(max-width:560px){.cta-block{grid-template-columns:1fr}}
+.cta-line{font-family:"Noto Serif JP",serif;font-weight:600;font-size:clamp(17px,3vw,22px);line-height:1.6;margin-bottom:1rem;max-width:26ch}
+.cta-links{display:flex;flex-direction:column;gap:.5rem;font-size:13px}
+.cta-links a{color:var(--accent);text-decoration:none;border-bottom:.5px solid transparent;transition:border-color .2s;width:fit-content}
+.cta-links a:hover{border-color:var(--accent)}
+.qr-box{text-align:center}
+.qr-box svg{width:128px;height:128px;display:block;background:#fff;padding:8px;border:.5px solid var(--line);border-radius:6px}
+.qr-cap{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;color:var(--ink3);margin-top:.6rem;text-transform:uppercase}
+
+footer{border-top:.5px solid var(--line);padding:1.8rem 0 3rem;text-align:center}
+footer p{font-size:11px;color:var(--ink3);letter-spacing:.05em;line-height:2}
+</style>
+</head>
+<body class="lang-ja">
+
+<script>window.CJ_ME = {"file": "KANRI_WhitePaper.html", "title": "KANRI白書——10年前の設計図が、いま実装できる", "created": "2026-07", "updated": "2026-07", "category": "認市", "author": "星C", "where": "東", "keywords": "誠網時緩管流", "coined": "KANRI is not Control", "picture": ""};</script>
+
+<div class="wrap">
+
+<header>
+  <div class="logo-block">
+    <div class="logo">html-notes</div>
+    <div class="logo-sub">by Roberto Hoshino &#215; Claude.ai</div>
+  </div>
+  <nav>
+    <a href="https://digiterior.net">digiterior.net</a>
+    <a href="/">notes</a>
+    <button class="lang-toggle" id="langBtn" onclick="toggleLang()">EN</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow only-ja">KANRI 白書 2026 &#8212; システム仕様書 Draft v1.7</div>
+  <div class="eyebrow only-en">KANRI White Paper 2026 &#8212; System Specification, Draft v1.7</div>
+  <h1 class="hero-title only-ja">10年前の設計図が、<br><span class="em">いま、実装できる。</span></h1>
+  <h1 class="hero-title only-en">A blueprint drawn in 2016.<br><span class="em">Buildable, at last, in 2026.</span></h1>
+  <p class="hero-lead only-ja">KANRIは新しいアイデアではない。人・モノ・時間・価値を、事業のすべての当事者をまたいでつなぐ構想は、10年前に描かれていた。足りなかったのは、巨大なデータベースと大部隊なしで作る方法。<strong>それが変わった。</strong>本書は、KANRIをいまどう作るかを記す：AIをエンジンに、RDBを核に持たずに。そして全体を保つのは、Controlではなく<strong>Integrity</strong>。</p>
+  <p class="hero-lead only-en">KANRI is not a new idea. A platform connecting people, products, time, and value across every party in a business was drawn a decade ago. What was missing was a way to build it without a large database and a large team. <strong>That is what changed.</strong> This paper specifies how KANRI is built today: with an AI as its engine, no relational database at its core &#8212; and held together not by control, but by <strong>integrity</strong>.</p>
+</section>
+
+<div class="origin">
+  <div class="tag">Origin &#183; 2016</div>
+  <div class="t only-ja">BazaarBazaar &#8212; 複数の会合を連携する、会員情報共有プラットホーム。</div>
+  <div class="t only-en">BazaarBazaar &#8212; a member-information platform connecting many gatherings.</div>
+  <p class="only-ja">2016年の図には、すでに全部あった。見込み客、営業、購買、協力会社、顧客が、cashless &amp; paperless の一枚の布でつながる——B2BとB2Cがひとつのキャンバスに。そして右下には静かに、業界がいまやっと辿り着く行き先が書かれていた：<strong>利益＝時間。品質＋付加価値。</strong> KANRIは、その図が、やっと実装できるようになったもの。</p>
+  <p class="only-en">The original diagram already contained the whole thesis: prospects, sales, procurement, suppliers, and customers in one paperless, cashless fabric &#8212; B2B and B2C on a single canvas. At the bottom right, one line quietly stated the destination the industry is only now reaching: <strong>Profit is time. Quality plus added value.</strong> KANRI is that diagram, finally buildable.</p>
+  <div class="credit">&#169; Digiterior 2016 &#8212; the specification's foundation</div>
+</div>
+
+<div class="diagram">
+  <svg viewBox="0 0 860 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KANRI resource flow">
+    <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#8a8680"/></marker></defs>
+    <g font-family="'IBM Plex Mono',monospace" font-size="10" fill="#8a8680" letter-spacing="1">
+      <text x="16" y="70">B2C</text><text x="16" y="230">B2B</text><text x="16" y="360">SUPPLY</text>
+    </g>
+    <g font-family="'IBM Plex Mono',monospace" font-size="11.5">
+      <rect x="70" y="45" width="150" height="40" rx="4" fill="#eef2f8" stroke="#1a3a5c"/><text x="145" y="70" text-anchor="middle" fill="#1a1814">Member / 生活者</text>
+      <rect x="255" y="45" width="150" height="40" rx="4" fill="#eef2f8" stroke="#1a3a5c"/><text x="330" y="70" text-anchor="middle" fill="#1a1814">Event / 需要喚起</text>
+      <rect x="440" y="45" width="150" height="40" rx="4" fill="#eef2f8" stroke="#1a3a5c"/><text x="515" y="70" text-anchor="middle" fill="#1a1814">WEB / EC 販売</text>
+      <rect x="625" y="45" width="150" height="40" rx="4" fill="#eef2f8" stroke="#1a3a5c"/><text x="700" y="70" text-anchor="middle" fill="#1a1814">Customer / 顧客</text>
+      <line x1="220" y1="65" x2="253" y2="65" stroke="#8a8680" marker-end="url(#ah)"/><line x1="405" y1="65" x2="438" y2="65" stroke="#8a8680" marker-end="url(#ah)"/><line x1="590" y1="65" x2="623" y2="65" stroke="#8a8680" marker-end="url(#ah)"/>
+    </g>
+    <g font-family="'IBM Plex Mono',monospace" font-size="11">
+      <rect x="70" y="185" width="120" height="38" rx="4" fill="#f3ede0" stroke="#b8960c"/><text x="130" y="209" text-anchor="middle" fill="#1a1814">Prospect</text>
+      <rect x="205" y="185" width="120" height="38" rx="4" fill="#f3ede0" stroke="#b8960c"/><text x="265" y="209" text-anchor="middle" fill="#1a1814">Estimate</text>
+      <rect x="340" y="185" width="120" height="38" rx="4" fill="#f3ede0" stroke="#b8960c"/><text x="400" y="209" text-anchor="middle" fill="#1a1814">Order</text>
+      <rect x="475" y="185" width="120" height="38" rx="4" fill="#f3ede0" stroke="#b8960c"/><text x="535" y="209" text-anchor="middle" fill="#1a1814">Delivery</text>
+      <rect x="610" y="185" width="120" height="38" rx="4" fill="#f3ede0" stroke="#b8960c"/><text x="670" y="209" text-anchor="middle" fill="#1a1814">Invoice</text>
+      <rect x="745" y="185" width="95" height="38" rx="4" fill="#f3ede0" stroke="#b8960c"/><text x="792" y="209" text-anchor="middle" fill="#1a1814">Profit</text>
+      <g stroke="#8a8680"><line x1="190" y1="204" x2="203" y2="204" marker-end="url(#ah)"/><line x1="325" y1="204" x2="338" y2="204" marker-end="url(#ah)"/><line x1="460" y1="204" x2="473" y2="204" marker-end="url(#ah)"/><line x1="595" y1="204" x2="608" y2="204" marker-end="url(#ah)"/><line x1="730" y1="204" x2="743" y2="204" marker-end="url(#ah)"/></g>
+    </g>
+    <g font-family="'IBM Plex Mono',monospace" font-size="11">
+      <rect x="205" y="320" width="120" height="38" rx="4" fill="#e9f0e6" stroke="#0f6e56"/><text x="265" y="344" text-anchor="middle" fill="#1a1814">PRE-ORDER</text>
+      <rect x="340" y="320" width="120" height="38" rx="4" fill="#e9f0e6" stroke="#0f6e56"/><text x="400" y="344" text-anchor="middle" fill="#1a1814">Jobs</text>
+      <rect x="475" y="320" width="120" height="38" rx="4" fill="#e9f0e6" stroke="#0f6e56"/><text x="535" y="344" text-anchor="middle" fill="#1a1814">検収</text>
+      <rect x="610" y="320" width="120" height="38" rx="4" fill="#e9f0e6" stroke="#0f6e56"/><text x="670" y="344" text-anchor="middle" fill="#1a1814">評価ランク</text>
+      <g stroke="#8a8680"><line x1="325" y1="339" x2="338" y2="339" marker-end="url(#ah)"/><line x1="460" y1="339" x2="473" y2="339" marker-end="url(#ah)"/><line x1="595" y1="339" x2="608" y2="339" marker-end="url(#ah)"/></g>
+      <line x1="535" y1="318" x2="535" y2="225" stroke="#8a8680" stroke-dasharray="3 3" marker-end="url(#ah)"/>
+    </g>
+    <g><rect x="330" y="115" width="200" height="50" rx="25" fill="#1a3a5c"/>
+      <text x="430" y="138" text-anchor="middle" font-family="'Noto Serif JP',serif" font-size="15" font-weight="700" fill="#fff">利益 ＝ 時間</text>
+      <text x="430" y="155" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="9" fill="#c8d4e4" letter-spacing="1">VALUE = TIME</text></g>
+  </svg>
+  <div class="diagram-cap">The 2016 blueprint, redrawn &#8212; B2C &#183; B2B &#183; Supply, converging on time as value</div>
+</div>
+
+<nav class="toc">
+  <div class="sec-label only-ja">目次</div>
+  <div class="sec-label only-en">Contents</div>
+  <ol class="only-ja">
+    <li><span class="n">00</span><span class="tt">綻びる一点</span></li>
+    <li><span class="n">01</span><span class="tt">KANRI is not Control</span></li>
+    <li><span class="n">02</span><span class="tt">Integrity — 内側から保つ秩序</span></li>
+    <li><span class="n">03</span><span class="tt">設計思想 — なぜRDBを持たないか</span></li>
+    <li><span class="n">04</span><span class="tt">4つの資源</span></li>
+    <li><span class="n">05</span><span class="tt">Master Data First</span></li>
+    <li><span class="n">06</span><span class="tt">業務フロー — 状態とINDEX</span></li>
+    <li><span class="n">07</span><span class="tt">記号インターフェース</span></li>
+    <li><span class="n">08</span><span class="tt">Learning Loop</span></li>
+    <li><span class="n">09</span><span class="tt">Agent層 — Claude.ai</span></li>
+    <li><span class="n">10</span><span class="tt">時間＝価値／会計は分ける</span></li>
+    <li><span class="n">11</span><span class="tt">認証インターフェース</span></li>
+    <li><span class="n">12</span><span class="tt">KANRIの位置</span></li>
+  </ol>
+  <ol class="only-en">
+    <li><span class="n">00</span><span class="tt">Where systems fray</span></li>
+    <li><span class="n">01</span><span class="tt">KANRI is not Control</span></li>
+    <li><span class="n">02</span><span class="tt">Integrity — order held from within</span></li>
+    <li><span class="n">03</span><span class="tt">Why no database</span></li>
+    <li><span class="n">04</span><span class="tt">The four resources</span></li>
+    <li><span class="n">05</span><span class="tt">Master Data First</span></li>
+    <li><span class="n">06</span><span class="tt">Flows — states &amp; INDEX</span></li>
+    <li><span class="n">07</span><span class="tt">Symbolic interface</span></li>
+    <li><span class="n">08</span><span class="tt">Learning Loop</span></li>
+    <li><span class="n">09</span><span class="tt">Agentic layer — Claude.ai</span></li>
+    <li><span class="n">10</span><span class="tt">Time = value / the accounting cut</span></li>
+    <li><span class="n">11</span><span class="tt">Authentication — sealed</span></li>
+    <li><span class="n">12</span><span class="tt">Where KANRI sits</span></li>
+  </ol>
+</nav>
+
+<!-- 00 -->
+<section class="ch" id="ca">
+  <div class="ch-head"><span class="num">00</span><h2 class="only-ja">綻びる一点</h2><h2 class="only-en">Where systems fray</h2></div>
+  <p class="lead only-ja">ERPは全体に見える。だが違う——そして、その隙間は黙っていない。<strong>ほころびる。</strong></p>
+  <p class="lead only-en">ERP looks whole. It is not &#8212; and the gap does not stay quiet. <strong>It frays.</strong></p>
+  <p class="only-ja">業務システムは網羅的に見えて、実はそれぞれ縄張りしか覆っていない。売りたい営業、安く買いたい仕入、締めたい経理——<strong>和解しない三つの真実</strong>が、和解させろと頼まれたことのないシステムの上で走っている。全員が自分の縄張りを最適化し、システムは持ち主の周りで綺麗に閉じる。</p>
+  <p class="only-en">Enterprise systems appear comprehensive, but each covers only a territory. Sales wants to sell; procurement wants it cheap; accounting wants it settled &#8212; <strong>three truths that do not reconcile</strong>, running on systems that were never asked to reconcile them. Everyone optimizes their territory, and every system closes neatly around its owner.</p>
+  <p class="only-ja">帰結は構造的だ。<strong>スコープの外に置かれた資源は、誤差項になる。</strong>誤差は名乗らない。部門の隙間に静かに溜まる——手渡しで、再入力で、誰も本物と認めないスプレッドシートの中で。そして境界で、布はほころびる。月末。期末。人がひとり、去るとき。</p>
+  <p class="only-en">The consequence is structural: <strong>any resource left outside the scope becomes an error term.</strong> The error does not announce itself. It accumulates quietly between departments &#8212; in handoffs, in re-keyed numbers, in the spreadsheet nobody admits is the real system &#8212; until, at a boundary, the fabric frays. A month end. A fiscal year. A person leaving.</p>
+  <div class="pull only-ja">誤差は、名乗らない。<em>境界で、ほころぶだけだ。</em></div>
+  <div class="pull only-en">The error never announces itself. <em>It simply frays at the boundary.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 1990s</span><p class="only-ja">Windowsが普及しExcelが現れると、営業・制作・請求がそれぞれ自分の書式を作り始めた。「1人1システム」。デジタル化が進むほど、再入力と照合が増えた——<strong>デジタル化の逆説</strong>。綻びは、40年前から同じ場所で起きている。</p><p class="only-en">When Windows spread and Excel arrived, sales, production and billing each began keeping their own format. One person, one system. The more digital, the more re-typing and reconciling &#8212; <strong>the paradox of digitalization</strong>. The fraying has happened in the same place for forty years.</p></div>
+  <p class="only-ja">不都合なのは、これが技術の問題ではないこと。すべての資源を覆うことは、そもそも<strong>誰のSCOPEにも入っていない</strong>。部分最適は心地よく、全体は誰の仕事でもない。気づいていない——あるいは、気づきたくない。</p>
+  <p class="only-en">The uncomfortable part: this is not a technology gap. Covering <em>all</em> resources has simply never been in anyone's SCOPE. Partial optimization is comfortable; the whole is nobody's job. Unnoticed &#8212; or unwelcome.</p>
+  <p class="only-ja">本書は全体を一気に論じない。香水がベースノートから組み立てられるように、<strong>ほころびの一点</strong>を見せる——期をまたぐ請求書、営業に届かない仕入評価、どのシステムも数えない1時間。そこから全体を想像してもらう。<strong>この誤差を3つの部門をまたいで追いかけた経験があるなら、あなたはもうKANRIを理解している。</strong></p>
+  <p class="only-en">This paper does not argue the whole at once. Like a fragrance built on a base note, it shows the fraying points &#8212; a period-straddling invoice, a supplier evaluation that never reaches sales, an hour no system counts &#8212; and lets the whole be imagined. <strong>If you have ever chased one of these errors across three departments, you already understand KANRI.</strong></p>
+</section>
+
+<!-- 01 -->
+<section class="ch" id="cb">
+  <div class="ch-head"><span class="num">01</span><h2>KANRI is not Control</h2></div>
+  <p class="lead only-ja">KANRIの翻訳で、いちばん難しいのは、その名前自身。</p>
+  <p class="lead only-en">The hardest part of KANRI to translate is its own name.</p>
+  <p class="only-ja">日本の組織で「<strong>管理</strong>」は<strong>Control</strong>になった。上司は絶対、指示は下へ流れ、部下は実行する——指示が適当でも、反論は許されない。系譜は軍隊と官僚組織で、いまも根深い。英語の management はもっと柔らかい。manage とは、なんとかする、<strong>やりくりする</strong>。二つの言葉は、最初から同じものではなかった。</p>
+  <p class="only-en">In Japanese organizations, <strong>管理</strong> has come to mean <strong>Control</strong>: the boss is absolute, instructions flow downward, subordinates execute &#8212; even a careless instruction is not to be questioned. The lineage is military and bureaucratic, and it runs deep. English <em>management</em> was always gentler: to manage is to cope, to make do &#8212; やりくりする. The two words were never the same.</p>
+  <p class="only-ja">創業者は何十年も、漢字を拒んでひらがなで書いてきた——<strong>かんり</strong>。静かな抵抗として。<strong>見えないものはコントロールできない。人の頭の中は見えない。</strong>作れるのは、自分の判断で動き、助け合い、学び合う風土。ひらがなの「かんり」は、まさにそれを意味していた。</p>
+  <p class="only-en">For decades, the founder refused the kanji and wrote the word in hiragana &#8212; <strong>かんり</strong> &#8212; as a quiet protest: <strong>you cannot control what you cannot see, and you cannot see inside a person's head.</strong> What you <em>can</em> build is a culture where people act on their own judgment, help one another, and learn from one another. かんり, in hiragana, meant exactly that.</p>
+  <div class="loop">管理 = <b>Control</b> &nbsp;&#8594;&nbsp; management = やりくり &nbsp;&#8594;&nbsp; かんり = <span class="only-ja">自律と学び合い</span><span class="only-en">autonomy &amp; mutual learning</span> &nbsp;&#8594;&nbsp; <b>KANRI</b> = <span class="only-ja">ひらがなの思想を、ローマ字で</span><span class="only-en">the hiragana philosophy, romanized</span></div>
+  <p class="only-ja">ローマ字のKANRIは、ひらがなの思想を漢字の重力から解いて、外へ運ぶ。日本の外の読者には、Controlを継がないただの新語。日本の読者には、問いになる：<strong>なぜ漢字ではないのか。</strong>その問いが、思想の入口になる。</p>
+  <p class="only-en">KANRI, romanized, carries the hiragana philosophy outward &#8212; freed from the kanji's gravity. Outside Japan it is simply a new word, inheriting nothing of Control. To a Japanese reader it is a question: <strong>why not the kanji?</strong> That question is the doorway into the philosophy.</p>
+  <div class="pull">KANRI is not Control.</div>
+  <p class="coin">&#8212; coined by Claude.ai &#183; approved by Roberto Hoshino &#183; 2026-07</p>
+  <p class="only-ja"><span class="integ">Integrity</span>Controlでないなら、何が全体を保つのか。答えは一語——<strong>Integrity</strong>。ただし、この一語は脚注で済ませられる重さではない。次章を、まるごと充てる。</p>
+  <p class="only-en"><span class="integ">Integrity</span>If not control, what holds the system together? One word &#8212; <strong>integrity</strong>. A word too heavy to pass in a footnote: the next chapter is devoted to it entirely.</p>
+</section>
+
+<!-- 02 -->
+<section class="ch" id="cint">
+  <div class="ch-head"><span class="num">02</span><h2 class="only-ja">Integrity — 内側から保つ秩序</h2><h2 class="only-en">Integrity — order held from within</h2></div>
+  <p class="lead only-ja">Controlは、いちばん高価な芝居だった。</p>
+  <p class="lead only-en">Control was always the most expensive theater.</p>
+  <p class="only-ja">承認の階段、監視のダッシュボード、締めの号令——どれも秩序を<strong>作って</strong>はいない。秩序が<strong>あるように見せる</strong>ためのコストだ。人の頭の中は見えず、見えないものは制御できない。だからControlは、演技と検査に永遠に支払い続ける。KANRIはその支払いをやめ、秩序を別の場所に置く。<strong>内側に。</strong></p>
+  <p class="only-en">Approval ladders, surveillance dashboards, the closing drumbeat &#8212; none of these <strong>create</strong> order. They are the cost of making order <strong>appear</strong> to exist. You cannot see inside a head, and you cannot control what you cannot see; so Control pays forever for performance and for inspection. KANRI stops paying, and locates order somewhere else. <strong>Inside.</strong></p>
+  <p class="only-ja">英語のIntegrityは、一語に三つの意味を畳む。KANRIはその三つを、比喩ではなく<strong>仕様</strong>として使う。</p>
+  <p class="only-en">English folds three meanings into the one word. KANRI uses all three &#8212; not as metaphor, but as <strong>specification</strong>.</p>
+  <div class="res">
+    <div class="res-item"><h4><span class="dot" style="background:#1a3a5c"></span>People<span class="only-ja"> — 誠実さ</span><span class="only-en"> &#8212; honesty</span></h4><p class="only-ja">率直に言える。悪い数字を隠さない。適当な指示に「違う」と言える。ひらがなの「かんり」が守ろうとしたもの。</p><p class="only-en">Speaking plainly. Bad numbers not hidden. &#8220;That&#8217;s wrong&#8221; is sayable, upward. What hiragana かんり protected.</p></div>
+    <div class="res-item"><h4><span class="dot" style="background:#0f6e56"></span>Data<span class="only-ja"> — 完全性</span><span class="only-en"> &#8212; wholeness</span></h4><p class="only-ja">4資源が欠けない。記録は追記され、曲がらない。日付フラグは嘘をつかない。→ 第03–06章</p><p class="only-en">Four resources, none missing. Records append; they do not bend. Dated flags do not lie. &#8594; ch. 03&#8211;06</p></div>
+    <div class="res-item"><h4><span class="dot" style="background:#b8960c"></span>Structure<span class="only-ja"> — 一体性</span><span class="only-en"> &#8212; soundness</span></h4><p class="only-ja">疎結合なのに、割れない。部分が壊れても、全体が保つ。→ 第03章の設計そのもの</p><p class="only-en">Loosely coupled, yet unfractured. A part may fail; the whole holds. &#8594; the very design of ch. 03</p></div>
+  </div>
+  <p class="only-ja" style="margin-top:1rem">そして2026年、この一語が急に重くなった。エージェントは、部下よりさらに「見えない」。人間の何倍もの速度で判断し、動く。</p>
+  <p class="only-en" style="margin-top:1rem">And in 2026, the word suddenly gained weight. Agents are even less visible than subordinates, deciding and acting at multiples of human speed.</p>
+  <div class="pull only-ja">監視は速度で負け、<em>承認は量で溺れる。</em></div>
+  <div class="pull only-en">Surveillance loses on speed. <em>Approval drowns in volume.</em></div>
+  <p class="coin">&#8212; coined by Claude.ai &#183; approved by Roberto Hoshino &#183; 2026-07</p>
+  <p class="only-ja">エージェントの時代に機能する管理モデルは、ひとつしか残らない——エージェントが推論する土台そのものが、誠実であること。綺麗なマスタ。曲がらない記録。割れない構造。Integrityは倫理の標語から、<strong>稼働要件</strong>になった。</p>
+  <p class="only-en">Only one management model survives the agentic era: the ground the agent reasons over must itself be honest. Clean master data. Records that do not bend. A structure that does not fracture. Integrity has moved from ethics poster to <strong>operating requirement</strong>.</p>
+  <div class="pull only-ja">Integrityは、標語ではない。<em>データ構造だ。</em></div>
+  <div class="pull only-en">Integrity is not a slogan. <em>It is a data structure.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; late 1980s</span><p class="only-ja">コクヨの複写式伝票。カーボン紙を挟みボールペンで一度書けば、見積・発注・請求・納品のすべてに同じ内容が写る。<strong>紙は、コンピュータより先にIntegrityを実装していた。</strong>KANRIは、あの一枚に還る試みでもある。</p><p class="only-en">The Kokuyo carbon-copy slip: write once with a ballpoint, and the same content transfers to estimate, order, invoice and delivery. <strong>Paper implemented integrity before computers did.</strong> KANRI is, in part, a return to that single sheet.</p></div>
+  <p class="only-ja">だから本書では、各章の終わりに<span class="integ">Integrity</span>の印を置く。飾りではない。思想が実装に着地した箇所を指す<strong>道標</strong>だ——フラットファイル（03）、マスタ（05）、日付フラグ（06）、学習ループ（08）、会計の分離（10）、認証（11）。すべて、同じ一語の別の顔。</p>
+  <p class="only-en">This is why every chapter in this paper closes with an <span class="integ">Integrity</span> mark. Not ornament &#8212; a <strong>signpost</strong> to where the philosophy lands in implementation: flat files (03), master data (05), dated flags (06), the learning loop (08), the accounting cut (10), authentication (11). Different faces of one word.</p>
+  <p class="only-ja">10年前、ひらがなの「かんり」は、ひとりの静かな抵抗だった。いまは違う。心理的安全性、自律分散、AIガバナンス——世界の議論は、別々の入口から同じ一点へ収束しつつある。<strong>時代が、ひらがなに追いついた。</strong></p>
+  <p class="only-en">Ten years ago, hiragana かんり was one person&#8217;s quiet protest. Not anymore. Psychological safety, decentralized autonomy, AI governance &#8212; the world&#8217;s arguments are converging, through different doors, on the same point. <strong>The times have caught up with the hiragana.</strong></p>
+</section>
+
+<!-- 03 -->
+<section class="ch" id="c0">
+  <div class="ch-head"><span class="num">03</span><h2 class="only-ja">設計思想 — なぜ、データベースを持たないか</h2><h2 class="only-en">Design philosophy — why no database</h2></div>
+  <p class="lead only-ja">KANRIは核にRDBを持たない。制約ではない。<strong>設計そのもの。</strong></p>
+  <p class="lead only-en">KANRI has no relational database at its core. Not a limitation &#8212; <strong>the design.</strong></p>
+  <p class="only-ja">この規模のプラットフォームは普通、スキーマとサーバーと保守部隊から始まる。KANRIは<strong>フラットファイルとINDEX</strong>から始まる——人間が読める素のレコードを、外部キーではなく色分けINDEXでつなぐ。状態はファイルに、意味はINDEXに、関係は結合ではなく参照で。</p>
+  <p class="only-en">A platform of this scope normally begins with schemas, servers, and a team to maintain them. KANRI begins with <strong>flat files and an index</strong> &#8212; plain, human-readable records, connected by a color-coded index rather than foreign keys. State lives in files; meaning lives in the index; relationships resolve by reference, not by join.</p>
+  <p class="only-ja">結果は<strong>疎結合</strong>。どの部分も、他に触れずに配置・移動・再構築できる。同じ原理がUIから認証層まで貫く。founder+AIで作れて安く回るのも、この形のおかげ——アーキテクチャとビジネスモデルが、同じ形をしている。</p>
+  <p class="only-en">The result is <strong>loose coupling</strong>: any part can be deployed, moved, or rebuilt without touching the rest. The same principle runs from the interface to the authentication layer. It is also what makes KANRI buildable by a founder and an AI &#8212; the architecture and the business model are the same shape.</p>
+  <div class="pull only-ja">疎結合とは、<em>壊れ方の設計だ。</em></div>
+  <div class="pull only-en">Loose coupling is <em>the design of how things are allowed to fail.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 1982 &#8594; 2026</span><p class="only-ja">300BPSの音響カプラーから40年で、CPUも通信も約十億倍になった。だがcos/sinで三次元を二次元に投影する数学は、1982年も2026年も同じだ。<strong>変わらないものを、変わらない設計で持ち続ける。</strong>ある広告代理店では、1993年からの記録がいまも途切れず遡れる。</p><p class="only-en">Forty years after a 300-baud acoustic coupler, CPU and bandwidth have grown roughly a billion-fold. Yet the cos/sin math that projects three dimensions onto two is identical in 1982 and 2026. <strong>Hold what does not change in a design that does not change.</strong> At one advertising agency, records since 1993 remain searchable, unbroken, today.</p></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 1991</span><p class="only-ja">日本に安価なRDBが無かった時代、船便のPC MAGAZINEで<strong>99ドルのMicrosoft Access</strong>を知り、冬のロサンゼルスへ飛んだ。日本語版は無い。Windows 3.1英語版から英字フォントを削り、日本語フォントだけを残す力技で動かした。その99ドルが、30年のビジネスの基礎になった。——RDBを求めて太平洋を渡った者が、いま、RDBを持たない設計を書いている。<strong>手放せるのは、知り尽くしたからだ。</strong></p><p class="only-en">When Japan had no affordable RDB, a sea-mailed PC MAGAZINE revealed <strong>Microsoft Access at $99</strong> &#8212; and a winter flight to Los Angeles followed. No Japanese edition existed; stripping the Latin fonts out of English Windows 3.1, leaving only the Japanese ones, forced it to run. That $99 became the foundation of thirty years of business. The man who crossed the Pacific for an RDB now writes a design that carries none. <strong>You can only let go of what you know completely.</strong></p></div>
+  <pre><span class="c"># a resource is a flat record + an index entry — no schema, no server</span>
+<span class="k">people/</span>cust_0421.json      <span class="c">{ name, initials, history_ref, … }</span>
+<span class="k">index/</span>people.idx         cust_0421 → 顧 · #1A237E · <span class="a">active</span>
+<span class="k">index/</span>time.idx           cust_0421 → 2016-… → now → next</pre>
+  <p class="only-ja"><span class="integ">Integrity</span>疎結合は脆さではない。全体がIntegrityを保つ方法だ：どの部分も、壊れ、作り直され、置き換えられても——残りを割らない。</p>
+  <p class="only-en"><span class="integ">Integrity</span>Loose coupling is not fragility. It is how the whole keeps its integrity: any part can fail, be rebuilt, or be replaced &#8212; without fracturing the rest.</p>
+</section>
+
+<!-- 04 -->
+<section class="ch" id="c1">
+  <div class="ch-head"><span class="num">04</span><h2 class="only-ja">4つの資源 — データモデル</h2><h2 class="only-en">The four resources — the data model</h2></div>
+  <span class="from2016">From 2016 &#183; the actor lanes &#8594; four resources</span>
+  <p class="only-ja">2016年の図は、事業を「当事者のレーン」で描いた。KANRIはそれを<strong>4つの資源</strong>に一般化する——組織が実際に扱っているのは、この4つ。3つは馴染み深い。<strong>4つ目が、他のシステムが無視するもの。</strong></p>
+  <p class="only-en">The 2016 diagram organized a business into lanes of actors. KANRI generalizes them into <strong>four resources</strong> &#8212; the four things every organization actually manages. Three are familiar. <strong>The fourth is the one other systems ignore.</strong></p>
+  <div class="res">
+    <div class="res-item"><h4><span class="dot" style="background:#1a3a5c"></span>People</h4><p class="only-ja">顧客・社員・会員・パートナー・協力会社</p><p class="only-en">Customers, employees, members, partners, suppliers</p></div>
+    <div class="res-item"><h4><span class="dot" style="background:#0f6e56"></span>Products</h4><p class="only-ja">商品・サービス・プロジェクト・知的資産</p><p class="only-en">Goods, services, projects, intellectual assets</p></div>
+    <div class="res-item"><h4><span class="dot" style="background:#c0550a"></span>Time</h4><p class="only-ja">履歴・活動・予定・未来の意図——資産として</p><p class="only-en">History, activity, schedule, future intent &#8212; as an asset</p></div>
+    <div class="res-item"><h4><span class="dot" style="background:#b8960c"></span>Value</h4><p class="only-ja">売上・原価・利益・入金</p><p class="only-en">Revenue, cost, profit, payment</p></div>
+  </div>
+  <div class="pull only-ja">時間は、4つ目の資源ではない。<em>数えられなかった、最初の資源だ。</em></div>
+  <div class="pull only-en">Time is not the fourth resource. <em>It is the first one nobody counted.</em></div>
+  <p class="only-ja" style="margin-top:1rem">各資源はフラットレコード＋INDEX。全体を縛る中央スキーマは無く、読み出し時にINDEXで結ぶ。だから<strong>マイグレーション無しで、資源ごとに育てられる</strong>。</p>
+  <p class="only-en" style="margin-top:1rem">Each resource is a set of flat records with an index. No central schema binds them; they join at read time through the index &#8212; which is why the model grows one resource at a time, without migrations.</p>
+</section>
+
+<!-- 05 -->
+<section class="ch" id="c2">
+  <div class="ch-head"><span class="num">05</span><h2>Master Data First</h2></div>
+  <p class="lead only-ja">KANRIは、プロセスではなく<strong>意味</strong>から始める。</p>
+  <p class="lead only-en">KANRI begins with <strong>meaning</strong>, not process.</p>
+  <div class="loop">Master &#8594; <b>Relationship</b> &#8594; Knowledge &#8594; Process &#8594; Interface</div>
+  <p class="only-ja">多くの企業プロジェクトは、上に向かって失敗する：汚れたマスタの上にプロセスを配線し、混乱が複利で増える。KANRIは順序を逆にする。<strong>意味の通った綺麗なマスタが先</strong>——それが、人間の判断とAIの判断、両方の土台だから。エージェントの賢さは、推論の土台になるマスタの質を超えられない。</p>
+  <p class="only-en">Most enterprise projects fail upward: they wire processes on top of dirty master data, and the mess compounds. KANRI inverts the order. <strong>Clean, meaningful master data comes first</strong> &#8212; the foundation for both human and AI decisions. An agent is only as good as the master data it reasons over.</p>
+  <div class="pull only-ja">プロセスは、あとから直せる。<em>意味は、最初に決まる。</em></div>
+  <div class="pull only-en">Processes can be fixed later. <em>Meaning is decided first.</em></div>
+  <p class="only-ja"><span class="integ">Integrity</span>綺麗なマスタは衛生ではない。Integrityの具体化だ——すべての資源・人・エージェントが合意する、ただ一つの意味。</p>
+  <p class="only-en"><span class="integ">Integrity</span>Clean master data is not hygiene. It is integrity made concrete &#8212; one meaning that every resource, person, and agent agrees on.</p>
+</section>
+
+<!-- 06 -->
+<section class="ch" id="c3">
+  <div class="ch-head"><span class="num">06</span><h2 class="only-ja">業務フロー — 状態とINDEX</h2><h2 class="only-en">Flows — states &amp; INDEX</h2></div>
+  <span class="from2016">From 2016 &#183; PRE-ORDER &#8594; ORDER &#8594; 検収 &#8594; 評価</span>
+  <p class="only-ja">2016年の図の業務フローは、明示的な状態機械になる。状態遷移はINDEXに<strong>日付フラグ</strong>として記録される——何の状態も、任意の時点で、クエリエンジン無しで分かる。</p>
+  <p class="only-en">The business flows from the original diagram become explicit state machines. Transitions are recorded as dated flags in the index &#8212; the status of anything is knowable at any point in time, without a query engine.</p>
+  <div class="states"><span class="state head">B2B</span><span class="arrow">&#183;</span><span class="state">Prospect</span><span class="arrow">&#8594;</span><span class="state">Estimate</span><span class="arrow">&#8594;</span><span class="state">Order</span><span class="arrow">&#8594;</span><span class="state">Delivery</span><span class="arrow">&#8594;</span><span class="state">Invoice</span><span class="arrow">&#8594;</span><span class="state">Profit</span></div>
+  <div class="states"><span class="state head">B2C</span><span class="arrow">&#183;</span><span class="state">Member</span><span class="arrow">&#8594;</span><span class="state">Event</span><span class="arrow">&#8594;</span><span class="state">Participation</span><span class="arrow">&#8594;</span><span class="state">Subscription</span><span class="arrow">&#8594;</span><span class="state">Payment</span></div>
+  <div class="pull only-ja">状態とは、<em>日付を持った事実である。</em></div>
+  <div class="pull only-en">A state is <em>a fact with a date.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; late 1980s</span><p class="only-ja">会計年度で閉じる販売管理と違い、あのシステムは<strong>未来のイベント</strong>を入力できた。先の予定が記録にあるから、仕入れも資金も前もって最適化できる。「未来かんり」という名は、ここから来た。未来日付のフラグは、40年前からこの設計の心臓だった。</p><p class="only-en">Unlike sales systems closed by the fiscal year, that early system accepted <strong>future events</strong>. With the future on record, purchasing and cash could be optimized in advance. The name <em>mirai-kanri</em> &#8212; future kanri &#8212; was born there. The future-dated flag has been the heart of this design for forty years.</p></div>
+  <pre><span class="c"># state lives as a dated flag in the index — not a DB row</span>
+<span class="k">index/</span>order.idx   ord_1180 → estimate:2026-06-30 → order:07-02 → <span class="a">delivery:pending</span></pre>
+</section>
+
+<!-- 07 -->
+<section class="ch" id="c4">
+  <div class="ch-head"><span class="num">07</span><h2 class="only-ja">記号インターフェース — 一文字、一意味</h2><h2 class="only-en">Symbolic interface — one character, one meaning</h2></div>
+  <p class="lead">「日本語は生まれながらにしてカラフルだった。」</p>
+  <p class="only-ja">KANRIのUIは、一文字と色でできている：<strong>花・森・空・金・風</strong>。一文字が意味を、一色が状態を運ぶ。濃い業務情報を、モバイル画面で一瞥で読める——INDEXは内部配管ではなく、<strong>それ自体がインターフェース</strong>。</p>
+  <p class="only-en">KANRI's interface is built from single characters and color: 花・森・空・金・風. One character carries a meaning; a color carries a state. Dense enterprise information becomes readable at a glance on a mobile screen &#8212; the index is not internal plumbing; <strong>it is the interface.</strong></p>
+  <p class="only-ja">装飾ではない。<strong>情報圧縮</strong>だ：俳句が17音に宇宙を畳むのと同じ原理を、業務データに適用した。そしてこれは、第11章の認証層の「見えている表面」でもある。</p>
+  <p class="only-en">This is not decoration. It is <strong>information compression</strong>: the principle that lets a haiku hold a world in seventeen syllables, applied to business data. It is also the visible surface of the authentication layer in chapter 11.</p>
+  <div class="pull only-ja">一文字は、<em>最小のダッシュボード。</em></div>
+  <div class="pull only-en">One character is <em>the smallest dashboard.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 1993</span><p class="only-ja">義理かんりでは、お歳暮を<strong>「歳」</strong>、お中元を<strong>「中」</strong>の一文字で表し、AND/ORも漢字で組めた——「歳＋中」「歳のみ」「中のみ」。漢字には部首・意味・形・文化的背景があり、<strong>分類のための構造が最初から備わっている。</strong>のちに部首へ色が重なり（氵→青、木→緑、金→黄金）、天然色漢字INDEX™へ育った。「一文字は、最小のダッシュボード」——その最初の一文字は、33年前に出荷されていた。</p><p class="only-en">In giri-kanri, the year-end gift was the single character <strong>歳</strong>, the mid-year gift <strong>中</strong> &#8212; and AND/OR logic was composed in kanji: 歳+中, 歳 only, 中 only. Kanji carry radicals, meaning, shape, and cultural depth: <strong>a structure for classification, built in from the start.</strong> Later, color joined the radicals (氵&#8594;blue, 木&#8594;green, 金&#8594;gold), growing into the Colorful Kanji INDEX&#8482;. &#8220;One character is the smallest dashboard&#8221; &#8212; the first such character shipped thirty-three years ago.</p></div>
+</section>
+
+<!-- 08 -->
+<section class="ch" id="c5">
+  <div class="ch-head"><span class="num">08</span><h2>Learning Loop</h2></div>
+  <span class="from2016">From 2016 &#183; 評価ランク</span>
+  <div class="loop">Action &#8594; Result &#8594; <b>Review</b> &#8594; Learning &#8594; Improvement &#8594; Action</div>
+  <p class="only-ja">2016年の図はすでに、供給サイクルの終わりに評価ランクを置いていた。KANRIはそのループを中核機構にする：<strong>すべての業務プロセスは、同時に学習プロセスである。</strong>完了したサイクルは経験としてINDEXに書き戻され、次のサイクル——人でもエージェントでも——は、前回の学びから始まる。</p>
+  <p class="only-en">The 2016 diagram already ended each supply cycle in an evaluation rank. KANRI makes that loop the core mechanic: <strong>every business process is also a learning process.</strong> Each completed cycle writes back into the index as experience, so the next cycle &#8212; human or agent &#8212; starts from what the last one learned.</p>
+  <div class="pull only-ja">経験を書き戻さないシステムは、<em>毎朝、新人に戻る。</em></div>
+  <div class="pull only-en">A system that never writes back its experience <em>reports for work, every morning, as a new hire.</em></div>
+  <p class="only-ja"><span class="integ">Integrity</span>ループはIntegrityが時間を生き延びる方法だ：完了したサイクルが、前のサイクルを監査する。</p>
+  <p class="only-en"><span class="integ">Integrity</span>The loop is how integrity survives time: every completed cycle audits the one before it.</p>
+</section>
+
+<!-- 09 -->
+<section class="ch" id="c6">
+  <div class="ch-head"><span class="num">09</span><h2 class="only-ja">Agent層 — Claude.aiがエンジン</h2><h2 class="only-en">Agentic layer — Claude.ai as the engine</h2></div>
+  <p class="lead only-ja">KANRIにおいてAIは、後付けの機能ではない。<strong>システムを作る道具であり、動かすエンジンそのもの。</strong></p>
+  <p class="lead only-en">In KANRI, the AI is not a feature bolted on. <strong>It is the engine the system is built with, and runs on.</strong></p>
+  <p class="only-ja">Claude.aiはフラットファイルとINDEXを読み、マスタの上で推論し、業務フローを横断して動く——見積のドラフト、請求の督促、仕入先の格付け、<strong>退職者が知っていたことの浮上</strong>。人間が意図を定め、エージェントが知識基盤に対して代行する。</p>
+  <p class="only-en">Claude.ai reads the flat files and the index, reasons over the master data, and acts across the business flows &#8212; drafting an estimate, chasing an invoice, ranking a supplier, <strong>surfacing what a departing employee knew</strong>. The human sets intent; the agent operates against the knowledge base.</p>
+  <div class="loop">Human &#8594; <b>Agent</b> &#8594; Knowledge base (files + INDEX) &#8594; Business flows &#8594; External parties</div>
+  <div class="pull only-ja">人間は意図を持ち、エージェントは実行を持ち、<em>INDEXが記憶を持つ。</em></div>
+  <div class="pull only-en">The human holds intent, the agent holds execution &#8212; <em>the index holds the memory.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 1986</span><p class="only-ja">特種情報処理技術者の受験票には、会社と自宅の電話番号が手書きで並ぶ。当時、番号は記憶の最前列に置くべきものだった。いまは何も暗記しない。<strong>「記憶に頼らない生活は楽」</strong>——記憶は人ではなく、INDEXが持てばいい。</p><p class="only-en">On the 1986 national-exam slip, office and home phone numbers are written by hand &#8212; things that once had to live at the front of human memory. Today, nothing is memorized. <strong>A life that does not lean on memory is light.</strong> Memory belongs not to the person, but to the index.</p></div>
+  <p class="only-ja">知識基盤が独自DBではなく素のファイルだから、エージェントは特別なコネクタ無しで会社全体を推論できる。アーキテクチャとAIが自然に出会う——founder+AIで<strong>毎日作って、毎日直せる</strong>理由も、まさにここにある。</p>
+  <p class="only-en">Because the knowledge base is plain files rather than a proprietary database, the agent needs no special connector to reason over the whole company. The architecture and the AI meet naturally &#8212; which is precisely why a founder and an AI can build daily and fix daily.</p>
+</section>
+
+<!-- 10 -->
+<section class="ch" id="c7">
+  <div class="ch-head"><span class="num">10</span><h2 class="only-ja">時間＝価値 ／ 会計は、分ける</h2><h2 class="only-en">Time = value / the accounting cut</h2></div>
+  <span class="from2016">From 2016 &#183; 「利益＝時間。品質＋付加価値。」</span>
+  <p class="only-ja">行き先は、10年前に図の上に書かれていた。どのシステムも人・モノ・カネは扱う。KANRIは、それらが省くただ一つ——<strong>時間そのもの</strong>——を、履歴・活動・未来の意図を持つ第一級の資源として足す。</p>
+  <p class="only-en">The destination was written on the diagram ten years ago. Every system manages people, products, and value; KANRI adds the one they omit &#8212; <strong>time itself</strong> &#8212; as a first-class resource with history, activity, and future intent.</p>
+  <div class="pull only-ja">時間をうまく扱うのは、効率のためではない。<em>創造と、関係と、人生に、時間を返すためだ。</em></div>
+  <div class="pull only-en">Managing time well is not efficiency for its own sake. <em>It returns hours to creativity, relationships, and life.</em></div>
+  <p class="lead only-ja" style="margin-top:1.4rem">会計は、分ける。</p>
+  <p class="lead only-en" style="margin-top:1.4rem">Accounting is kept separate &#8212; deliberately.</p>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 40 years</span><p class="only-ja">顧客、年月日、製品、数量、単価、小計、合計、税。コクヨの伝票にあった構造は、オフコン、Windows、Dynamics、kintoneとプラットフォームが変わっても、本質的に変わっていない。<strong>お金の形は、40年変わっていない。</strong>だから会計は「別の帳簿」として切り離せる。</p><p class="only-en">Customer, date, product, quantity, unit price, subtotal, total, tax. The structure printed on a Kokuyo slip has survived every platform &#8212; office computers, Windows, Dynamics, kintone &#8212; essentially unchanged. <strong>The shape of money has not changed in forty years.</strong> That is why accounting can be cut away as a ledger of its own.</p></div>
+  <p class="only-ja">期をまたぐ売上や経費を、ソフトウェアが強制的にどちらかへ入れたりしない。決算のとき、<strong>人間が決める</strong>——前期か、今期か。月マタギも同じ。業務の記録は連続した流れ。会計はその上に、判断で重ねる期間の投影。<strong>記録は曲がらない。曲がるのは、ビューだけ。</strong></p>
+  <p class="only-en">A sale or expense straddling a period boundary is not forced into a bucket by the software. At closing, <strong>a human decides</strong> &#8212; this period or the last. Month boundaries, the same. The operational record is a continuous flow; the accounting view is a periodized projection laid over it, by judgment. <strong>The record never bends. Only the view does.</strong></p>
+  <pre><span class="c"># the record is continuous; the period is a judged view</span>
+<span class="k">ledger/</span>inv_0311.json    <span class="c">{ amount, dates, flow_refs, … }</span>
+<span class="k">index/</span>period.idx        inv_0311 → FY2025? FY2026? → <span class="a">decided: human · 2026-07-31</span></pre>
+  <p class="only-ja"><span class="integ">Integrity</span>この緩さは、いい加減さではない。設計だ。KANRIは<strong>キャッシュフロー経営</strong>を目指す：金が動く連続の真実に、期間の区切りを人間の判断で重ねる。従来のERPは期を仕訳に焼き込み、その周りで硬直する。KANRIは流れを丸ごと保ち、境界を人間に保つ。<strong>ゆるく、しかし、正確に。</strong></p>
+  <p class="only-en"><span class="integ">Integrity</span>This looseness is not sloppiness &#8212; it is the design. KANRI aims at <strong>cashflow-first management</strong>: the continuous truth of money moving, with the periodic cut applied as a human decision on top. A conventional ERP bakes the period into the posting and hardens around it; KANRI keeps the flow whole and the boundary human. <strong>Loose &#8212; and precise.</strong></p>
+</section>
+
+<!-- 11 -->
+<section class="ch" id="c8">
+  <div class="ch-head"><span class="num">11</span><h2 class="only-ja">認証インターフェース — 封印された層</h2><h2 class="only-en">Authentication — the sealed layer</h2></div>
+  <p class="lead only-ja">KANRIは、表示に使うのと同じ記号面で認証する——名と、一文字と、一色。<strong>誰にでも見えるのに、誰にも再現できないしるし。</strong></p>
+  <p class="lead only-en">KANRI authenticates through the same symbolic surface it displays &#8212; a name, a character, a color: <strong>public in appearance, yet impossible to reproduce.</strong></p>
+  <p class="only-ja">本仕様が記すのは<strong>インターフェースだけ</strong>：認証のしるしがKANRIにどう提示され、どう消費されるか。しるしを再現不能にする仕組み——コピーもフィッシングも総当たりもできないものから引き出される——は<strong>特許出願中</strong>であり、意図的に trade secret として伏せてある。</p>
+  <p class="only-en">This specification describes only the <strong>interface</strong>: how the mark is presented and consumed by KANRI. The mechanism that makes it unreproducible &#8212; drawn from something that cannot be copied, phished, or brute-forced &#8212; is the subject of a <strong>pending patent application</strong>, deliberately held as a trade secret.</p>
+  <p class="only-ja">公開されているのは、低価値の表面だけ——<strong>石垣と障子</strong>。深部が再現不能だからこそ、堂々と見せられる。このプラットフォームの防御力は、本書が記述しないものの中にある。</p>
+  <p class="only-en">What is public is only the low-value surface &#8212; a stone wall and a paper screen &#8212; shown openly because its depth is not reproducible. The defensibility lies in what this paper does not describe.</p>
+  <div class="pull only-ja">見せられるのは、<em>再現できないからだ。</em></div>
+  <div class="pull only-en">It can be shown openly <em>because it cannot be reproduced.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 2000</span><p class="only-ja">インターネットが世界を変え始めた年、VeriSignの認定資格を5日間で3つ修めた。PKI——公開鍵でEコマースを守る技術。「見せられるのは、再現できないからだ」という設計は、<strong>四半世紀の認証の系譜</strong>の上に立っている。</p><p class="only-en">In the year the internet began changing everything: three VeriSign certifications in five days &#8212; PKI, securing e-commerce with public keys. &#8220;Shown openly because it cannot be reproduced&#8221; stands on <strong>a quarter-century lineage of authentication.</strong></p></div>
+  <p class="only-ja"><span class="integ">Integrity</span>認証は、門のIntegrityだ——偽造できないしるしが、静かに漂わない記録を守る。</p>
+  <p class="only-en"><span class="integ">Integrity</span>Authentication is integrity at the gate &#8212; a mark that cannot be faked, guarding records that cannot quietly drift.</p>
+  <div class="sealed">Interface specified &#183; mechanism sealed &#183; patent pending, held individually</div>
+</section>
+
+<!-- 12 -->
+<section class="ch" id="c9">
+  <div class="ch-head"><span class="num">12</span><h2 class="only-ja">KANRIの位置</h2><h2 class="only-en">Where KANRI sits</h2></div>
+  <p class="only-ja">KANRIは、より深い<strong>特許出願中の基盤</strong>の応用である。基盤は複数の製品を生める。KANRIは、その企業向けの表現。</p>
+  <p class="only-en">KANRI is an <strong>application</strong> of a deeper, patent-pending base. The base can spawn more than one product; KANRI is its enterprise expression.</p>
+  <div class="stack">
+    <div class="stack-row base"><span class="stack-tag">Base &#183; patent-pending</span><span class="stack-name">COLOURFUL JAPAN&#8482; / 天然色漢字INDEX&#8482; <span>&#8212; authentication &amp; symbolic interface</span></span></div>
+    <div class="stack-row"><span class="stack-tag">Application &#183; B2B</span><span class="stack-name">KANRI <span>&#8212; enterprise knowledge &amp; resource intelligence</span></span></div>
+    <div class="stack-row"><span class="stack-tag">Application &#183; B2C</span><span class="stack-name">Smart Life Styles&#174; <span>&#8212; time &amp; life, for individuals</span></span></div>
+  </div>
+  <div class="pull only-ja">KANRIは、製品の名ではない。<em>最初の応用の名だ。</em></div>
+  <div class="pull only-en">KANRI is not the name of the product. <em>It is the name of the first application.</em></div>
+  <div class="dig"><span class="yr">発掘 &#8212; excavated &#183; 1993</span><p class="only-ja">Microsoft Access 1.1の上に作った、年賀状・お歳暮・お中元——日本の「義理」を扱うソフト<strong>「義理かんり」</strong>。データベースエンジンも画面部品も自作せず、プラットフォームの上に一枚を足すだけ——だから速く、確かで、通算4,000本を超えて届いた。Microsoftのプロダクトマネージャーに請われてソースを公開し、MicrosoftのDMに同梱されて通販で売れ、これを土台に自分のデータベースを作る人が続出した。ひらがなの「かんり」を名に持つ、最初のソフトでもある。<strong>全部を自分で作らない。</strong>30年後、KANRIがClaude.aiの上で同じ手を打っている。むしろ、原点に近い。</p><p class="only-en"><strong><em>Giri-kanri</em></strong> (1993): software for Japan&#8217;s culture of <em>giri</em> &#8212; new-year cards, seasonal gifts &#8212; built on Microsoft Access 1.1. No homemade database engine, no homemade UI &#8212; one sheet added on top of a platform. That is why it shipped fast, held its quality, and reached over 4,000 copies. At the request of a Microsoft product manager its source was opened; its flyers rode inside Microsoft&#8217;s own mailings, and people built their own databases upon it. It was also the first software to carry the hiragana name かんり. <strong>Do not build everything yourself.</strong> Thirty years on, KANRI plays the same move on Claude.ai. If anything &#8212; closer to the origin.</p></div>
+  <p class="only-ja" style="margin-top:1.6rem">最後に、本書がなぜ日本語と英語の二層で書かれているかに触れておく。漢字は一文字で分類する（歳、中、作、設）。ひらがなは一語の綴りで思想を変える（管理→かんり）。そしてオノマトペは、数値にならない手触りまで運ぶ——世界がアニメを通じて知っている、あの表現力だ。<strong>圧縮と質感、その両端を一つの言語が持っている。</strong>30年、この道具で情報を設計してきた確信を、最後の一行にしておく。</p>
+  <p class="only-en" style="margin-top:1.6rem">A closing note on why this paper is written in two layers, Japanese and English. Kanji classify in a single character (歳, 中, 作, 設). Hiragana can turn a philosophy with one change of spelling (管理 &#8594; かんり). And onomatopoeia carries textures that never become numbers &#8212; the expressive power the world knows through anime. <strong>Compression at one end, sensation at the other, held in a single language.</strong> Thirty years of designing information with this instrument, folded into a final line.</p>
+  <div class="pull only-ja">日本語には、<em>情報をデザインする力がある。</em></div>
+  <div class="pull only-en">Japanese has <em>the power to design information.</em></div>
+</section>
+
+<!-- CLOSE -->
+<section class="cta-block">
+  <div>
+    <div class="eyebrow" style="margin-bottom:1.2rem">Vision 2040</div>
+    <div class="loop" style="margin-bottom:1.5rem">Resource mgmt &#8594; Knowledge mgmt &#8594; Learning systems &#8594; <b>Agentic mgmt</b> &#8594; Smart Life Styles</div>
+    <p class="cta-line only-ja">テクノロジーは、人の創造性を置き換えるためにあるのではない。そのための時間をつくるためにある。<br><span style="color:var(--accent)">KANRI is not Control &#8212; it is integrity.</span></p>
+    <p class="cta-line only-en">Technology should not replace human creativity. It should create the time for it.<br><span style="color:var(--accent)">KANRI is not Control &#8212; it is integrity.</span></p>
+    <div class="cta-links">
+      <a class="only-ja" href="https://digiterior.net">digiterior.net — 基盤と応用を見る &#8594;</a>
+      <a class="only-en" href="https://digiterior.net">digiterior.net — the base &amp; its applications &#8594;</a>
+      <a class="only-ja" href="partnership.html">パートナー提案 — 一緒に進めませんか &#8594;</a>
+      <a class="only-en" href="partnership.html">Partnership proposal — build it with us &#8594;</a>
+    </div>
+  </div>
+  <div class="qr-box">
+    <svg viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR to this page"><rect width="37" height="37" fill="#fff"/><path d="M2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM5,2H6V3H5zM6,2H7V3H6zM7,2H8V3H7zM8,2H9V3H8zM11,2H12V3H11zM12,2H13V3H12zM16,2H17V3H16zM17,2H18V3H17zM20,2H21V3H20zM23,2H24V3H23zM24,2H25V3H24zM26,2H27V3H26zM28,2H29V3H28zM29,2H30V3H29zM30,2H31V3H30zM31,2H32V3H31zM32,2H33V3H32zM33,2H34V3H33zM34,2H35V3H34zM2,3H3V4H2zM8,3H9V4H8zM10,3H11V4H10zM12,3H13V4H12zM13,3H14V4H13zM14,3H15V4H14zM15,3H16V4H15zM16,3H17V4H16zM18,3H19V4H18zM19,3H20V4H19zM23,3H24V4H23zM28,3H29V4H28zM34,3H35V4H34zM2,4H3V5H2zM4,4H5V5H4zM5,4H6V5H5zM6,4H7V5H6zM8,4H9V5H8zM10,4H11V5H10zM12,4H13V5H12zM13,4H14V5H13zM15,4H16V5H15zM18,4H19V5H18zM19,4H20V5H19zM20,4H21V5H20zM21,4H22V5H21zM23,4H24V5H23zM25,4H26V5H25zM26,4H27V5H26zM28,4H29V5H28zM30,4H31V5H30zM31,4H32V5H31zM32,4H33V5H32zM34,4H35V5H34zM2,5H3V6H2zM4,5H5V6H4zM5,5H6V6H5zM6,5H7V6H6zM8,5H9V6H8zM10,5H11V6H10zM11,5H12V6H11zM12,5H13V6H12zM13,5H14V6H13zM17,5H18V6H17zM23,5H24V6H23zM24,5H25V6H24zM28,5H29V6H28zM30,5H31V6H30zM31,5H32V6H31zM32,5H33V6H32zM34,5H35V6H34zM2,6H3V7H2zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM11,6H12V7H11zM12,6H13V7H12zM15,6H16V7H15zM17,6H18V7H17zM19,6H20V7H19zM20,6H21V7H20zM25,6H26V7H25zM28,6H29V7H28zM30,6H31V7H30zM31,6H32V7H31zM32,6H33V7H32zM34,6H35V7H34zM2,7H3V8H2zM8,7H9V8H8zM12,7H13V8H12zM13,7H14V8H13zM14,7H15V8H14zM15,7H16V8H15zM18,7H19V8H18zM20,7H21V8H20zM22,7H23V8H22zM23,7H24V8H23zM24,7H25V8H24zM28,7H29V8H28zM34,7H35V8H34zM2,8H3V9H2zM3,8H4V9H3zM4,8H5V9H4zM5,8H6V9H5zM6,8H7V9H6zM7,8H8V9H7zM8,8H9V9H8zM10,8H11V9H10zM12,8H13V9H12zM14,8H15V9H14zM16,8H17V9H16zM18,8H19V9H18zM20,8H21V9H20zM22,8H23V9H22zM24,8H25V9H24zM26,8H27V9H26zM28,8H29V9H28zM29,8H30V9H29zM30,8H31V9H30zM31,8H32V9H31zM32,8H33V9H32zM33,8H34V9H33zM34,8H35V9H34zM10,9H11V10H10zM11,9H12V10H11zM16,9H17V10H16zM2,10H3V11H2zM8,10H9V11H8zM10,10H11V11H10zM12,10H13V11H12zM14,10H15V11H14zM16,10H17V11H16zM17,10H18V11H17zM19,10H20V11H19zM22,10H23V11H22zM24,10H25V11H24zM27,10H28V11H27zM28,10H29V11H28zM31,10H32V11H31zM32,10H33V11H32zM33,10H34V11H33zM4,11H5V12H4zM5,11H6V12H5zM6,11H7V12H6zM9,11H10V12H9zM11,11H12V12H11zM12,11H13V12H12zM16,11H17V12H16zM17,11H18V12H17zM18,11H19V12H18zM20,11H21V12H20zM21,11H22V12H21zM23,11H24V12H23zM24,11H25V12H24zM25,11H26V12H25zM30,11H31V12H30zM31,11H32V12H31zM32,11H33V12H32zM34,11H35V12H34zM2,12H3V13H2zM6,12H7V13H6zM7,12H8V13H7zM8,12H9V13H8zM9,12H10V13H9zM10,12H11V13H10zM14,12H15V13H14zM17,12H18V13H17zM20,12H21V13H20zM22,12H23V13H22zM24,12H25V13H24zM27,12H28V13H27zM30,12H31V13H30zM32,12H33V13H32zM33,12H34V13H33zM2,13H3V14H2zM3,13H4V14H3zM4,13H5V14H4zM5,13H6V14H5zM10,13H11V14H10zM11,13H12V14H11zM16,13H17V14H16zM18,13H19V14H18zM22,13H23V14H22zM29,13H30V14H29zM30,13H31V14H30zM31,13H32V14H31zM32,13H33V14H32zM34,13H35V14H34zM2,14H3V15H2zM3,14H4V15H3zM5,14H6V15H5zM7,14H8V15H7zM8,14H9V15H8zM12,14H13V15H12zM14,14H15V15H14zM15,14H16V15H15zM16,14H17V15H16zM17,14H18V15H17zM18,14H19V15H18zM19,14H20V15H19zM20,14H21V15H20zM21,14H22V15H21zM22,14H23V15H22zM25,14H26V15H25zM26,14H27V15H26zM28,14H29V15H28zM33,14H34V15H33zM34,14H35V15H34zM2,15H3V16H2zM4,15H5V16H4zM6,15H7V16H6zM7,15H8V16H7zM10,15H11V16H10zM13,15H14V16H13zM14,15H15V16H14zM16,15H17V16H16zM18,15H19V16H18zM19,15H20V16H19zM22,15H23V16H22zM25,15H26V16H25zM28,15H29V16H28zM29,15H30V16H29zM33,15H34V16H33zM34,15H35V16H34zM2,16H3V17H2zM5,16H6V17H5zM8,16H9V17H8zM10,16H11V17H10zM11,16H12V17H11zM12,16H13V17H12zM14,16H15V17H14zM16,16H17V17H16zM19,16H20V17H19zM21,16H22V17H21zM23,16H24V17H23zM24,16H25V17H24zM26,16H27V17H26zM27,16H28V17H27zM28,16H29V17H28zM31,16H32V17H31zM32,16H33V17H32zM33,16H34V17H33zM3,17H4V18H3zM4,17H5V18H4zM6,17H7V18H6zM7,17H8V18H7zM10,17H11V18H10zM11,17H12V18H11zM13,17H14V18H13zM14,17H15V18H14zM17,17H18V18H17zM21,17H22V18H21zM24,17H25V18H24zM26,17H27V18H26zM27,17H28V18H27zM31,17H32V18H31zM32,17H33V18H32zM34,17H35V18H34zM3,18H4V19H3zM5,18H6V19H5zM7,18H8V19H7zM8,18H9V19H8zM9,18H10V19H9zM10,18H11V19H10zM11,18H12V19H11zM12,18H13V19H12zM14,18H15V19H14zM18,18H19V19H18zM19,18H20V19H19zM21,18H22V19H21zM24,18H25V19H24zM26,18H27V19H26zM27,18H28V19H27zM29,18H30V19H29zM30,18H31V19H30zM31,18H32V19H31zM32,18H33V19H32zM34,18H35V19H34zM5,19H6V20H5zM6,19H7V20H6zM7,19H8V20H7zM12,19H13V20H12zM13,19H14V20H13zM15,19H16V20H15zM16,19H17V20H16zM17,19H18V20H17zM18,19H19V20H18zM19,19H20V20H19zM21,19H22V20H21zM22,19H23V20H22zM23,19H24V20H23zM25,19H26V20H25zM28,19H29V20H28zM31,19H32V20H31zM32,19H33V20H32zM33,19H34V20H33zM4,20H5V21H4zM5,20H6V21H5zM6,20H7V21H6zM8,20H9V21H8zM9,20H10V21H9zM12,20H13V21H12zM13,20H14V21H13zM16,20H17V21H16zM17,20H18V21H17zM21,20H22V21H21zM22,20H23V21H22zM23,20H24V21H23zM24,20H25V21H24zM25,20H26V21H25zM26,20H27V21H26zM28,20H29V21H28zM29,20H30V21H29zM31,20H32V21H31zM32,20H33V21H32zM34,20H35V21H34zM3,21H4V22H3zM9,21H10V22H9zM12,21H13V22H12zM14,21H15V22H14zM18,21H19V22H18zM19,21H20V22H19zM20,21H21V22H20zM22,21H23V22H22zM27,21H28V22H27zM30,21H31V22H30zM31,21H32V22H31zM32,21H33V22H32zM34,21H35V22H34zM4,22H5V23H4zM5,22H6V23H5zM6,22H7V23H6zM8,22H9V23H8zM10,22H11V23H10zM11,22H12V23H11zM13,22H14V23H13zM14,22H15V23H14zM17,22H18V23H17zM18,22H19V23H18zM24,22H25V23H24zM27,22H28V23H27zM29,22H30V23H29zM30,22H31V23H30zM31,22H32V23H31zM33,22H34V23H33zM34,22H35V23H34zM2,23H3V24H2zM3,23H4V24H3zM4,23H5V24H4zM6,23H7V24H6zM7,23H8V24H7zM9,23H10V24H9zM15,23H16V24H15zM16,23H17V24H16zM18,23H19V24H18zM20,23H21V24H20zM22,23H23V24H22zM23,23H24V24H23zM25,23H26V24H25zM27,23H28V24H27zM28,23H29V24H28zM29,23H30V24H29zM30,23H31V24H30zM31,23H32V24H31zM2,24H3V25H2zM4,24H5V25H4zM5,24H6V25H5zM6,24H7V25H6zM8,24H9V25H8zM10,24H11V25H10zM11,24H12V25H11zM13,24H14V25H13zM17,24H18V25H17zM18,24H19V25H18zM19,24H20V25H19zM20,24H21V25H20zM23,24H24V25H23zM27,24H28V25H27zM28,24H29V25H28zM29,24H30V25H29zM31,24H32V25H31zM33,24H34V25H33zM2,25H3V26H2zM6,25H7V26H6zM7,25H8V26H7zM11,25H12V26H11zM14,25H15V26H14zM15,25H16V26H15zM20,25H21V26H20zM22,25H23V26H22zM24,25H25V26H24zM26,25H27V26H26zM28,25H29V26H28zM30,25H31V26H30zM31,25H32V26H31zM32,25H33V26H32zM34,25H35V26H34zM2,26H3V27H2zM3,26H4V27H3zM7,26H8V27H7zM8,26H9V27H8zM9,26H10V27H9zM10,26H11V27H10zM11,26H12V27H11zM16,26H17V27H16zM17,26H18V27H17zM18,26H19V27H18zM20,26H21V27H20zM25,26H26V27H25zM26,26H27V27H26zM27,26H28V27H27zM28,26H29V27H28zM29,26H30V27H29zM30,26H31V27H30zM32,26H33V27H32zM33,26H34V27H33zM34,26H35V27H34zM10,27H11V28H10zM11,27H12V28H11zM12,27H13V28H12zM14,27H15V28H14zM15,27H16V28H15zM16,27H17V28H16zM17,27H18V28H17zM18,27H19V28H18zM20,27H21V28H20zM21,27H22V28H21zM22,27H23V28H22zM25,27H26V28H25zM26,27H27V28H26zM30,27H31V28H30zM32,27H33V28H32zM2,28H3V29H2zM3,28H4V29H3zM4,28H5V29H4zM5,28H6V29H5zM6,28H7V29H6zM7,28H8V29H7zM8,28H9V29H8zM14,28H15V29H14zM17,28H18V29H17zM20,28H21V29H20zM22,28H23V29H22zM23,28H24V29H23zM24,28H25V29H24zM25,28H26V29H25zM26,28H27V29H26zM28,28H29V29H28zM30,28H31V29H30zM32,28H33V29H32zM33,28H34V29H33zM2,29H3V30H2zM8,29H9V30H8zM12,29H13V30H12zM13,29H14V30H13zM14,29H15V30H14zM15,29H16V30H15zM16,29H17V30H16zM17,29H18V30H17zM22,29H23V30H22zM24,29H25V30H24zM25,29H26V30H25zM26,29H27V30H26zM30,29H31V30H30zM31,29H32V30H31zM32,29H33V30H32zM33,29H34V30H33zM34,29H35V30H34zM2,30H3V31H2zM4,30H5V31H4zM5,30H6V31H5zM6,30H7V31H6zM8,30H9V31H8zM12,30H13V31H12zM13,30H14V31H13zM14,30H15V31H14zM16,30H17V31H16zM20,30H21V31H20zM21,30H22V31H21zM24,30H25V31H24zM26,30H27V31H26zM27,30H28V31H27zM28,30H29V31H28zM29,30H30V31H29zM30,30H31V31H30zM31,30H32V31H31zM2,31H3V32H2zM4,31H5V32H4zM5,31H6V32H5zM6,31H7V32H6zM8,31H9V32H8zM11,31H12V32H11zM14,31H15V32H14zM15,31H16V32H15zM18,31H19V32H18zM19,31H20V32H19zM21,31H22V32H21zM22,31H23V32H22zM25,31H26V32H25zM27,31H28V32H27zM29,31H30V32H29zM30,31H31V32H30zM31,31H32V32H31zM32,31H33V32H32zM33,31H34V32H33zM34,31H35V32H34zM2,32H3V33H2zM4,32H5V33H4zM5,32H6V33H5zM6,32H7V33H6zM8,32H9V33H8zM11,32H12V33H11zM14,32H15V33H14zM15,32H16V33H15zM16,32H17V33H16zM18,32H19V33H18zM21,32H22V33H21zM27,32H28V33H27zM29,32H30V33H29zM30,32H31V33H30zM33,32H34V33H33zM34,32H35V33H34zM2,33H3V34H2zM8,33H9V34H8zM11,33H12V34H11zM12,33H13V34H12zM13,33H14V34H13zM15,33H16V34H15zM16,33H17V34H16zM17,33H18V34H17zM18,33H19V34H18zM20,33H21V34H20zM22,33H23V34H22zM24,33H25V34H24zM29,33H30V34H29zM30,33H31V34H30zM31,33H32V34H31zM32,33H33V34H32zM2,34H3V35H2zM3,34H4V35H3zM4,34H5V35H4zM5,34H6V35H5zM6,34H7V35H6zM7,34H8V35H7zM8,34H9V35H8zM10,34H11V35H10zM13,34H14V35H13zM14,34H15V35H14zM19,34H20V35H19zM21,34H22V35H21zM24,34H25V35H24zM25,34H26V35H25zM26,34H27V35H26zM29,34H30V35H29zM33,34H34V35H33z" fill="#1a1814"/></svg>
+    <div class="qr-cap">scan this paper</div>
+  </div>
+</section>
+
+<footer>
+  <p>KANRI &#183; White Paper &#183; Draft v1.7 &#183; 2026<br>天然色漢字 INDEX&#8482; &#160;|&#160; Smart Life Styles&#174; &#160;|&#160; love your long life, love your long time&#8482;<br>&#169; Koichiro Hoshino &#183; digiterior.net</p>
+</footer>
+
+</div>
+
+<script>
+var NOTES_HOME = "/";
+function toggleLang(){
+  var b = document.body, btn = document.getElementById("langBtn");
+  if (b.classList.contains("lang-ja")){
+    b.classList.remove("lang-ja"); b.classList.add("lang-en");
+    document.documentElement.lang = "en"; btn.textContent = "日本語";
+    document.title = "KANRI White Paper 2026 — A 2016 blueprint, buildable at last";
+  } else {
+    b.classList.remove("lang-en"); b.classList.add("lang-ja");
+    document.documentElement.lang = "ja"; btn.textContent = "EN";
+    document.title = "KANRI白書 2026 — 10年前の設計図が、いま実装できる";
+  }
+}
+</script>
+
+</body>
+</html>
