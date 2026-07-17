@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"
-     width="120" height="120" role="img" data-surface="dgt" data-date="2026-07-17">
-  <title>楽 — digiterior beacon 2026-07-17</title>
+     width="120" height="120" role="img" data-surface="dgt" data-date="2026-07-18">
+  <title>楽 — digiterior beacon 2026-07-18</title>
   <g stroke="#1F1D1A" stroke-opacity="0.55" stroke-width="1" fill="none">
     <path d="M 60 100 L 12 44"/>
     <path d="M 60 100 L 38 32"/>
@@ -10,7 +10,7 @@
     <path d="M 12 44 A 72 72 0 0 1 108 44"/>
     <path d="M 26 60 A 50 50 0 0 1 94 60" stroke-opacity="0.3"/>
   </g>
-  <circle id="keystone" cx="60" cy="100" r="15" fill="#A66B30"/>
+  <circle id="keystone" cx="60" cy="100" r="15" fill="#A6A630"/>
   <text x="60" y="105" text-anchor="middle" font-family="serif"
         font-size="13" fill="#FFFFFF">楽</text>
 </svg>
