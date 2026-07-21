@@ -77,6 +77,12 @@ body {
   letter-spacing: 1px; color: var(--dim);
 }
 .lg-dot { width: 10px; height: 10px; border-radius: 50%; }
+.lg-kanji {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid currentColor;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif JP', serif; font-size: 12px; font-weight: 700;
+}
 
 /* ── MAP CONTAINER ── */
 .map-wrap {
@@ -202,18 +208,20 @@ svg { width: 100%; height: auto; display: block; }
   </div>
   <div class="h-sub">
     Roberto Hoshino × Claude.ai — 2026年5月19日〜6月9日。<br>
-    ひとつの会話スレッドの中で、話題がどう拡散し、どこで繋がったか。
+    ひとつの会話スレッドの中で、話題がどう拡散し、どこで繋がったか。<br>
+    漢字一文字のINDEXが物語の系を示す——文字が変わる場所で、SPARKが発火する。
   </div>
   <div class="h-period">MUFJ RADIO → PARTNER NETWORK → 森嶋 → DIGITERIOR → UI FLORIST　＋　森嶋 第三接続</div>
 </header>
 
 <!-- LEGEND -->
 <div class="legend">
-  <div class="lg-item"><span class="lg-dot" style="background:var(--gold);"></span>ビジネス・パートナーシップ</div>
-  <div class="lg-item"><span class="lg-dot" style="background:var(--indigo-l);"></span>技術・プロダクト</div>
-  <div class="lg-item"><span class="lg-dot" style="background:var(--rose);"></span>人生・記憶</div>
-  <div class="lg-item"><span class="lg-dot" style="background:var(--green-l);"></span>コミュニティ・地域</div>
-  <div class="lg-item"><span class="lg-dot" style="background:var(--purple);"></span>思想・哲学</div>
+  <div class="lg-item"><span class="lg-kanji" style="color:var(--gold-l);">業</span>ビジネス・パートナーシップ</div>
+  <div class="lg-item"><span class="lg-kanji" style="color:var(--indigo-l);">技</span>技術・プロダクト</div>
+  <div class="lg-item"><span class="lg-kanji" style="color:var(--rose-l);">生</span>人生・記憶</div>
+  <div class="lg-item"><span class="lg-kanji" style="color:var(--green-l);">市</span>コミュニティ・地域</div>
+  <div class="lg-item"><span class="lg-kanji" style="color:#ce93d8;">思</span>思想・哲学</div>
+  <div class="lg-item"><span style="color:var(--gold-l);font-size:14px;">★</span>SPARK — 文字が変わる交点</div>
 </div>
 
 <!-- NEURAL MAP SVG -->
@@ -304,7 +312,7 @@ svg { width: 100%; height: auto; display: block; }
     <text x="550" y="301" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">漢字認証</text>
   </g>
   <g>
-    <circle cx="800" cy="300" r="28" fill="rgba(129,199,132,0.12)" stroke="#81c784"/>
+    <title>藍PROJECT — 行員70名と藍を育てる。神田の藍が、金融と繋がった。</title><circle cx="800" cy="300" r="28" fill="rgba(129,199,132,0.12)" stroke="#81c784"/>
     <text x="800" y="297" text-anchor="middle" font-size="11" fill="#a5d6a7">藍PROJECT</text>
     <text x="800" y="311" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">行員70名</text>
   </g>
@@ -335,7 +343,7 @@ svg { width: 100%; height: auto; display: block; }
     <text x="830" y="499" text-anchor="middle" font-size="9" fill="#a5d6a7">植替え体験</text>
   </g>
   <g class="pulse">
-    <circle cx="940" cy="500" r="26" fill="rgba(224,85,112,0.12)" stroke="#e05570"/>
+    <title>Anthroslan — 薔薇を捧げる。義母の見舞いから続く、記憶の糸のうえで。</title><circle cx="940" cy="500" r="26" fill="rgba(224,85,112,0.12)" stroke="#e05570"/>
     <text x="940" y="497" text-anchor="middle" font-size="10" fill="#f48fb1">Anthroslan</text>
     <text x="940" y="510" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">薔薇を捧げる</text>
   </g>
@@ -371,7 +379,7 @@ svg { width: 100%; height: auto; display: block; }
 
   <!-- 森嶋 - THE MAGICAL NODE -->
   <g class="pulse">
-    <circle cx="570" cy="950" r="38" fill="rgba(224,85,112,0.2)" stroke="#F9A825" stroke-width="2.5"/>
+    <title>森嶋 — スペイン大使への差し入れの酒の名が、思い出せなかった調布の墓碑の苗字だった。星の時間。</title><circle cx="570" cy="950" r="38" fill="rgba(224,85,112,0.2)" stroke="#F9A825" stroke-width="2.5"/>
     <text x="570" y="942" text-anchor="middle" font-size="16" font-weight="700" fill="#F9A825">森嶋</text>
     <text x="570" y="960" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">酒の名前 = 墓碑の苗字</text>
   </g>
@@ -379,7 +387,7 @@ svg { width: 100%; height: auto; display: block; }
 
   <!-- 森嶋 THIRD CONNECTION (addendum 2026-07-21) -->
   <g class="pulse">
-    <circle cx="730" cy="982" r="30" fill="rgba(249,168,37,0.14)" stroke="#F9A825" stroke-width="2" stroke-dasharray="3 3"/>
+    <title>第三接続 — 2026-07-21 引き払いの日。藍と薔薇を愛でた唯一のコンシェルジェの苗字も、森嶋。</title><circle cx="730" cy="982" r="30" fill="rgba(249,168,37,0.14)" stroke="#F9A825" stroke-width="2" stroke-dasharray="3 3"/>
     <text x="730" y="976" text-anchor="middle" font-size="12" font-weight="700" fill="#F9A825">第三接続</text>
     <text x="730" y="992" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">コンシェルジェ</text>
   </g>
@@ -418,17 +426,62 @@ svg { width: 100%; height: auto; display: block; }
 
   <!-- CONVERGENCE -->
   <g class="pulse">
-    <circle cx="530" cy="1245" r="32" fill="rgba(249,168,37,0.15)" stroke="#F9A825" stroke-width="2"/>
+    <title>UI FLORIST — 花の記憶をWEBへ。すべての線がここに流れ込んだ。</title><circle cx="530" cy="1245" r="32" fill="rgba(249,168,37,0.15)" stroke="#F9A825" stroke-width="2"/>
     <text x="530" y="1241" text-anchor="middle" font-size="11" font-weight="500" fill="#F9A825">UI FLORIST</text>
     <text x="530" y="1256" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.6)">花の記憶をWEBへ</text>
   </g>
 
   <!-- FINAL -->
   <g class="pulse">
-    <circle cx="548" cy="1380" r="42" fill="rgba(200,146,10,0.2)" stroke="#F9A825" stroke-width="2.5"/>
+    <title>MEMORY-BANK™ — すべての記憶が認証キーになる。拡散はすべて、この思想の実証だった。</title><circle cx="548" cy="1380" r="42" fill="rgba(200,146,10,0.2)" stroke="#F9A825" stroke-width="2.5"/>
     <text x="548" y="1372" text-anchor="middle" font-size="12" font-weight="700" fill="#F9A825">MEMORY-BANK™</text>
     <text x="548" y="1388" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">すべての記憶が</text>
     <text x="548" y="1400" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">認証キーになる</text>
+  </g>
+  <!-- ═══ KANJI INDEX BADGES (業技生市思) ═══ -->
+  <g font-family="'Noto Serif JP',serif" font-weight="700" font-size="12">
+    <text x="578" y="74" fill="#F9A825">業</text>
+    <text x="923" y="80" fill="#f48fb1">生</text>
+    <text x="325" y="278" fill="#F9A825">業</text>
+    <text x="573" y="270" fill="#9fa8da">技</text>
+    <text x="823" y="280" fill="#a5d6a7">市</text>
+    <text x="241" y="472" fill="#F9A825">業</text>
+    <text x="400" y="474" fill="#F9A825">業</text>
+    <text x="468" y="476" fill="#ce93d8">思</text>
+    <text x="640" y="474" fill="#a5d6a7">市</text>
+    <text x="848" y="476" fill="#a5d6a7">市</text>
+    <text x="961" y="482" fill="#f48fb1">生</text>
+    <text x="210" y="654" fill="#F9A825">業</text>
+    <text x="198" y="826" fill="#F9A825">業</text>
+    <text x="205" y="994" fill="#F9A825">業</text>
+    <text x="921" y="672" fill="#f48fb1">生</text>
+    <text x="850" y="844" fill="#f48fb1">生</text>
+    <text x="670" y="674" fill="#a5d6a7">市</text>
+    <text x="450" y="1064" fill="#a5d6a7">市</text>
+    <text x="668" y="1056" fill="#f48fb1">生</text>
+    <text x="850" y="1024" fill="#9fa8da">技</text>
+    <text x="368" y="1096" fill="#ce93d8">思</text>
+    <text x="556" y="1221" fill="#F9A825">業</text>
+    <text x="600" y="922" fill="#F9A825" font-size="14">★</text>
+    <text x="754" y="958" fill="#F9A825" font-size="13">★</text>
+    <text x="582" y="1348" fill="#F9A825" font-size="14">★</text>
+  </g>
+
+  <!-- ═══ SPARK — 文字が変わる交点 ═══ -->
+  <g font-size="10" fill="#F9A825" opacity="0.75" text-anchor="middle">
+    <text x="688" y="175">★</text>
+    <text x="550" y="198">★</text>
+    <text x="500" y="385">★</text>
+    <text x="593" y="390">★</text>
+    <text x="705" y="525">★</text>
+    <text x="620" y="805">★</text>
+    <text class="pulse" x="700" y="918" font-size="14">★</text>
+    <text x="500" y="1028">★</text>
+    <text x="463" y="1158">★</text>
+    <text x="597" y="1156">★</text>
+    <text x="700" y="1150">★</text>
+    <text x="770" y="646">★</text>
+    <text x="792" y="1010">★</text>
   </g>
 
 </svg>
