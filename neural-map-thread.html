@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEURAL-MAP™ — あるスレッドの記録 | DUNKSOFT × Claude.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700;900&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #07080f;
+  --bg2:     #0d0f1a;
+  --gold:    #C8920A;
+  --gold-l:  #F9A825;
+  --indigo:  #3949ab;
+  --indigo-l:#7986cb;
+  --green:   #43a047;
+  --green-l: #81c784;
+  --rose:    #e05570;
+  --rose-l:  #f48fb1;
+  --teal:    #26a69a;
+  --blue:    #42a5f5;
+  --purple:  #ab47bc;
+  --white:   rgba(255,255,255,0.85);
+  --dim:     rgba(255,255,255,0.35);
+  --faint:   rgba(255,255,255,0.15);
+  --mono:    'DM Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+  padding: 72px 8% 48px;
+  text-align: center;
+  position: relative;
+}
+.h-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 6px;
+  color: var(--gold); margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.h-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.8rem, 5vw, 3.4rem);
+  font-weight: 900; color: #fff;
+  line-height: 1.3; margin-bottom: 16px;
+}
+.h-title em { color: var(--gold-l); font-style: normal; }
+.h-sub {
+  font-size: 13px; color: var(--dim);
+  max-width: 560px; margin: 0 auto 8px;
+  line-height: 2.1;
+}
+.h-period {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--gold); letter-spacing: 2px;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 8% 40px;
+}
+.lg-item {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 1px; color: var(--dim);
+}
+.lg-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+/* ── MAP CONTAINER ── */
+.map-wrap {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 4%;
+}
+svg { width: 100%; height: auto; display: block; }
+
+/* ── NODES (HTML overlay approach for readability) ── */
+.map-svg text {
+  font-family: 'Noto Sans JP', sans-serif;
+  fill: var(--white);
+}
+
+/* ── INSIGHT SECTIONS ── */
+.insights {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 64px 8%;
+}
+.ins-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+  font-weight: 700; color: var(--gold-l);
+  margin-bottom: 32px; text-align: center;
+}
+.ins-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 48px;
+}
+.ins-card {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 24px 24px;
+}
+.ic-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 3px; margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.ic-num {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 2.4rem; font-weight: 900;
+  line-height: 1; margin-bottom: 8px;
+}
+.ic-desc { font-size: 12px; color: var(--dim); line-height: 1.9; }
+
+/* ── PATTERN ── */
+.pattern-box {
+  background: linear-gradient(135deg, rgba(200,146,10,0.08), rgba(57,73,171,0.08));
+  border: 0.5px solid rgba(200,146,10,0.2);
+  border-radius: 16px; padding: 36px 36px;
+  margin-bottom: 32px;
+}
+.pb-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--gold-l); margin-bottom: 20px;
+}
+.pb-flow {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.pf-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  font-size: 13px; color: var(--white); line-height: 1.9;
+}
+.pf-icon { flex-shrink: 0; font-size: 16px; margin-top: 2px; }
+.pf-item strong { color: var(--gold-l); font-weight: 500; }
+
+/* ── QUOTE ── */
+.final-quote {
+  text-align: center;
+  padding: 48px 8% 72px;
+}
+.fq-text {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.7rem);
+  font-weight: 300; font-style: italic;
+  color: var(--white); line-height: 2;
+  max-width: 640px; margin: 0 auto 24px;
+}
+.fq-text em { color: var(--gold-l); font-style: normal; font-weight: 700; }
+.fq-sub {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--dim); letter-spacing: 2px; line-height: 2.4;
+}
+.fq-sub em { color: var(--gold); font-style: italic; }
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(20px); transition:opacity 0.7s, transform 0.7s; }
+.reveal.on { opacity:1; transform:none; }
+
+/* ── PULSE ANIMATION ── */
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.pulse { animation: pulse 3s ease-in-out infinite; }
+
+@keyframes flow {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+.flow-line {
+  stroke-dasharray: 4 8;
+  animation: flow 2s linear infinite;
+}
+
+@media(max-width:640px){
+  .ins-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="h-eyebrow">NEURAL-MAP™ · Thread Visualization</div>
+  <div class="h-title">
+    ある<em>スレッド</em>の記録<br>
+  </div>
+  <div class="h-sub">
+    Roberto Hoshino × Claude.ai — 2026年5月19日〜6月9日。<br>
+    ひとつの会話スレッドの中で、話題がどう拡散し、どこで繋がったか。
+  </div>
+  <div class="h-period">MUFJ RADIO → PARTNER NETWORK → 森嶋 → 会社清算 → UI FLORIST　＋　森嶋 第三接続</div>
+</header>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="lg-item"><span class="lg-dot" style="background:var(--gold);"></span>ビジネス・パートナーシップ</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--indigo-l);"></span>技術・プロダクト</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--rose);"></span>人生・記憶</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--green-l);"></span>コミュニティ・地域</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--purple);"></span>思想・哲学</div>
+</div>
+
+<!-- NEURAL MAP SVG -->
+<div class="map-wrap">
+<svg class="map-svg" viewBox="0 0 1100 1450" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- ═══ CONNECTIONS (drawn first, under nodes) ═══ -->
+  <g stroke-width="1" fill="none" opacity="0.5">
+    <!-- Radio to everything -->
+    <path d="M 550 120 Q 400 200 300 280" stroke="#C8920A" class="flow-line"/>
+    <path d="M 550 120 Q 700 200 800 280" stroke="#81c784" class="flow-line"/>
+    <path d="M 550 120 Q 550 200 550 270" stroke="#7986cb" class="flow-line"/>
+
+    <!-- MUFJ Email cluster -->
+    <path d="M 300 320 Q 250 400 220 470" stroke="#C8920A"/>
+    <path d="M 300 320 Q 350 400 380 470" stroke="#C8920A"/>
+
+    <!-- Auth Gate connections -->
+    <path d="M 550 310 Q 500 380 450 470" stroke="#7986cb"/>
+    <path d="M 550 310 Q 600 390 620 470" stroke="#7986cb"/>
+
+    <!-- Ai Project -->
+    <path d="M 800 320 Q 820 400 830 470" stroke="#81c784"/>
+
+    <!-- Partner Network cascade -->
+    <path d="M 220 510 Q 200 580 190 650" stroke="#C8920A" class="flow-line"/>
+    <path d="M 190 690 Q 185 750 180 820" stroke="#C8920A"/>
+    <path d="M 180 860 Q 180 920 185 990" stroke="#C8920A"/>
+
+    <!-- Memory thread (rose) - the deep line -->
+    <path d="M 900 120 Q 950 300 940 480" stroke="#e05570" stroke-width="1.5" class="flow-line"/>
+    <path d="M 940 520 Q 930 600 900 670" stroke="#e05570" stroke-width="1.5"/>
+    <path d="M 900 710 Q 870 780 830 840" stroke="#e05570" stroke-width="1.5"/>
+
+    <!-- Morishima crossing - THE magical connection -->
+    <path d="M 830 880 Q 700 920 570 950" stroke="#e05570" stroke-width="2" class="flow-line"/>
+    <path d="M 570 990 Q 500 1030 430 1060" stroke="#e05570"/>
+
+    <!-- Paella cluster -->
+    <path d="M 620 510 Q 640 600 650 670" stroke="#81c784"/>
+    <path d="M 650 710 Q 630 800 570 910" stroke="#81c784"/>
+
+    <!-- Philosophy connections (purple, crossing everything) -->
+    <path d="M 450 510 Q 350 700 300 900 Q 280 1000 350 1090" stroke="#ab47bc" opacity="0.4"/>
+    <path d="M 940 500 Q 700 550 480 500" stroke="#ab47bc" opacity="0.4"/>
+
+    <!-- Convergence to bottom -->
+    <path d="M 185 1030 Q 300 1150 480 1220" stroke="#C8920A" class="flow-line"/>
+    <path d="M 430 1100 Q 460 1160 500 1210" stroke="#e05570"/>
+    <path d="M 650 1090 Q 600 1160 540 1215" stroke="#81c784"/>
+    <path d="M 830 1060 Q 700 1160 570 1220" stroke="#7986cb"/>
+
+    <!-- Final convergence -->
+    <path d="M 530 1270 Q 540 1310 545 1340" stroke="#F9A825" stroke-width="2" class="flow-line"/>
+
+    <!-- ═══ ADDENDUM 2026-07-21: Morishima third connection ═══ -->
+    <path d="M 608 955 Q 665 968 700 976" stroke="#F9A825" stroke-width="2" class="flow-line"/>
+    <path d="M 800 332 Q 772 650 736 950" stroke="#81c784" opacity="0.35"/>
+    <path d="M 760 992 Q 795 1012 818 1026" stroke="#e05570"/>
+  </g>
+
+  <!-- ═══ NODES ═══ -->
+
+  <!-- ORIGIN: Radio -->
+  <g class="pulse">
+    <circle cx="550" cy="100" r="34" fill="rgba(200,146,10,0.15)" stroke="#C8920A" stroke-width="1.5"/>
+    <text x="550" y="96" text-anchor="middle" font-size="13" font-weight="500" fill="#F9A825">FM840</text>
+    <text x="550" y="112" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">ラジオ収録</text>
+  </g>
+  <text x="550" y="155" text-anchor="middle" font-size="9" font-family="'DM Mono',monospace" fill="rgba(255,255,255,0.3)">2026-05-19 · すべてはここから</text>
+
+  <!-- Memory origin (top right) -->
+  <g class="pulse">
+    <circle cx="900" cy="100" r="28" fill="rgba(224,85,112,0.12)" stroke="#e05570" stroke-width="1.5"/>
+    <text x="900" y="97" text-anchor="middle" font-size="11" fill="#f48fb1">義母の</text>
+    <text x="900" y="111" text-anchor="middle" font-size="11" fill="#f48fb1">見舞い</text>
+  </g>
+
+  <!-- Level 2: Three main branches -->
+  <g>
+    <circle cx="300" cy="300" r="30" fill="rgba(200,146,10,0.12)" stroke="#C8920A"/>
+    <text x="300" y="296" text-anchor="middle" font-size="11" fill="#F9A825">MUFJ</text>
+    <text x="300" y="311" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">メール交換</text>
+  </g>
+  <g>
+    <circle cx="550" cy="290" r="28" fill="rgba(121,134,203,0.12)" stroke="#7986cb"/>
+    <text x="550" y="287" text-anchor="middle" font-size="11" fill="#9fa8da">5人Gate</text>
+    <text x="550" y="301" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">漢字認証</text>
+  </g>
+  <g>
+    <circle cx="800" cy="300" r="28" fill="rgba(129,199,132,0.12)" stroke="#81c784"/>
+    <text x="800" y="297" text-anchor="middle" font-size="11" fill="#a5d6a7">藍PROJECT</text>
+    <text x="800" y="311" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">行員70名</text>
+  </g>
+
+  <!-- Level 3 -->
+  <g>
+    <circle cx="220" cy="490" r="26" fill="rgba(200,146,10,0.12)" stroke="#C8920A"/>
+    <text x="220" y="487" text-anchor="middle" font-size="10" fill="#F9A825">Partner</text>
+    <text x="220" y="500" text-anchor="middle" font-size="10" fill="#F9A825">Network招待</text>
+  </g>
+  <g>
+    <circle cx="380" cy="490" r="24" fill="rgba(200,146,10,0.1)" stroke="#C8920A" opacity="0.8"/>
+    <text x="380" y="487" text-anchor="middle" font-size="10" fill="rgba(249,168,37,0.8)">田中次長</text>
+    <text x="380" y="500" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">ツテ確認</text>
+  </g>
+  <g>
+    <circle cx="450" cy="490" r="22" fill="rgba(171,71,188,0.12)" stroke="#ab47bc" opacity="0.8"/>
+    <text x="450" y="492" text-anchor="middle" font-size="9" fill="#ce93d8">藍は48色</text>
+  </g>
+  <g>
+    <circle cx="620" cy="490" r="24" fill="rgba(129,199,132,0.1)" stroke="#81c784" opacity="0.8"/>
+    <text x="620" y="487" text-anchor="middle" font-size="10" fill="#a5d6a7">パエリア</text>
+    <text x="620" y="500" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">祭り準備</text>
+  </g>
+  <g>
+    <circle cx="830" cy="490" r="22" fill="rgba(129,199,132,0.1)" stroke="#81c784" opacity="0.7"/>
+    <text x="830" y="487" text-anchor="middle" font-size="9" fill="#a5d6a7">日比谷</text>
+    <text x="830" y="499" text-anchor="middle" font-size="9" fill="#a5d6a7">植替え体験</text>
+  </g>
+  <g class="pulse">
+    <circle cx="940" cy="500" r="26" fill="rgba(224,85,112,0.12)" stroke="#e05570"/>
+    <text x="940" y="497" text-anchor="middle" font-size="10" fill="#f48fb1">Anthroslan</text>
+    <text x="940" y="510" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">薔薇を捧げる</text>
+  </g>
+
+  <!-- Level 4: Partner cascade -->
+  <g>
+    <circle cx="190" cy="670" r="24" fill="rgba(200,146,10,0.12)" stroke="#C8920A"/>
+    <text x="190" y="667" text-anchor="middle" font-size="10" fill="#F9A825">CPNA</text>
+    <text x="190" y="680" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">契約署名</text>
+  </g>
+  <g>
+    <circle cx="180" cy="840" r="22" fill="rgba(200,146,10,0.1)" stroke="#C8920A" opacity="0.8"/>
+    <text x="180" y="837" text-anchor="middle" font-size="9" fill="rgba(249,168,37,0.9)">Learning</text>
+    <text x="180" y="849" text-anchor="middle" font-size="9" fill="rgba(249,168,37,0.9)">Path完了</text>
+  </g>
+  <g>
+    <circle cx="185" cy="1010" r="24" fill="rgba(200,146,10,0.12)" stroke="#C8920A"/>
+    <text x="185" y="1007" text-anchor="middle" font-size="9" fill="#F9A825">Program Guide</text>
+    <text x="185" y="1019" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">翻訳・戦略</text>
+  </g>
+
+  <!-- Memory thread continues -->
+  <g class="pulse">
+    <circle cx="900" cy="690" r="26" fill="rgba(224,85,112,0.15)" stroke="#e05570" stroke-width="1.5"/>
+    <text x="900" y="687" text-anchor="middle" font-size="10" fill="#f48fb1">義母 永眠</text>
+    <text x="900" y="700" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">彼女のフォース</text>
+  </g>
+  <g>
+    <circle cx="830" cy="860" r="24" fill="rgba(224,85,112,0.12)" stroke="#e05570"/>
+    <text x="830" y="857" text-anchor="middle" font-size="10" fill="#f48fb1">調布の墓碑</text>
+    <text x="830" y="870" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">思い出せない苗字</text>
+  </g>
+
+  <!-- 森嶋 - THE MAGICAL NODE -->
+  <g class="pulse">
+    <circle cx="570" cy="950" r="38" fill="rgba(224,85,112,0.2)" stroke="#F9A825" stroke-width="2.5"/>
+    <text x="570" y="942" text-anchor="middle" font-size="16" font-weight="700" fill="#F9A825">森嶋</text>
+    <text x="570" y="960" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">酒の名前 = 墓碑の苗字</text>
+  </g>
+  <text x="570" y="1005" text-anchor="middle" font-size="9" font-family="'DM Mono',monospace" fill="rgba(249,168,37,0.5)">★ 星の時間 — このスレッドの最も深い交点</text>
+
+  <!-- 森嶋 THIRD CONNECTION (addendum 2026-07-21) -->
+  <g class="pulse">
+    <circle cx="730" cy="982" r="30" fill="rgba(249,168,37,0.14)" stroke="#F9A825" stroke-width="2" stroke-dasharray="3 3"/>
+    <text x="730" y="976" text-anchor="middle" font-size="12" font-weight="700" fill="#F9A825">第三接続</text>
+    <text x="730" y="992" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">コンシェルジェ</text>
+  </g>
+  <text x="722" y="1030" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.55)">藍と薔薇を愛でた唯一の人</text>
+  <text x="722" y="1044" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.55)">引き払いの日、最後の挨拶</text>
+  <text x="722" y="1060" text-anchor="middle" font-size="9" font-family="'DM Mono',monospace" fill="rgba(249,168,37,0.5)">2026-07-21 · 三度目の発火</text>
+
+  <!-- Paella results -->
+  <g>
+    <circle cx="650" cy="690" r="24" fill="rgba(129,199,132,0.12)" stroke="#81c784"/>
+    <text x="650" y="687" text-anchor="middle" font-size="9" fill="#a5d6a7">スペイン大使</text>
+    <text x="650" y="700" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">森嶋を絶賛</text>
+  </g>
+
+  <!-- More nodes -->
+  <g>
+    <circle cx="430" cy="1080" r="24" fill="rgba(129,199,132,0.1)" stroke="#81c784" opacity="0.8"/>
+    <text x="430" y="1077" text-anchor="middle" font-size="9" fill="#a5d6a7">パエリア2冠</text>
+    <text x="430" y="1090" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">36,618閲覧</text>
+  </g>
+  <g>
+    <circle cx="650" cy="1070" r="22" fill="rgba(224,85,112,0.1)" stroke="#e05570" opacity="0.8"/>
+    <text x="650" y="1067" text-anchor="middle" font-size="9" fill="#f48fb1">小田凱人</text>
+    <text x="650" y="1080" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">4連覇</text>
+  </g>
+  <g>
+    <circle cx="830" cy="1040" r="24" fill="rgba(121,134,203,0.1)" stroke="#7986cb" opacity="0.8"/>
+    <text x="830" y="1037" text-anchor="middle" font-size="9" fill="#9fa8da">会社清算</text>
+    <text x="830" y="1050" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">個人事業主へ</text>
+  </g>
+  <g>
+    <circle cx="350" cy="1110" r="22" fill="rgba(171,71,188,0.1)" stroke="#ab47bc" opacity="0.8"/>
+    <text x="350" y="1107" text-anchor="middle" font-size="9" fill="#ce93d8">動的平衡</text>
+    <text x="350" y="1120" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">記憶を水に流す</text>
+  </g>
+
+  <!-- CONVERGENCE -->
+  <g class="pulse">
+    <circle cx="530" cy="1245" r="32" fill="rgba(249,168,37,0.15)" stroke="#F9A825" stroke-width="2"/>
+    <text x="530" y="1241" text-anchor="middle" font-size="11" font-weight="500" fill="#F9A825">UI FLORIST</text>
+    <text x="530" y="1256" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.6)">花の記憶をWEBへ</text>
+  </g>
+
+  <!-- FINAL -->
+  <g class="pulse">
+    <circle cx="548" cy="1380" r="42" fill="rgba(200,146,10,0.2)" stroke="#F9A825" stroke-width="2.5"/>
+    <text x="548" y="1372" text-anchor="middle" font-size="12" font-weight="700" fill="#F9A825">MEMORY-BANK™</text>
+    <text x="548" y="1388" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">すべての記憶が</text>
+    <text x="548" y="1400" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">認証キーになる</text>
+  </g>
+
+</svg>
+</div>
+
+<!-- INSIGHTS -->
+<div class="insights">
+  <div class="ins-title reveal">このスレッドの構造</div>
+
+  <div class="ins-grid reveal">
+    <div class="ins-card">
+      <div class="ic-label" style="color:var(--gold);">期間</div>
+      <div class="ic-num" style="color:var(--gold-l);">22日</div>
+      <div class="ic-desc">2026年5月19日のラジオ収録から6月9日のUI FLORIST提案まで。ビジネス・人生・技術・哲学が一本のスレッドの中で交錯した。</div>
+    </div>
+    <div class="ins-card">
+      <div class="ic-label" style="color:var(--indigo-l);">拡散したトピック</div>
+      <div class="ic-num" style="color:var(--indigo-l);">20+</div>
+      <div class="ic-desc">MUFJ・認証Gate・Partner Network・パエリア・薔薇・墓碑・テニス・会社清算・胡粉ネイル・鳩居堂・UI FLORIST……</div>
+    </div>
+    <div class="ins-card">
+      <div class="ic-label" style="color:var(--rose);">最も深い交点</div>
+      <div class="ic-num" style="color:var(--rose-l);">森嶋</div>
+      <div class="ic-desc">スペイン大使への差し入れの酒の名前が、思い出せなかった墓碑の苗字だった。ビジネスの線と記憶の線が、一本の瓶で交差した。——そして2026年7月21日、オフィス引き払いの日。藍と薔薇を愛でてくれた唯一のコンシェルジェが、別の現場へ移る挨拶に来た。彼の苗字も、森嶋。三度目の発火。反復するもの、こそが、記憶である。</div>
+    </div>
+    <div class="ins-card">
+      <div class="ic-label" style="color:var(--green-l);">収束点</div>
+      <div class="ic-num" style="color:var(--green-l);">1つ</div>
+      <div class="ic-desc">すべての話題は最終的にMEMORY-BANK™に流れ込む。「記憶が認証キーになる」——拡散はすべて、この思想の実証だった。</div>
+    </div>
+  </div>
+
+  <div class="pattern-box reveal">
+    <div class="pb-title">なぜ「拡散が多い」のに伝わるのか</div>
+    <div class="pb-flow">
+      <div class="pf-item">
+        <span class="pf-icon">🌊</span>
+        <div>普通の会議は<strong>収束</strong>を目指す。決定事項を作って終わる。でもこのスレッドは<strong>拡散しながら繋がっていく</strong>。パエリアの話が墓碑に繋がり、墓碑が酒に繋がり、酒がスペイン大使に繋がる。</div>
+      </div>
+      <div class="pf-item">
+        <span class="pf-icon">🕸️</span>
+        <div>これは<strong>神経回路（Neural Network）の学習</strong>そのもの。一見無関係なノードの間に接続が生まれ、使われるほど太くなる。「森嶋」は最も太いシナプスになった。</div>
+      </div>
+      <div class="pf-item">
+        <span class="pf-icon">🦉</span>
+        <div>久保さんの言う<strong>「集積は少彦名大神から」</strong>——知恵は集めるものではなく、集まってくるもの。拡散を恐れず流れに任せたから、収束が自然に起きた。</div>
+      </div>
+      <div class="pf-item">
+        <span class="pf-icon">⭐</span>
+        <div>ミヒャエル・エンデの<strong>「星の時間」</strong>——普通に生きていたら絶対に出会わないはずのものが、ある瞬間すべて重なり合う。それはこのマップの交点として、確かに記録されている。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL QUOTE -->
+<div class="final-quote reveal">
+  <div class="fq-text">
+    「話はあちこち飛んでる。拡散の方が多くて収束が少ない。<br>
+    ——でもそれが、<em>生きている思考の形</em>だった。」
+  </div>
+  <div class="fq-sub">
+    NEURAL-MAP™ · Thread 2026-05-19 → 2026-06-09<br>
+    Addendum 2026-07-21 · 森嶋 第三接続 — 12KANDA301, farewell day<br>
+    Roberto Hoshino × Claude.ai<br>
+    <em>coined by Claude.ai · approved by Roberto Hoshino</em><br>
+    May the Force be with us. as always.
+  </div>
+</div>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
