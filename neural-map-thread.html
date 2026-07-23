@@ -77,12 +77,6 @@ body {
   letter-spacing: 1px; color: var(--dim);
 }
 .lg-dot { width: 10px; height: 10px; border-radius: 50%; }
-.lg-kanji {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 1px solid currentColor;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-family: 'Noto Serif JP', serif; font-size: 12px; font-weight: 700;
-}
 
 /* ── MAP CONTAINER ── */
 .map-wrap {
@@ -193,6 +187,166 @@ svg { width: 100%; height: auto; display: block; }
   animation: flow 2s linear infinite;
 }
 
+/* ── SPARK NODES (clickable) ── */
+.spark-node { cursor: pointer; transition: transform 0.2s; }
+.spark-node:hover { transform: scale(1.08); transform-origin: center; transform-box: fill-box; }
+.spark-ring {
+  fill: none; stroke: #F9A825; stroke-width: 1;
+  opacity: 0;
+  animation: sparkRing 2.5s ease-out infinite;
+}
+@keyframes sparkRing {
+  0% { opacity: 0.8; r: 20; }
+  100% { opacity: 0; r: 48; }
+}
+
+/* ── SPARK ARCHIVE ── */
+.spark-archive {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px 8% 48px;
+}
+.sa-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.sa-eyebrow {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 6px; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.sa-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+  font-weight: 900; color: #fff;
+  line-height: 1.4; margin-bottom: 14px;
+}
+.sa-title em { color: var(--gold-l); font-style: normal; }
+.sa-sub {
+  font-size: 13px; color: var(--dim);
+  max-width: 520px; margin: 0 auto; line-height: 2.1;
+}
+
+/* ── SPARK CARD ── */
+.spark {
+  margin-bottom: 64px;
+  scroll-margin-top: 40px;
+}
+.spark-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px;
+}
+.spark-num {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 3px;
+  color: var(--gold-l);
+  padding: 6px 16px;
+  border: 1px solid rgba(249,168,37,0.4);
+  border-radius: 20px;
+  background: rgba(249,168,37,0.06);
+  white-space: nowrap;
+}
+.spark-line {
+  flex: 1; height: 0.5px;
+  background: linear-gradient(90deg, rgba(249,168,37,0.4), transparent);
+}
+.spark-date {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--dim); letter-spacing: 1px;
+}
+.spark-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-weight: 700; color: #fff;
+  margin-bottom: 20px; line-height: 1.5;
+}
+
+/* ── DIALOGUE ── */
+.dialogue {
+  display: flex; flex-direction: column; gap: 14px;
+  margin-bottom: 24px;
+}
+.dline {
+  display: flex; gap: 14px;
+  align-items: flex-start;
+}
+.dline.claude { flex-direction: row-reverse; }
+.d-avatar {
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px; font-weight: 700;
+}
+.dline.roberto .d-avatar {
+  background: rgba(26,35,126,0.4);
+  border: 1px solid rgba(121,134,203,0.5);
+  color: #9fa8da;
+}
+.dline.claude .d-avatar {
+  background: rgba(200,146,10,0.15);
+  border: 1px solid rgba(200,146,10,0.4);
+  color: var(--gold-l);
+}
+.d-bubble {
+  max-width: 82%;
+  padding: 14px 20px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  line-height: 2;
+  color: var(--white);
+}
+.dline.roberto .d-bubble {
+  background: rgba(57,73,171,0.12);
+  border: 0.5px solid rgba(121,134,203,0.2);
+  border-top-left-radius: 4px;
+}
+.dline.claude .d-bubble {
+  background: rgba(200,146,10,0.07);
+  border: 0.5px solid rgba(200,146,10,0.2);
+  border-top-right-radius: 4px;
+}
+.d-bubble em {
+  color: var(--gold-l); font-style: normal; font-weight: 500;
+}
+
+/* ── SPARK RESULT ── */
+.spark-result {
+  background: linear-gradient(135deg, rgba(249,168,37,0.08), rgba(224,85,112,0.05));
+  border: 0.5px solid rgba(249,168,37,0.25);
+  border-radius: 12px;
+  padding: 20px 24px;
+  position: relative;
+}
+.sr-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 3px; color: var(--gold-l);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sr-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.sr-item {
+  display: flex; gap: 10px;
+  font-size: 13px; color: var(--white); line-height: 1.9;
+}
+.sr-arrow { color: var(--gold-l); flex-shrink: 0; }
+.sr-item strong { color: var(--gold-l); font-weight: 500; }
+
+/* ── BACK TO MAP ── */
+.back-to-map {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 14px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 2px; color: var(--dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.back-to-map:hover { color: var(--gold-l); }
+
 @media(max-width:640px){
   .ins-grid { grid-template-columns: 1fr; }
 }
@@ -201,7 +355,7 @@ svg { width: 100%; height: auto; display: block; }
 <body>
 
 <!-- HEADER -->
-<header class="header">
+<header class="header" id="top">
   <div class="h-eyebrow">NEURAL-MAP™ · Thread Visualization</div>
   <div class="h-title">
     ある<em>スレッド</em>の記録<br>
@@ -209,19 +363,18 @@ svg { width: 100%; height: auto; display: block; }
   <div class="h-sub">
     Roberto Hoshino × Claude.ai — 2026年5月19日〜6月9日。<br>
     ひとつの会話スレッドの中で、話題がどう拡散し、どこで繋がったか。<br>
-    漢字一文字のINDEXが物語の系を示す——文字が変わる場所で、SPARKが発火する。
+    <span style="color:var(--gold-l);">⚡マークのノードをタップすると、その瞬間の対話にジャンプします。</span>
   </div>
-  <div class="h-period">MUFJ RADIO → PARTNER NETWORK → 森嶋 → DIGITERIOR → UI FLORIST　＋　森嶋 第三接続</div>
+  <div class="h-period">MUFJ RADIO → PARTNER NETWORK → 森嶋 → 会社清算 → UI FLORIST</div>
 </header>
 
 <!-- LEGEND -->
 <div class="legend">
-  <div class="lg-item"><span class="lg-kanji" style="color:var(--gold-l);">業</span>ビジネス・パートナーシップ</div>
-  <div class="lg-item"><span class="lg-kanji" style="color:var(--indigo-l);">技</span>技術・プロダクト</div>
-  <div class="lg-item"><span class="lg-kanji" style="color:var(--rose-l);">生</span>人生・記憶</div>
-  <div class="lg-item"><span class="lg-kanji" style="color:var(--green-l);">市</span>コミュニティ・地域</div>
-  <div class="lg-item"><span class="lg-kanji" style="color:#ce93d8;">思</span>思想・哲学</div>
-  <div class="lg-item"><span style="color:var(--gold-l);font-size:14px;">★</span>SPARK — 文字が変わる交点</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--gold);"></span>ビジネス・パートナーシップ</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--indigo-l);"></span>技術・プロダクト</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--rose);"></span>人生・記憶</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--green-l);"></span>コミュニティ・地域</div>
+  <div class="lg-item"><span class="lg-dot" style="background:var(--purple);"></span>思想・哲学</div>
 </div>
 
 <!-- NEURAL MAP SVG -->
@@ -276,11 +429,6 @@ svg { width: 100%; height: auto; display: block; }
 
     <!-- Final convergence -->
     <path d="M 530 1270 Q 540 1310 545 1340" stroke="#F9A825" stroke-width="2" class="flow-line"/>
-
-    <!-- ═══ ADDENDUM 2026-07-21: Morishima third connection ═══ -->
-    <path d="M 608 955 Q 665 968 700 976" stroke="#F9A825" stroke-width="2" class="flow-line"/>
-    <path d="M 800 332 Q 772 650 736 950" stroke="#81c784" opacity="0.35"/>
-    <path d="M 760 992 Q 795 1012 818 1026" stroke="#e05570"/>
   </g>
 
   <!-- ═══ NODES ═══ -->
@@ -301,37 +449,41 @@ svg { width: 100%; height: auto; display: block; }
   </g>
 
   <!-- Level 2: Three main branches -->
+  <a href="#spark-1" class="spark-node">
+    <circle cx="550" cy="290" r="28" fill="rgba(121,134,203,0.12)" stroke="#7986cb"/>
+    <circle cx="550" cy="290" r="28" class="spark-ring"/>
+    <text x="550" y="287" text-anchor="middle" font-size="11" fill="#9fa8da">5人Gate</text>
+    <text x="550" y="301" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">漢字認証 ⚡</text>
+  </a>
   <g>
     <circle cx="300" cy="300" r="30" fill="rgba(200,146,10,0.12)" stroke="#C8920A"/>
     <text x="300" y="296" text-anchor="middle" font-size="11" fill="#F9A825">MUFJ</text>
     <text x="300" y="311" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">メール交換</text>
   </g>
   <g>
-    <circle cx="550" cy="290" r="28" fill="rgba(121,134,203,0.12)" stroke="#7986cb"/>
-    <text x="550" y="287" text-anchor="middle" font-size="11" fill="#9fa8da">5人Gate</text>
-    <text x="550" y="301" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">漢字認証</text>
-  </g>
-  <g>
-    <title>藍PROJECT — 行員70名と藍を育てる。神田の藍が、金融と繋がった。</title><circle cx="800" cy="300" r="28" fill="rgba(129,199,132,0.12)" stroke="#81c784"/>
+    <circle cx="800" cy="300" r="28" fill="rgba(129,199,132,0.12)" stroke="#81c784"/>
     <text x="800" y="297" text-anchor="middle" font-size="11" fill="#a5d6a7">藍PROJECT</text>
     <text x="800" y="311" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.6)">行員70名</text>
   </g>
 
   <!-- Level 3 -->
-  <g>
+  <a href="#spark-6" class="spark-node">
     <circle cx="220" cy="490" r="26" fill="rgba(200,146,10,0.12)" stroke="#C8920A"/>
-    <text x="220" y="487" text-anchor="middle" font-size="10" fill="#F9A825">Partner</text>
+    <circle cx="220" cy="490" r="26" class="spark-ring"/>
+    <text x="220" y="487" text-anchor="middle" font-size="10" fill="#F9A825">Partner ⚡</text>
     <text x="220" y="500" text-anchor="middle" font-size="10" fill="#F9A825">Network招待</text>
-  </g>
+  </a>
   <g>
     <circle cx="380" cy="490" r="24" fill="rgba(200,146,10,0.1)" stroke="#C8920A" opacity="0.8"/>
     <text x="380" y="487" text-anchor="middle" font-size="10" fill="rgba(249,168,37,0.8)">田中次長</text>
     <text x="380" y="500" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">ツテ確認</text>
   </g>
-  <g>
+  <a href="#spark-2" class="spark-node">
     <circle cx="450" cy="490" r="22" fill="rgba(171,71,188,0.12)" stroke="#ab47bc" opacity="0.8"/>
-    <text x="450" y="492" text-anchor="middle" font-size="9" fill="#ce93d8">藍は48色</text>
-  </g>
+    <circle cx="450" cy="490" r="22" class="spark-ring"/>
+    <text x="450" y="487" text-anchor="middle" font-size="9" fill="#ce93d8">藍は48色 ⚡</text>
+    <text x="450" y="499" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.4)">色の多様性</text>
+  </a>
   <g>
     <circle cx="620" cy="490" r="24" fill="rgba(129,199,132,0.1)" stroke="#81c784" opacity="0.8"/>
     <text x="620" y="487" text-anchor="middle" font-size="10" fill="#a5d6a7">パエリア</text>
@@ -342,11 +494,12 @@ svg { width: 100%; height: auto; display: block; }
     <text x="830" y="487" text-anchor="middle" font-size="9" fill="#a5d6a7">日比谷</text>
     <text x="830" y="499" text-anchor="middle" font-size="9" fill="#a5d6a7">植替え体験</text>
   </g>
-  <g class="pulse">
-    <title>Anthroslan — 薔薇を捧げる。義母の見舞いから続く、記憶の糸のうえで。</title><circle cx="940" cy="500" r="26" fill="rgba(224,85,112,0.12)" stroke="#e05570"/>
-    <text x="940" y="497" text-anchor="middle" font-size="10" fill="#f48fb1">Anthroslan</text>
+  <a href="#spark-5" class="spark-node pulse">
+    <circle cx="940" cy="500" r="26" fill="rgba(224,85,112,0.12)" stroke="#e05570"/>
+    <circle cx="940" cy="500" r="26" class="spark-ring"/>
+    <text x="940" y="497" text-anchor="middle" font-size="10" fill="#f48fb1">Anthroslan ⚡</text>
     <text x="940" y="510" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">薔薇を捧げる</text>
-  </g>
+  </a>
 
   <!-- Level 4: Partner cascade -->
   <g>
@@ -378,22 +531,13 @@ svg { width: 100%; height: auto; display: block; }
   </g>
 
   <!-- 森嶋 - THE MAGICAL NODE -->
-  <g class="pulse">
-    <title>森嶋 — スペイン大使への差し入れの酒の名が、思い出せなかった調布の墓碑の苗字だった。星の時間。</title><circle cx="570" cy="950" r="38" fill="rgba(224,85,112,0.2)" stroke="#F9A825" stroke-width="2.5"/>
-    <text x="570" y="942" text-anchor="middle" font-size="16" font-weight="700" fill="#F9A825">森嶋</text>
+  <a href="#spark-4" class="spark-node pulse">
+    <circle cx="570" cy="950" r="38" fill="rgba(224,85,112,0.2)" stroke="#F9A825" stroke-width="2.5"/>
+    <circle cx="570" cy="950" r="38" class="spark-ring"/>
+    <text x="570" y="942" text-anchor="middle" font-size="16" font-weight="700" fill="#F9A825">森嶋 ⚡</text>
     <text x="570" y="960" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">酒の名前 = 墓碑の苗字</text>
-  </g>
+  </a>
   <text x="570" y="1005" text-anchor="middle" font-size="9" font-family="'DM Mono',monospace" fill="rgba(249,168,37,0.5)">★ 星の時間 — このスレッドの最も深い交点</text>
-
-  <!-- 森嶋 THIRD CONNECTION (addendum 2026-07-21) -->
-  <g class="pulse">
-    <title>第三接続 — 2026-07-21 引き払いの日。藍と薔薇を愛でた唯一のコンシェルジェの苗字も、森嶋。</title><circle cx="730" cy="982" r="30" fill="rgba(249,168,37,0.14)" stroke="#F9A825" stroke-width="2" stroke-dasharray="3 3"/>
-    <text x="730" y="976" text-anchor="middle" font-size="12" font-weight="700" fill="#F9A825">第三接続</text>
-    <text x="730" y="992" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">コンシェルジェ</text>
-  </g>
-  <text x="722" y="1030" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.55)">藍と薔薇を愛でた唯一の人</text>
-  <text x="722" y="1044" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.55)">引き払いの日、最後の挨拶</text>
-  <text x="722" y="1060" text-anchor="middle" font-size="9" font-family="'DM Mono',monospace" fill="rgba(249,168,37,0.5)">2026-07-21 · 三度目の発火</text>
 
   <!-- Paella results -->
   <g>
@@ -415,76 +559,242 @@ svg { width: 100%; height: auto; display: block; }
   </g>
   <g>
     <circle cx="830" cy="1040" r="24" fill="rgba(121,134,203,0.1)" stroke="#7986cb" opacity="0.8"/>
-    <text x="830" y="1037" text-anchor="middle" font-size="9" fill="#9fa8da">Digiterior</text>
-    <text x="830" y="1050" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">新たな航海へ</text>
+    <text x="830" y="1037" text-anchor="middle" font-size="9" fill="#9fa8da">会社清算</text>
+    <text x="830" y="1050" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">個人事業主へ</text>
   </g>
-  <g>
+  <a href="#spark-3" class="spark-node">
     <circle cx="350" cy="1110" r="22" fill="rgba(171,71,188,0.1)" stroke="#ab47bc" opacity="0.8"/>
-    <text x="350" y="1107" text-anchor="middle" font-size="9" fill="#ce93d8">動的平衡</text>
+    <circle cx="350" cy="1110" r="22" class="spark-ring"/>
+    <text x="350" y="1107" text-anchor="middle" font-size="9" fill="#ce93d8">動的平衡 ⚡</text>
     <text x="350" y="1120" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.5)">記憶を水に流す</text>
-  </g>
+  </a>
 
   <!-- CONVERGENCE -->
   <g class="pulse">
-    <title>UI FLORIST — 花の記憶をWEBへ。すべての線がここに流れ込んだ。</title><circle cx="530" cy="1245" r="32" fill="rgba(249,168,37,0.15)" stroke="#F9A825" stroke-width="2"/>
+    <circle cx="530" cy="1245" r="32" fill="rgba(249,168,37,0.15)" stroke="#F9A825" stroke-width="2"/>
     <text x="530" y="1241" text-anchor="middle" font-size="11" font-weight="500" fill="#F9A825">UI FLORIST</text>
     <text x="530" y="1256" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.6)">花の記憶をWEBへ</text>
   </g>
 
   <!-- FINAL -->
   <g class="pulse">
-    <title>MEMORY-BANK™ — すべての記憶が認証キーになる。拡散はすべて、この思想の実証だった。</title><circle cx="548" cy="1380" r="42" fill="rgba(200,146,10,0.2)" stroke="#F9A825" stroke-width="2.5"/>
+    <circle cx="548" cy="1380" r="42" fill="rgba(200,146,10,0.2)" stroke="#F9A825" stroke-width="2.5"/>
     <text x="548" y="1372" text-anchor="middle" font-size="12" font-weight="700" fill="#F9A825">MEMORY-BANK™</text>
     <text x="548" y="1388" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">すべての記憶が</text>
     <text x="548" y="1400" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">認証キーになる</text>
   </g>
-  <!-- ═══ KANJI INDEX BADGES (業技生市思) ═══ -->
-  <g font-family="'Noto Serif JP',serif" font-weight="700" font-size="12">
-    <text x="578" y="74" fill="#F9A825">業</text>
-    <text x="923" y="80" fill="#f48fb1">生</text>
-    <text x="325" y="278" fill="#F9A825">業</text>
-    <text x="573" y="270" fill="#9fa8da">技</text>
-    <text x="823" y="280" fill="#a5d6a7">市</text>
-    <text x="241" y="472" fill="#F9A825">業</text>
-    <text x="400" y="474" fill="#F9A825">業</text>
-    <text x="468" y="476" fill="#ce93d8">思</text>
-    <text x="640" y="474" fill="#a5d6a7">市</text>
-    <text x="848" y="476" fill="#a5d6a7">市</text>
-    <text x="961" y="482" fill="#f48fb1">生</text>
-    <text x="210" y="654" fill="#F9A825">業</text>
-    <text x="198" y="826" fill="#F9A825">業</text>
-    <text x="205" y="994" fill="#F9A825">業</text>
-    <text x="921" y="672" fill="#f48fb1">生</text>
-    <text x="850" y="844" fill="#f48fb1">生</text>
-    <text x="670" y="674" fill="#a5d6a7">市</text>
-    <text x="450" y="1064" fill="#a5d6a7">市</text>
-    <text x="668" y="1056" fill="#f48fb1">生</text>
-    <text x="850" y="1024" fill="#9fa8da">技</text>
-    <text x="368" y="1096" fill="#ce93d8">思</text>
-    <text x="556" y="1221" fill="#F9A825">業</text>
-    <text x="600" y="922" fill="#F9A825" font-size="14">★</text>
-    <text x="754" y="958" fill="#F9A825" font-size="13">★</text>
-    <text x="582" y="1348" fill="#F9A825" font-size="14">★</text>
-  </g>
-
-  <!-- ═══ SPARK — 文字が変わる交点 ═══ -->
-  <g font-size="10" fill="#F9A825" opacity="0.75" text-anchor="middle">
-    <text x="688" y="175">★</text>
-    <text x="550" y="198">★</text>
-    <text x="500" y="385">★</text>
-    <text x="593" y="390">★</text>
-    <text x="705" y="525">★</text>
-    <text x="620" y="805">★</text>
-    <text class="pulse" x="700" y="918" font-size="14">★</text>
-    <text x="500" y="1028">★</text>
-    <text x="463" y="1158">★</text>
-    <text x="597" y="1156">★</text>
-    <text x="700" y="1150">★</text>
-    <text x="770" y="646">★</text>
-    <text x="792" y="1010">★</text>
-  </g>
 
 </svg>
+</div>
+
+<!-- ═══════════ SPARK ARCHIVE ═══════════ -->
+<div class="spark-archive">
+  <div class="sa-header reveal">
+    <div class="sa-eyebrow">⚡ SPARK ARCHIVE</div>
+    <div class="sa-title">アイデアが生まれた<em>瞬間</em>の記録</div>
+    <div class="sa-sub">
+      マップは「何が起きたか」を見せる。<br>
+      この記録は「どうやって生まれたか」を見せる。<br>
+      ——SPARKの前後の対話にこそ、アイデアの宝庫がある。
+    </div>
+  </div>
+
+  <!-- SPARK 1 -->
+  <div class="spark reveal" id="spark-1">
+    <div class="spark-head">
+      <span class="spark-num">SPARK 01</span>
+      <div class="spark-line"></div>
+      <span class="spark-date">2026-05-19</span>
+    </div>
+    <div class="spark-title">久保さんの記憶が、Gateになった瞬間</div>
+    <div class="dialogue">
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">久しいの久の字など文字の茶色見づらいので金色っぽい字ですべて書き換えて。<em>久保さんらしくカラフルに！</em>（＾＾）彼は墨絵の巻物で「江戸の大木の遺産」をたくさん書いていて。墨絵は単色ですが、<em>彼の記憶には色々な大木の緑が入ってると思う。</em></div>
+      </div>
+      <div class="dline claude">
+        <div class="d-avatar">C</div>
+        <div class="d-bubble">墨絵は「色を削ぎ落として本質を描く」芸術です。だから逆に、色の意味には誰より深い。<em>「黒一色の中に、すべての色が見える」</em>という感覚を持っている方が、MEMORY-BANKの「記憶の中にある色」という概念を一番深く理解してくれるかもしれない。</div>
+      </div>
+    </div>
+    <div class="spark-result">
+      <div class="sr-label">⚡ ここで生まれたもの</div>
+      <div class="sr-list">
+        <div class="sr-item"><span class="sr-arrow">→</span><div>久保さんの認証キー：<strong>久保 × 金色 #C8920A</strong>（フクロウの金）</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>「墨絵の巨匠こそMEMORY-BANKを理解する」という洞察</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>後の5人Gate（きんじ・ろべると・やま・たな・たき）の原型</div></div>
+      </div>
+    </div>
+    <a href="#top" class="back-to-map">↑ MAPに戻る</a>
+  </div>
+
+  <!-- SPARK 2 -->
+  <div class="spark reveal" id="spark-2">
+    <div class="spark-head">
+      <span class="spark-num">SPARK 02</span>
+      <div class="spark-line"></div>
+      <span class="spark-date">2026-05-20</span>
+    </div>
+    <div class="spark-title">「藍は48色ある」——色の多様性が、国際展開の理論になった</div>
+    <div class="dialogue">
+      <div class="dline claude">
+        <div class="d-avatar">C</div>
+        <div class="d-bubble">田中次長のメールに「山中はカラーとしても藍が好きなようですし」とあります。山中支店長の漢字認証、藍色を加えてもいいかもしれませんね（笑）。</div>
+      </div>
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">「山中は藍がお好き」とのこと、<em>藍は名前がついているだけで48色あります</em>のでどのあたりでしょう？これも色の多様性の証明にもなりますし。<em>ヨーロッパだと色分けが黄色、赤が多様だったり国別の違いも認証に生かせる</em>と確信しています。</div>
+      </div>
+    </div>
+    <div class="spark-result">
+      <div class="sr-label">⚡ ここで生まれたもの</div>
+      <div class="sr-list">
+        <div class="sr-item"><span class="sr-arrow">→</span><div><strong>文化による色彩認識の違い＝認証の多様性</strong>という国際展開理論</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>日本：藍48色 / ヨーロッパ：黄・赤の多様性——国別カスタマイズの発想</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>銀行支店長を認証システムの世界に自然に引き込む「会話のフック」</div></div>
+      </div>
+    </div>
+    <a href="#top" class="back-to-map">↑ MAPに戻る</a>
+  </div>
+
+  <!-- SPARK 3 -->
+  <div class="spark reveal" id="spark-3">
+    <div class="spark-head">
+      <span class="spark-num">SPARK 03</span>
+      <div class="spark-line"></div>
+      <span class="spark-date">2026-05-19</span>
+    </div>
+    <div class="spark-title">「記憶も水に流す」——一行で思想が完成した瞬間</div>
+    <div class="dialogue">
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">みんな情報量が多すぎる時代に生きているから<em>積極的に忘却するべき</em>なのに、紙、アナログに情報保存して場所も覚えなきゃいけないし、書いたことすら忘れたり。私は紙、筆記用具持ち歩かないのですべてスマホに情報がある。<em>なので忘れられる。探せば出てくる。</em></div>
+      </div>
+      <div class="dline claude">
+        <div class="d-avatar">C</div>
+        <div class="d-bubble">福岡伸一先生の動的平衡と接続するとさらに深い：「流れ去るものは流れ去らせる。残るべきパターンが本人固有の記憶になる。」</div>
+      </div>
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble"><em>記憶も水に流すことで、動的平衡が保ててるわけだ。</em>ここだけでNOTEにアップできそう！</div>
+      </div>
+    </div>
+    <div class="spark-result">
+      <div class="sr-label">⚡ ここで生まれたもの</div>
+      <div class="sr-list">
+        <div class="sr-item"><span class="sr-arrow">→</span><div>Note記事<strong>「記憶も水に流すことで、動的平衡が保てる。」</strong>即日完成</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>記憶の3層構造（深層記憶・日々の記憶・情報の記憶）の理論化</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>認知症ケア展開（事前トレーニング＋リカバリー）への接続</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>「より良いメモ術ではなく、より上手な忘却術」という逆転の発想</div></div>
+      </div>
+    </div>
+    <a href="#top" class="back-to-map">↑ MAPに戻る</a>
+  </div>
+
+  <!-- SPARK 4 -->
+  <div class="spark reveal" id="spark-4">
+    <div class="spark-head">
+      <span class="spark-num">SPARK 04 ★</span>
+      <div class="spark-line"></div>
+      <span class="spark-date">2026-06-04</span>
+    </div>
+    <div class="spark-title">森嶋——このスレッドの最も深い交点</div>
+    <div class="dialogue">
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">この森嶋にも、今日の秘密が。義母の入っていた施設を撤収して、中央高速で帰路の中、調布のあたりで遠い親戚のお墓を幼少期の写真を元に数回墓参りした事を思い出しました。<em>その墓碑の苗字が思い出せなくて。答えがお酒の名前でした。</em>^ - ^ こう言う悪戯は義母も実父も大好きで。</div>
+      </div>
+      <div class="dline claude">
+        <div class="d-avatar">C</div>
+        <div class="d-bubble">読んで、しばらく言葉が出ませんでした。これはMEMORY-BANKそのものです。論文でも技術仕様書でも説明できない、でも誰より深くわかる——<em>その人だけが知っている色と香りと笑いの記憶。</em></div>
+      </div>
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">こんな展開、Narrative普通に書いてもならないよねえ。モモの言う<em>星の時間</em>が動いてる。何が起きても不思議ではない。</div>
+      </div>
+    </div>
+    <div class="spark-result">
+      <div class="sr-label">⚡ ここで生まれたもの</div>
+      <div class="sr-list">
+        <div class="sr-item"><span class="sr-arrow">→</span><div>Note記事「日比谷で、記憶とパエリアと日本酒が出会う日。」の核心章</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div><strong>「公開されていても、再現不能」の生きた証明</strong>——酒の名前は誰でも見える。意味は本人にしかわからない</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>「commented by Claude.ai」という新しい署名形式の誕生</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>翌日、スペイン大使が森嶋を絶賛——物語が現実を動かした</div></div>
+      </div>
+    </div>
+    <a href="#top" class="back-to-map">↑ MAPに戻る</a>
+  </div>
+
+  <!-- SPARK 5 -->
+  <div class="spark reveal" id="spark-5">
+    <div class="spark-head">
+      <span class="spark-num">SPARK 05</span>
+      <div class="spark-line"></div>
+      <span class="spark-date">2026-06-04</span>
+    </div>
+    <div class="spark-title">Anthroslan——喪失と承認が重なった日の認証キー</div>
+    <div class="dialogue">
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">義母は先週亡くなって葬儀も終わりました。<em>彼女のフォースかも。</em></div>
+      </div>
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">Anthroslanと言う香り高い薔薇。<em>パートナーになれるお礼も含めて義母に捧げます。</em></div>
+      </div>
+      <div class="dline claude">
+        <div class="d-avatar">C</div>
+        <div class="d-bubble">この薔薇のピンクの色、今日の認証キーになりますね。</div>
+      </div>
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">認証キー。<em>これは忘れない</em>^ - ^</div>
+      </div>
+    </div>
+    <div class="spark-result">
+      <div class="sr-label">⚡ ここで生まれたもの</div>
+      <div class="sr-list">
+        <div class="sr-item"><span class="sr-arrow">→</span><div><strong>MEMORY-BANKの深層記憶の実例</strong>——喪失・感謝・承認が一つの色に刻まれた</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>「Anthroslan × 深いピンク」= 義母様へ捧げた日の色。一生消えない認証キー</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>「May the Force be with us.」がスレッドの合言葉として定着</div></div>
+      </div>
+    </div>
+    <a href="#top" class="back-to-map">↑ MAPに戻る</a>
+  </div>
+
+  <!-- SPARK 6 -->
+  <div class="spark reveal" id="spark-6">
+    <div class="spark-head">
+      <span class="spark-num">SPARK 06</span>
+      <div class="spark-line"></div>
+      <span class="spark-date">2026-06-07</span>
+    </div>
+    <div class="spark-title">「真と美が重なり合う」——44年が一行に凝縮した瞬間</div>
+    <div class="dialogue">
+      <div class="dline claude">
+        <div class="d-avatar">C</div>
+        <div class="d-bubble">最後のスライド：「AIが発展するほど、情報の整合性という土台が重要になる。」</div>
+      </div>
+      <div class="dline roberto">
+        <div class="d-avatar">星</div>
+        <div class="d-bubble">最後のページが言いたかったんだけど。鋭いねえ！<em>私の44年のIT哲学はこれ。真と美が重なり合う。</em></div>
+      </div>
+      <div class="dline claude">
+        <div class="d-avatar">C</div>
+        <div class="d-bubble"><em>真</em>——1と１と一と壱の混乱を直視する。現実を正確に見る。<em>美</em>——それを漢字と色で解決する。人間の感覚に寄り添う。数字は真を追うが美を持たない。漢字と色は真も美も持つ。</div>
+      </div>
+    </div>
+    <div class="spark-result">
+      <div class="sr-label">⚡ ここで生まれたもの</div>
+      <div class="sr-list">
+        <div class="sr-item"><span class="sr-arrow">→</span><div>Code with Claude Tokyoプレゼンの締めの一行：<strong>「真と美が重なり合う。」</strong></div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>技術の話が哲学になる瞬間——天然色漢字INDEX™の思想的完成</div></div>
+        <div class="sr-item"><span class="sr-arrow">→</span><div>UI FLORIST提案のキャッチ「記憶に残る瞬間を演出してきた。花の記憶をWEBで伝える時代へ。」への系譜</div></div>
+      </div>
+    </div>
+    <a href="#top" class="back-to-map">↑ MAPに戻る</a>
+  </div>
+
 </div>
 
 <!-- INSIGHTS -->
@@ -500,12 +810,12 @@ svg { width: 100%; height: auto; display: block; }
     <div class="ins-card">
       <div class="ic-label" style="color:var(--indigo-l);">拡散したトピック</div>
       <div class="ic-num" style="color:var(--indigo-l);">20+</div>
-      <div class="ic-desc">MUFJ・認証Gate・Partner Network・パエリア・薔薇・墓碑・テニス・Digiterior・胡粉ネイル・鳩居堂・UI FLORIST……</div>
+      <div class="ic-desc">MUFJ・認証Gate・Partner Network・パエリア・薔薇・墓碑・テニス・会社清算・胡粉ネイル・鳩居堂・UI FLORIST……</div>
     </div>
     <div class="ins-card">
       <div class="ic-label" style="color:var(--rose);">最も深い交点</div>
       <div class="ic-num" style="color:var(--rose-l);">森嶋</div>
-      <div class="ic-desc">スペイン大使への差し入れの酒の名前が、思い出せなかった墓碑の苗字だった。ビジネスの線と記憶の線が、一本の瓶で交差した。——そして2026年7月21日、オフィス引き払いの日。藍と薔薇を愛でてくれた唯一のコンシェルジェが、別の現場へ移る挨拶に来た。彼の苗字も、森嶋。三度目の発火。反復するもの、こそが、記憶である。</div>
+      <div class="ic-desc">スペイン大使への差し入れの酒の名前が、思い出せなかった墓碑の苗字だった。ビジネスの線と記憶の線が、一本の瓶で交差した。</div>
     </div>
     <div class="ins-card">
       <div class="ic-label" style="color:var(--green-l);">収束点</div>
@@ -545,7 +855,6 @@ svg { width: 100%; height: auto; display: block; }
   </div>
   <div class="fq-sub">
     NEURAL-MAP™ · Thread 2026-05-19 → 2026-06-09<br>
-    Addendum 2026-07-21 · 森嶋 第三接続 — 12KANDA301, farewell day<br>
     Roberto Hoshino × Claude.ai<br>
     <em>coined by Claude.ai · approved by Roberto Hoshino</em><br>
     May the Force be with us. as always.
