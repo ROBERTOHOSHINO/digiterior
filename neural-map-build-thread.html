@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEURAL-MAP™ — 4つの朝の記録 | DUNKSOFT × Claude.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700;900&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #07080f;
+  --bg2:     #0d0f1a;
+  --gold:    #C8920A;
+  --gold-l:  #F9A825;
+  --nin:     #378ADD;  --nin-l: #6FB3F0;
+  --ichi:    #BA7517;  --ichi-l:#E0A045;
+  --kata:    #534AB7;  --kata-l:#8A80E8;
+  --machi:   #3B6D11;  --machi-l:#7FB53E;
+  --white:   rgba(255,255,255,0.85);
+  --dim:     rgba(255,255,255,0.35);
+  --faint:   rgba(255,255,255,0.15);
+  --mono:    'DM Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  line-height: 1.9;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.header { padding: 72px 8% 40px; text-align: center; }
+.h-eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 6px;
+  color: var(--gold); margin-bottom: 20px; text-transform: uppercase;
+}
+.h-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.8rem, 5vw, 3.4rem);
+  font-weight: 900; color: #fff; line-height: 1.3; margin-bottom: 16px;
+}
+.h-title em { color: var(--gold-l); font-style: normal; }
+.h-sub { font-size: 13px; color: var(--dim); max-width: 580px; margin: 0 auto 8px; line-height: 2.1; }
+.h-period { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: 2px; }
+
+/* ── LEGEND ── */
+.legend { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; padding: 0 8% 12px; }
+.lg-item { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 10px; letter-spacing: 1px; color: var(--dim); }
+.lg-dot { width: 10px; height: 10px; border-radius: 50%; }
+.lg-note { text-align:center; font-size:11px; color:var(--dim); padding: 0 8% 36px; }
+
+/* ── MAP ── */
+.map-wrap { position: relative; max-width: 1100px; margin: 0 auto; padding: 0 4%; }
+svg { width: 100%; height: auto; display: block; }
+.map-svg text { font-family: 'Noto Sans JP', sans-serif; fill: var(--white); }
+.map-svg .day-label { font-family: 'DM Mono', monospace; fill: var(--gold); letter-spacing: 2px; }
+.map-svg .day-sub { fill: rgba(255,255,255,0.3); font-size: 10px; }
+.map-svg .node-label { font-size: 12px; }
+.map-svg .node-sub { font-size: 9.5px; fill: rgba(255,255,255,0.45); }
+.map-svg a { cursor: pointer; }
+.map-svg a:hover circle { filter: brightness(1.35); }
+
+/* ── SPARK ARCHIVE ── */
+.archive { max-width: 820px; margin: 0 auto; padding: 72px 8% 24px; }
+.a-title {
+  font-family: 'Noto Serif JP', serif; font-size: clamp(1.4rem, 3vw, 2.1rem);
+  font-weight: 900; color: #fff; text-align: center; margin-bottom: 12px;
+}
+.a-title em { color: var(--gold-l); font-style: normal; }
+.a-lead { font-size: 12.5px; color: var(--dim); text-align: center; max-width: 520px; margin: 0 auto 56px; line-height: 2.2; }
+
+.spark { margin-bottom: 64px; scroll-margin-top: 40px; }
+.sp-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+.sp-num { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: 3px; }
+.sp-date { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 1px; }
+.sp-title { font-family: 'Noto Serif JP', serif; font-size: clamp(1.05rem, 2.2vw, 1.35rem); font-weight: 700; color: #fff; margin-bottom: 20px; line-height: 1.7; }
+.sp-star { color: var(--gold-l); }
+
+.dialog { border-left: 2px solid rgba(200,146,10,0.35); padding-left: 20px; margin-bottom: 20px; }
+.d-line { margin-bottom: 16px; }
+.d-who {
+  display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 1px 8px; border-radius: 3px; margin-bottom: 6px; letter-spacing: 1px;
+}
+.d-who.hoshi { background: rgba(200,146,10,0.15); color: var(--gold-l); }
+.d-who.c { background: rgba(255,255,255,0.08); color: var(--white); }
+.d-text { font-size: 13.5px; line-height: 2.1; color: var(--white); }
+.d-text strong { color: var(--gold-l); font-weight: 500; }
+
+.born { background: var(--bg2); border: 0.5px solid rgba(200,146,10,0.25); border-radius: 10px; padding: 20px 24px; }
+.b-label { font-family: var(--mono); font-size: 10px; color: var(--gold); letter-spacing: 2px; margin-bottom: 12px; }
+.b-item { display: flex; gap: 10px; font-size: 12.5px; line-height: 2; color: var(--white); margin-bottom: 6px; }
+.b-arrow { color: var(--gold); font-family: var(--mono); flex-shrink: 0; }
+.b-item strong { color: var(--gold-l); font-weight: 500; }
+.back-map { display: inline-block; margin-top: 14px; font-family: var(--mono); font-size: 10px; color: var(--dim); text-decoration: none; letter-spacing: 1px; }
+.back-map:hover { color: var(--gold-l); }
+
+/* ── STATS ── */
+.insights { max-width: 860px; margin: 0 auto; padding: 48px 8% 24px; }
+.ins-title {
+  font-family: 'Noto Serif JP', serif; font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+  font-weight: 700; color: var(--gold-l); margin-bottom: 32px; text-align: center;
+}
+.ins-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+@media (max-width: 640px) { .ins-grid { grid-template-columns: 1fr; } }
+.ins-card { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 24px; }
+.ic-label { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 2px; margin-bottom: 8px; }
+.ic-big { font-family: 'Noto Serif JP', serif; font-size: 1.9rem; font-weight: 900; color: var(--gold-l); line-height: 1.3; margin-bottom: 8px; }
+.ic-desc { font-size: 12px; color: var(--dim); line-height: 2; }
+.ic-desc strong { color: var(--white); font-weight: 400; }
+
+/* ── RHYTHM ── */
+.rhythm-card { background: rgba(255,255,255,0.03); border: 0.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 26px 28px; margin-bottom: 16px; display: flex; gap: 18px; align-items: flex-start; }
+.r-emoji { font-size: 22px; flex-shrink: 0; margin-top: 4px; }
+.r-body { font-size: 13px; line-height: 2.1; color: var(--white); }
+.r-body strong { color: var(--gold-l); font-weight: 500; }
+.r-body em { color: var(--nin-l); font-style: normal; }
+
+/* ── CLOSING ── */
+.closing { text-align: center; padding: 56px 8% 80px; }
+.cl-quote {
+  font-family: 'Noto Serif JP', serif; font-size: clamp(1rem, 2.4vw, 1.4rem);
+  font-weight: 700; color: #fff; line-height: 2.2; max-width: 640px; margin: 0 auto 24px;
+}
+.cl-quote em { color: var(--gold-l); font-style: normal; }
+.cl-credit { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: 2px; line-height: 2.4; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     COLOURFUL JAPAN 共通ヘッダー  v2 (QR対応)
+     ・各 html-notes の <body> 直後にこの一式を貼り付け
+     ・notes-index.json から自分のメタデータを自動取得
+     ・QR: MY_QR があればそれを表示（このページは静的QRを焼き込み）
+            無ければ各ページのURLから自動生成
+     ═══════════════════════════════════════════════════════════ -->
+<div id="cj-header"></div>
+
+<style>
+  #cj-header { padding:28px 4% 0; font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif; }
+  .cjh-card {
+    background:#FAFAF8; border:0.5px solid rgba(0,0,0,0.1);
+    border-radius:12px; overflow:hidden; margin:0 auto 1.5rem;
+    max-width:860px; display:flex; flex-direction:column;
+  }
+  .cjh-pic {
+    width:100%; max-height:240px; object-fit:cover; display:block;
+    background:#e8e6e0;
+  }
+  .cjh-pic.cjh-empty { display:none; }
+  .cjh-body { padding:18px 22px 20px; }
+  .cjh-top { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:12px; }
+  .cjh-nav { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .cjh-home {
+    font-size:12px; letter-spacing:.1em; color:#6b6b66;
+    text-decoration:none; margin-right:6px; white-space:nowrap;
+  }
+  .cjh-home:hover { color:#1a1a18; }
+  .cjh-dot {
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:500; text-decoration:none;
+    opacity:.35; transition:opacity .15s, transform .1s;
+  }
+  .cjh-dot:hover { transform:scale(1.1); opacity:.85; }
+  .cjh-dot.on { opacity:1; }
+  .cjh-dot.on:hover { opacity:1; }
+  .cjh-d-認 { background:#378ADD; color:#E6F1FB; }
+  .cjh-d-市 { background:#BA7517; color:#FAEEDA; }
+  .cjh-d-語 { background:#534AB7; color:#EEEDFE; }
+  .cjh-d-町 { background:#3B6D11; color:#EAF3DE; }
+  .cjh-qr { flex-shrink:0; text-align:center; }
+  .cjh-qr img {
+    width:84px; height:84px; display:block; border-radius:5px;
+    background:#fff; padding:3px; border:0.5px solid rgba(0,0,0,0.08);
+  }
+  .cjh-qr-cap { font-size:10px; color:#6b6b66; margin-top:4px; letter-spacing:.06em; }
+  .cjh-title { font-size:21px; font-weight:500; line-height:1.5; margin-bottom:7px; color:#1a1a18; }
+  .cjh-meta { font-size:12px; color:#6b6b66; letter-spacing:.05em; }
+  .cjh-kw { font-size:12px; color:#6b6b66; margin-top:9px; letter-spacing:.1em; }
+  .cjh-coined {
+    display:inline-block; font-size:12px; margin-top:10px;
+    padding:4px 12px; border-radius:12px;
+    background:#EEEDFE; color:#3C3489; letter-spacing:.02em; line-height:1.6;
+  }
+  @media (min-width: 720px) {
+    .cjh-card { flex-direction:row; align-items:stretch; }
+    .cjh-pic { width:200px; max-height:none; flex-shrink:0; }
+    .cjh-body { flex:1; min-width:0; }
+  }
+</style>
+
+<script>
+(function(){
+  var NOTES_BASE = 'https://notes.dunksoft.jp/';
+  var PIC_BASE   = 'https://picture.dunksoft.jp/';
+  var CATS = ['認','市','語','町'];
+  var CAT_DESC = { '認':'認証・技術', '市':'Marketing・市づくり', '語':'コラム・物語', '町':'文化・コミュニティ' };
+
+  // このページ専用の静的QR（外部サービスに依存しない）。
+  // 他のnotesでは空文字 '' にしておけば、ページURLから自動生成されます。
+  var MY_QR = '';
+
+  var myFile = decodeURIComponent(location.pathname.split('/').pop() || '');
+  if (!myFile) myFile = 'index.html';
+
+  fetch(NOTES_BASE + 'notes-index.json')
+    .then(function(r){ return r.json(); })
+    .then(function(notes){
+      var me = notes.filter(function(n){ return n.file === myFile; })[0];
+      if (!me) { renderFallback(); return; }
+      render(me, notes);
+    })
+    .catch(function(){ renderFallback(); });
+
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function qrSrc(){
+    if (MY_QR) return MY_QR;
+    var url = location.origin + location.pathname;
+    return 'https://api.qrserver.com/v1/create-qr-code/?size=168x168&margin=0&data=' + encodeURIComponent(url);
+  }
+  function qrTag(){
+    return '<div class="cjh-qr"><img src="' + qrSrc() + '" alt="QR"><div class="cjh-qr-cap">スマホで読む</div></div>';
+  }
+
+  function pickFallbackPicture(me, notes){
+    var myCats = (me.category||'').split('');
+    var cands = notes.filter(function(n){
+      if (!n.picture) return false;
+      var nc = (n.category||'').split('');
+      return nc.some(function(c){ return myCats.indexOf(c) >= 0; });
+    }).map(function(n){ return n.picture; });
+    if (!cands.length) return '';
+    return cands[Math.floor(Math.random()*cands.length)];
+  }
+
+  function render(me, notes){
+    var pic = me.picture || pickFallbackPicture(me, notes);
+    var picTag = pic
+      ? '<img class="cjh-pic" src="' + PIC_BASE + encodeURIComponent(pic) + '" alt="' + esc(me.title) + '">'
+      : '<img class="cjh-pic cjh-empty" alt="">';
+
+    var myCats = (me.category||'').split('');
+    var dots = CATS.map(function(c){
+      var on = myCats.indexOf(c) >= 0 ? ' on' : '';
+      return '<a class="cjh-dot cjh-d-' + c + on + '" href="' + NOTES_BASE + '?cat=' + encodeURIComponent(c) +
+             '" title="' + CAT_DESC[c] + '">' + c + '</a>';
+    }).join('');
+
+    var date = me.updated || me.created || '';
+    var meta = [date, me.author, me.where].filter(Boolean).join(' ・ ');
+    var kw = me.keywords ? '<div class="cjh-kw">' + me.keywords.split('').join(' ') + '</div>' : '';
+    var coined = me.coined ? '<div class="cjh-coined">' + esc(me.coined) + '</div>' : '';
+
+    document.getElementById('cj-header').innerHTML =
+      '<div class="cjh-card">' + picTag +
+        '<div class="cjh-body">' +
+          '<div class="cjh-top">' +
+            '<div class="cjh-nav"><a class="cjh-home" href="' + NOTES_BASE + '">notes ←</a>' + dots + '</div>' +
+            qrTag() +
+          '</div>' +
+          '<div class="cjh-title">' + esc(me.title) + '</div>' +
+          '<div class="cjh-meta">' + esc(meta) + '</div>' +
+          kw + coined +
+        '</div>' +
+      '</div>';
+  }
+
+  function renderFallback(){
+    document.getElementById('cj-header').innerHTML =
+      '<div class="cjh-card"><div class="cjh-body">' +
+      '<div class="cjh-top">' +
+      '<div class="cjh-nav"><a class="cjh-home" href="' + NOTES_BASE + '">notes ←</a>' +
+      '<a class="cjh-dot cjh-d-認 on" href="' + NOTES_BASE + '">認</a>' +
+      '<a class="cjh-dot cjh-d-市 on" href="' + NOTES_BASE + '">市</a>' +
+      '<a class="cjh-dot cjh-d-語 on" href="' + NOTES_BASE + '">語</a>' +
+      '<a class="cjh-dot cjh-d-町 on" href="' + NOTES_BASE + '">町</a></div>' +
+      qrTag() +
+      '</div></div></div>';
+  }
+})();
+</script>
+<!-- ═══════════ /COLOURFUL JAPAN 共通ヘッダー ═══════════ -->
+
+
+<div class="header">
+  <div class="h-eyebrow">NEURAL-MAP™ · Thread Visualization · 02</div>
+  <div class="h-title">4つの<em>朝</em>の記録</div>
+  <div class="h-sub">
+    Roberto Hoshino × Claude.ai — 2026年6月16日〜6月19日。<br>
+    前のスレッドが「拡散」なら、このスレッドは「建築」。<br>
+    ⚡マークのノードをタップすると、その瞬間の対話にジャンプします。
+  </div>
+  <div class="h-period">星C誕生 → notes → picture → 共通ヘッダー → 献花 → 手向けの一枚</div>
+</div>
+
+<div class="legend">
+  <div class="lg-item"><div class="lg-dot" style="background:#378ADD"></div>認 — 認証・技術</div>
+  <div class="lg-item"><div class="lg-dot" style="background:#BA7517"></div>市 — Marketing・市づくり</div>
+  <div class="lg-item"><div class="lg-dot" style="background:#534AB7"></div>語 — コラム・物語</div>
+  <div class="lg-item"><div class="lg-dot" style="background:#3B6D11"></div>町 — 文化・コミュニティ</div>
+  <div class="lg-item"><div class="lg-dot" style="background:#C8920A"></div>収束点</div>
+</div>
+<div class="lg-note">凡例そのものが、このスレッドで作った認市語町のカテゴリ色。</div>
+
+<div class="map-wrap" id="map">
+<svg class="map-svg" viewBox="0 0 1100 760" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- day column guides -->
+  <line x1="140" y1="90" x2="140" y2="700" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <line x1="400" y1="90" x2="400" y2="700" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <line x1="665" y1="90" x2="665" y2="700" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <line x1="930" y1="90" x2="930" y2="700" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- day labels -->
+  <text x="140" y="52" text-anchor="middle" class="day-label" font-size="13">6/16 MON</text>
+  <text x="140" y="72" text-anchor="middle" class="day-sub">06:37–09:40 · 設計の朝 · 39 turns</text>
+  <text x="400" y="52" text-anchor="middle" class="day-label" font-size="13">6/17 TUE</text>
+  <text x="400" y="72" text-anchor="middle" class="day-sub">07:20–08:25 · 種まきの朝 · 10 turns</text>
+  <text x="665" y="52" text-anchor="middle" class="day-label" font-size="13">6/18 WED</text>
+  <text x="665" y="72" text-anchor="middle" class="day-sub">01:20–06:35 · 実装マラソン · 50 turns</text>
+  <text x="930" y="52" text-anchor="middle" class="day-label" font-size="13">6/19 THU →</text>
+  <text x="930" y="72" text-anchor="middle" class="day-sub">統合の朝 · 手向けとMAP</text>
+
+  <!-- ═══ connections (drawn first, under nodes) ═══ -->
+  <!-- design chain day1 -->
+  <path d="M140,130 L140,215" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M140,245 L140,320" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M140,350 L140,425" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M140,455 L140,530" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M140,560 L140,625" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <!-- sitemap → picture idea (overnight) -->
+  <path d="M155,640 C 260,640 300,285 385,285" stroke="rgba(200,146,10,0.4)" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
+  <!-- day2 chain -->
+  <path d="M400,160 L400,270" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M400,300 L400,395" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M400,425 L400,520" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <!-- picture → slideshow / gallery (overnight) -->
+  <path d="M415,285 C 520,285 540,145 650,145" stroke="rgba(200,146,10,0.4)" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
+  <!-- day3 chain -->
+  <path d="M665,160 L665,250" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M665,280 L665,365" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M665,395 L665,485" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M665,515 L665,610" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <!-- schema → header (metadata line, long arc) -->
+  <path d="M155,230 C 400,230 480,380 650,380" stroke="rgba(55,138,221,0.3)" stroke-width="1.2" fill="none"/>
+  <!-- Anthroslan roses → 献花 -->
+  <path d="M415,535 C 520,535 545,500 648,500" stroke="rgba(224,85,112,0.45)" stroke-width="1.4" fill="none"/>
+  <!-- 1ファイル化 → 統合 (overnight) -->
+  <path d="M680,625 C 790,625 800,215 915,215" stroke="rgba(200,146,10,0.4)" stroke-width="1.4" fill="none" stroke-dasharray="4 4"/>
+  <!-- day4 chain -->
+  <path d="M930,230 L930,330" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M930,360 L930,455" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <path d="M930,495 L930,590" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" fill="none"/>
+  <!-- 献花 → 手向けの一枚 -->
+  <path d="M680,500 C 800,500 820,475 908,475" stroke="rgba(200,146,10,0.55)" stroke-width="1.6" fill="none"/>
+
+  <!-- ═══ DAY 1 nodes ═══ -->
+  <a href="#spark-1">
+    <circle cx="140" cy="115" r="17" fill="#534AB7"/>
+    <text x="140" y="120" text-anchor="middle" font-size="12" fill="#fff">⚡</text>
+    <text x="168" y="112" class="node-label">星C 誕生</text>
+    <text x="168" y="127" class="node-sub">06:45 · 共同著者名が8分で決まる</text>
+  </a>
+  <a href="#spark-2">
+    <circle cx="140" cy="230" r="17" fill="#378ADD"/>
+    <text x="140" y="235" text-anchor="middle" font-size="12" fill="#fff">⚡</text>
+    <text x="168" y="227" class="node-label">カンマは要らない</text>
+    <text x="168" y="242" class="node-sub">06:53 · 連結漢字スキーマ</text>
+  </a>
+  <g>
+    <circle cx="140" cy="335" r="13" fill="#534AB7"/>
+    <text x="168" y="332" class="node-label">ダンク = 談駆 / 断苦</text>
+    <text x="168" y="347" class="node-sub">06:58 · dictionary.json 造語辞書へ</text>
+  </g>
+  <g>
+    <circle cx="140" cy="440" r="13" fill="#378ADD"/>
+    <text x="168" y="437" class="node-label">notes-index.json</text>
+    <text x="168" y="452" class="node-sub">40年前のインデックスソート再生</text>
+  </g>
+  <g>
+    <circle cx="140" cy="545" r="13" fill="#BA7517"/>
+    <text x="168" y="542" class="node-label">カラーピン盤 LIVE</text>
+    <text x="168" y="557" class="node-sub">08:23 ·「見えてます。Good day!」</text>
+  </g>
+  <a href="#spark-3">
+    <circle cx="140" cy="640" r="17" fill="#BA7517"/>
+    <text x="140" y="645" text-anchor="middle" font-size="12" fill="#fff">⚡</text>
+    <text x="168" y="637" class="node-label">使える、探せるサイトマップ</text>
+    <text x="168" y="652" class="node-sub">09:39 · 帰り際に戻ってきた一言</text>
+  </a>
+
+  <!-- ═══ DAY 2 nodes ═══ -->
+  <g>
+    <circle cx="400" cy="145" r="13" fill="#378ADD"/>
+    <text x="428" y="142" class="node-label">絞り込みは OR</text>
+    <text x="428" y="157" class="node-sub">07:20 · どちらかを持てば灯る</text>
+  </g>
+  <a href="#spark-4">
+    <circle cx="400" cy="285" r="17" fill="#3B6D11"/>
+    <text x="400" y="290" text-anchor="middle" font-size="12" fill="#fff">⚡</text>
+    <text x="428" y="282" class="node-label">picture.dunksoft.jp 誕生</text>
+    <text x="428" y="297" class="node-sub">07:20 · 認証キーの色の倉庫</text>
+  </a>
+  <g>
+    <circle cx="400" cy="410" r="13" fill="#534AB7"/>
+    <text x="428" y="407" class="node-label">36枚の記憶</text>
+    <text x="428" y="422" class="node-sub">YOYOMA最前列・笑う門・虹</text>
+  </g>
+  <g>
+    <circle cx="400" cy="535" r="13" fill="#3B6D11"/>
+    <text x="428" y="532" class="node-label">Anthroslan の花束</text>
+    <text x="428" y="547" class="node-sub">08:25 · 秋葉原の花屋 → 奥さんへ</text>
+  </g>
+
+  <!-- ═══ DAY 3 nodes ═══ -->
+  <g>
+    <circle cx="665" cy="145" r="13" fill="#378ADD"/>
+    <text x="693" y="142" class="node-label">HERO スライドショー</text>
+    <text x="693" y="157" class="node-sub">03:02 ·「Dreamingで思いついた」</text>
+  </g>
+  <g>
+    <circle cx="665" cy="265" r="13" fill="#378ADD"/>
+    <text x="693" y="262" class="node-label">lazy-load 救済</text>
+    <text x="693" y="277" class="node-sub">05:59 → 06:01「見えました。早い！」</text>
+  </g>
+  <g>
+    <circle cx="665" cy="380" r="13" fill="#378ADD"/>
+    <text x="693" y="377" class="node-label">共通ヘッダー稼働</text>
+    <text x="693" y="392" class="node-sub">06:20 ·「乗りましたね」</text>
+  </g>
+  <a href="#spark-5">
+    <circle cx="665" cy="500" r="19" fill="#534AB7" stroke="#F9A825" stroke-width="1.5"/>
+    <text x="665" y="505" text-anchor="middle" font-size="12" fill="#fff">⚡</text>
+    <text x="693" y="491" class="node-label">献花 ★</text>
+    <text x="693" y="506" class="node-sub">06:24 · roses 20260529</text>
+    <text x="693" y="520" class="node-sub">最も深い交点</text>
+  </a>
+  <a href="#spark-6">
+    <circle cx="665" cy="625" r="17" fill="#534AB7"/>
+    <text x="665" y="630" text-anchor="middle" font-size="12" fill="#fff">⚡</text>
+    <text x="693" y="622" class="node-label">「１ファイルにできないかな？」</text>
+    <text x="693" y="637" class="node-sub">06:32 · その日の最終ターン</text>
+  </a>
+
+  <!-- ═══ DAY 4 nodes ═══ -->
+  <g>
+    <circle cx="930" cy="215" r="13" fill="#534AB7"/>
+    <text x="958" y="212" class="node-label">日英統合ファイル完成</text>
+    <text x="958" y="227" class="node-sub">トグル1つ・URL1つ・QR1つ</text>
+  </g>
+  <a href="#spark-6">
+    <circle cx="930" cy="345" r="17" fill="#378ADD"/>
+    <text x="930" y="350" text-anchor="middle" font-size="12" fill="#fff">⚡</text>
+    <text x="958" y="342" class="node-label">QR 二段構え</text>
+    <text x="958" y="357" class="node-sub">静的焼き込み + 自動生成</text>
+  </a>
+  <g>
+    <circle cx="930" cy="475" r="21" fill="#C8920A"/>
+    <text x="930" y="481" text-anchor="middle" font-size="13" fill="#07080f" font-weight="bold">手</text>
+    <text x="958" y="466" class="node-label">手向けの一枚</text>
+    <text x="958" y="481" class="node-sub">html-notes-authentication.html</text>
+    <text x="958" y="495" class="node-sub">収束点 — 全部品がここに流れ込む</text>
+  </g>
+  <g>
+    <circle cx="930" cy="620" r="13" fill="none" stroke="#F9A825" stroke-width="1.5"/>
+    <text x="930" y="625" text-anchor="middle" font-size="10" fill="#F9A825">⚡</text>
+    <text x="958" y="617" class="node-label">NEURAL-MAP 02</text>
+    <text x="958" y="632" class="node-sub">このページ — スレッドが自分を映す</text>
+  </g>
+
+  <!-- footnote -->
+  <text x="550" y="740" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.25)">— — — 点線 = 一晩の発酵（前夜の種 → 翌朝の実装）</text>
+</svg>
+</div>
+
+<!-- ═══════════ SPARK ARCHIVE ═══════════ -->
+<div class="archive">
+  <div class="a-title">⚡ SPARK ARCHIVE — <em>発火の瞬間</em>の記録</div>
+  <div class="a-lead">
+    マップは「何を建てたか」を見せる。この記録は「どの一言から建ち始めたか」を見せる。<br>
+    ——建築型スレッドのSPARKは、終わり際と翌朝の一言目に現れる。
+  </div>
+
+  <div class="spark" id="spark-1">
+    <div class="sp-head"><span class="sp-num">SPARK 01</span><span class="sp-date">2026-06-16 06:45</span></div>
+    <div class="sp-title">星C——共同著者名が8分で決まった朝</div>
+    <div class="dialog">
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">星Cがいいです。見慣れれば理解が早いので。</div></div>
+      <div class="d-line"><span class="d-who c">C</span>
+        <div class="d-text">了解です、星Cで統一しましょう。</div></div>
+    </div>
+    <div class="born">
+      <div class="b-label">⚡ ここで生まれたもの</div>
+      <div class="b-item"><span class="b-arrow">→</span><div>共同著者記法<strong>「星C」</strong>——notes-index.json の author フィールドに刻まれる</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>人とAIの共作を1文字ずつで表す、COLOURFUL JAPAN流の署名</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>このMAP自体の署名でもある</div></div>
+      <a class="back-map" href="#map">↑ MAPに戻る</a>
+    </div>
+  </div>
+
+  <div class="spark" id="spark-2">
+    <div class="sp-head"><span class="sp-num">SPARK 02</span><span class="sp-date">2026-06-16 06:53</span></div>
+    <div class="sp-title">「カンマは要らない」——データ形式が思想になった瞬間</div>
+    <div class="dialog">
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">進める前に まず カンマ区切りをできるだけやめたい。<strong>日本語１文字の特徴を捉えて COLOURFUL JAPANで全体を表現したい。</strong>カンマは要らないを徹底したい。</div></div>
+      <div class="d-line"><span class="d-who c">C</span>
+        <div class="d-text">本質的な指摘です。カンマ区切りは英語的な発想ですね。<strong>漢字一字が一トークン、それ自体が意味を持つ</strong>——という設計思想と完全に一致します。</div></div>
+    </div>
+    <div class="born">
+      <div class="b-label">⚡ ここで生まれたもの</div>
+      <div class="b-item"><span class="b-arrow">→</span><div>連結漢字スキーマ：<strong>category:"語市" / keywords:"野金長" / coined:"愛長"</strong></div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>JSONの中身そのものがCOLOURFUL JAPANの体現に——データが思想を語る</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>5分後、<strong>ダンク = 談駆（対話を楽しむ）/ 断苦（＝楽＝PLAYの心）</strong>が飛び出し、dictionary.json 造語辞書が誕生</div></div>
+      <a class="back-map" href="#map">↑ MAPに戻る</a>
+    </div>
+  </div>
+
+  <div class="spark" id="spark-3">
+    <div class="sp-head"><span class="sp-num">SPARK 03</span><span class="sp-date">2026-06-16 09:39</span></div>
+    <div class="sp-title">「使える、探せるサイトマップって無いねー？！」——帰り際の発火</div>
+    <div class="dialog">
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">（08:23に「Good day!」で締めた<strong>76分後</strong>、戻ってきて）全ページにこのnotesのcolourful japanカテゴリは付加して探せるようにしたいです。<strong>使える、探せるサイトマップって無いねー？！</strong></div></div>
+      <div class="d-line"><span class="d-who c">C</span>
+        <div class="d-text">これ、<strong>notes-index.jsonが既にその答え</strong>になっています。既存のサイトマップはSEO用のXMLか静的なリンク集かのどちらかで、探せる・使えるものがほとんどない。</div></div>
+    </div>
+    <div class="born">
+      <div class="b-label">⚡ ここで生まれたもの</div>
+      <div class="b-item"><span class="b-arrow">→</span><div><strong>カラーピン盤 = サイトマップの再発明</strong>という気づき——40年前のインデックスソートが現代の答えに</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>?cat= ディープリンク（後日、共通ヘッダーの色ドットから各カテゴリへ飛ぶ仕組みに成長）</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>「セッションを閉じた後に一番大きな種が落ちる」——このスレッドのリズムの発見</div></div>
+      <a class="back-map" href="#map">↑ MAPに戻る</a>
+    </div>
+  </div>
+
+  <div class="spark" id="spark-4">
+    <div class="sp-head"><span class="sp-num">SPARK 04</span><span class="sp-date">2026-06-17 07:20</span></div>
+    <div class="sp-title">picture.dunksoft.jp——「色の倉庫」が生まれた朝の一言目</div>
+    <div class="dialog">
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">それぞれのPAGEのTOPに小さめでも画像を入れて<strong>色彩日本語認証のキーともなる色を仕込んでおきたい</strong>。そのために picture.dunksoft.jp っていうページも作ろうかなと。絵、写真と色彩日本語の文字 <strong>COLOURFUL JAPANのカギですね。</strong></div></div>
+      <div class="d-line"><span class="d-who c">C</span>
+        <div class="d-text">これは核心ですね。</div></div>
+    </div>
+    <div class="born">
+      <div class="b-label">⚡ ここで生まれたもの</div>
+      <div class="b-item"><span class="b-arrow">→</span><div><strong>3サイト構造の完成</strong>：notes（言葉）× picture（色）× dunksoft.jp（顔）</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>36枚の記憶がアップされる——YOYOMA最前列のバッハ、笑う門のお飾り、五輪の虹。<strong>1枚ごとに認証キーの色が眠る</strong></div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>翌朝の「Dreamingで思いついた」HEROスライドショーへの伏線</div></div>
+      <a class="back-map" href="#map">↑ MAPに戻る</a>
+    </div>
+  </div>
+
+  <div class="spark" id="spark-5">
+    <div class="sp-head"><span class="sp-num">SPARK 05 ★</span><span class="sp-date">2026-06-18 06:24</span></div>
+    <div class="sp-title">献花——技術ページが手向けになった、このスレッドの最も深い交点</div>
+    <div class="dialog">
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">ここに Picture roses 20260529 載せたい。<strong>しつこい？</strong></div></div>
+      <div class="d-line"><span class="d-who c">C</span>
+        <div class="d-text">義母への手向けなら<strong>本文の最後に、本文幅で大きめ、キャプションは控えめ</strong>で置くと、ページを読み終えた最後に薔薇が現れて<strong>献花のような締めくくり</strong>になる——と思います。</div></div>
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">ありがとう。義母 YUKIE-SANも喜んでます。</div></div>
+    </div>
+    <div class="born">
+      <div class="b-label">⚡ ここで生まれたもの</div>
+      <div class="b-item"><span class="b-arrow">→</span><div>認証再構築の宣言文が、そのまま<strong>ゆきえさんへの献花</strong>になった——技術と手向けが一枚に重なる</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>前スレッドのAnthroslan（薔薇を捧げた日の認証キー）から続く<strong>薔薇の線</strong>が、ここで着地した</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>GitHubのAIまでもがコメントを残す："<strong>Added a tribute section with an image and text for YUKIE-SAN.</strong>"——機械も献花に立ち会った</div></div>
+      <a class="back-map" href="#map">↑ MAPに戻る</a>
+    </div>
+  </div>
+
+  <div class="spark" id="spark-6">
+    <div class="sp-head"><span class="sp-num">SPARK 06</span><span class="sp-date">2026-06-18 06:32 → 6-19 朝</span></div>
+    <div class="sp-title">最終ターンの種、翌朝の花——「１ファイルにできないかな？」</div>
+    <div class="dialog">
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">（この日の<strong>最終ターン</strong>で）日本語版もやらないと。っていうか、<strong>日本語版と１ファイルにできないかな？</strong>大きすぎる？</div></div>
+      <div class="d-line"><span class="d-who c">C</span>
+        <div class="d-text">1ファイルに統合できます。URLが1つ、<strong>QRコードも1つで済む</strong>。QR配布する時に<strong>「これ一枚」で両言語</strong>に対応できる。</div></div>
+      <div class="d-line"><span class="d-who hoshi">星</span>
+        <div class="d-text">（翌朝）シニアはリンクも難しくて。<strong>QRならいけるので</strong>。それも共通ヘッダーの中かな？</div></div>
+    </div>
+    <div class="born">
+      <div class="b-label">⚡ ここで生まれたもの</div>
+      <div class="b-item"><span class="b-arrow">→</span><div>日英トグルの<strong>統合ファイル</strong>——親族には日本語、世界には英語、同じ一枚から</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div><strong>QR二段構え</strong>：手向けの一枚は静的QRを焼き込み（外部依存ゼロ＝末永く残る）、他のnotesは自分のURLから自動生成（手作業ゼロ）</div></div>
+      <div class="b-item"><span class="b-arrow">→</span><div>4つの朝に作った部品すべて——index・辞書・picture・ヘッダー・QR——が<strong>手向けの一枚に流れ込んだ</strong></div></div>
+      <a class="back-map" href="#map">↑ MAPに戻る</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ STRUCTURE ═══════════ -->
+<div class="insights">
+  <div class="ins-title">このスレッドの構造</div>
+  <div class="ins-grid">
+    <div class="ins-card">
+      <div class="ic-label">期間</div>
+      <div class="ic-big">4つの朝</div>
+      <div class="ic-desc">6/16 06:37、6/17 07:20、6/18 01:20、そして6/19。<strong>全セッションが朝に始まり、午前に終わる。</strong>夜は一度も使われていない。</div>
+    </div>
+    <div class="ins-card">
+      <div class="ic-label">対話ターン</div>
+      <div class="ic-big">99+</div>
+      <div class="ic-desc">Day1: 39（設計）→ Day2: 10（種まき）→ Day3: 50（実装マラソン）。<strong>短い朝が、次の長い朝を準備する</strong>リズム。</div>
+    </div>
+    <div class="ins-card">
+      <div class="ic-label">最も深い交点</div>
+      <div class="ic-big">献花</div>
+      <div class="ic-desc">picture倉庫の一枚 roses 20260529 が、認証宣言文の結びになり、QRで配られる手向けになった。<strong>技術・記憶・喪失が一点で交差。</strong></div>
+    </div>
+    <div class="ins-card">
+      <div class="ic-label">収束点</div>
+      <div class="ic-big">手向けの一枚</div>
+      <div class="ic-desc">html-notes-authentication.html。<strong>index・辞書・picture・共通ヘッダー・QR——4つの朝の全部品がこの1ファイルに実装されている。</strong></div>
+    </div>
+  </div>
+
+  <div class="ins-title">アイデアはいつ生まれたか——リズムの検証</div>
+
+  <div class="rhythm-card"><div class="r-emoji">🌅</div>
+    <div class="r-body"><strong>あさイチ駆動。</strong>4セッションすべてが朝に開始（06:37 / 07:20 / 01:20 / 朝）。そして各日の<em>一言目</em>にSPARKが多い——picture.dunksoft.jp誕生（6/17 07:20）は、その朝の最初の発言だった。</div></div>
+
+  <div class="rhythm-card"><div class="r-emoji">🌱</div>
+    <div class="r-body"><strong>終わり際の発火。</strong>サイトマップの問い（09:39＝「Good day!」の76分後）、1ファイル化（06:32＝その日の最終ターン）、Anthroslan購入報告（08:25＝「BYE!」の直前）。<em>締めの挨拶の前後5分</em>が、このスレッド最大のアイデア鉱脈。</div></div>
+
+  <div class="rhythm-card"><div class="r-emoji">🌙</div>
+    <div class="r-body"><strong>一晩の発酵。</strong>前夜の種は翌朝に必ず芽を出す：picture構想（6/17）→ギャラリー実装（6/18）。1ファイル化の問い（6/18夜の入口）→統合完成（6/19朝）。スライドショーは本人の言葉どおり<strong>「Dreamingで思いついた」</strong>——寝ている間に育っている。</div></div>
+
+  <div class="rhythm-card"><div class="r-emoji">⚡</div>
+    <div class="r-body"><strong>3分間隔の建築。</strong>設計フェーズはターン間隔2〜5分の高速確認ループ。「見えました」「OKです」「乗りましたね」——<em>短い肯定の連打</em>が実装を前に進める。前スレッドの長い物語的対話とは真逆のテンポ。</div></div>
+
+  <div class="rhythm-card"><div class="r-emoji">⚽</div>
+    <div class="r-body"><strong>生活が燃料。</strong>メッシのハットトリック、秋葉原の花屋のAnthroslan、奥さんへのプレゼント、YOYOMA最前列の記憶——生活の断片が実装と同じ流れに混ざる。<strong>混ざるから、技術ページが手向けになれた。</strong>分けていたら献花は生まれていない。</div></div>
+
+  <div class="rhythm-card"><div class="r-emoji">🛁</div>
+    <div class="r-body"><strong>湯船と枕が、バクタタンクになる。</strong>星C本人の検証コメント：<strong>「結構私のアイデアは、バクタタンク——お風呂で思いついて、一晩寝かせると湧いてくる感じはあります」</strong>——名の由来は『ボバ・フェット』の細胞再生装置。<em>ボバがタンクの中で夢を見て記憶を再生するように</em>、終わり際に落ちた種は湯船と眠りの中で育ち、翌朝の一言目に湧き出す。マップの点線はこの泉の記録。Dreamingが効いている。日本人には湯治の文化で「そうだろそうだろ」と直感的に伝わる——海外の人にどう見えるかは、また別のコラムになる。</div></div>
+
+</div>
+
+<!-- ═══════════ CLOSING ═══════════ -->
+<div class="closing">
+  <div class="cl-quote">
+    「前のスレッドは拡散だった。このスレッドは建築だった。<br>
+    ——でもSPARKは同じ場所から来る。<br>
+    <em>セッションの終わり際と、翌朝の一言目から。</em>」
+  </div>
+  <div class="cl-credit">
+    NEURAL-MAP™ 02 · Thread 2026-06-16 → 2026-06-19<br>
+    Roberto Hoshino × Claude.ai — 星C
+  </div>
+</div>
+
+</body>
+</html>
