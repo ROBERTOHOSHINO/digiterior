@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEURAL-MAP™ 04 v0.2 — 双雷の日の対話 | DIGITERIOR × Claude.ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700;900&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07080f; --gold:#C8920A; --gold-l:#F9A825;
+  --nin:#378ADD; --ichi:#BA7517; --go:#534AB7; --machi:#3B6D11;
+  --white:rgba(255,255,255,0.85); --dim:rgba(255,255,255,0.35); --faint:rgba(255,255,255,0.12);
+  --mono:'DM Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:'Noto Sans JP',sans-serif;font-weight:300;line-height:1.9;overflow-x:hidden;}
+.header{padding:64px 8% 32px;text-align:center;}
+.h-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:6px;color:var(--gold);margin-bottom:18px;text-transform:uppercase;}
+.h-title{font-family:'Noto Serif JP',serif;font-size:clamp(1.7rem,5vw,3.2rem);font-weight:900;color:#fff;line-height:1.35;margin-bottom:14px;}
+.h-title em{color:var(--gold-l);font-style:normal;}
+.h-sub{font-size:13px;color:var(--dim);max-width:580px;margin:0 auto 8px;line-height:2.1;}
+.h-period{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:2px;}
+.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;padding:20px 8% 32px;}
+.lg-item{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--dim);}
+.lg-dot{width:10px;height:10px;border-radius:50%;}
+.map-wrap{max-width:960px;margin:0 auto;padding:0 4%;}
+svg{width:100%;height:auto;display:block;}
+.map-svg text{font-family:'Noto Sans JP',sans-serif;fill:var(--white);}
+.map-svg .kanji{font-family:'Noto Serif JP',serif;font-weight:700;}
+.spark-node{cursor:pointer;}
+.spark-ring{fill:none;stroke:#F9A825;stroke-width:1;opacity:0;animation:sparkRing 2.5s ease-out infinite;}
+@keyframes sparkRing{0%{opacity:0.8;}100%{opacity:0;transform:scale(1.6);}}
+.spark-ring{transform-origin:center;transform-box:fill-box;}
+@keyframes preSpark{0%,100%{stroke-opacity:0.25;}50%{stroke-opacity:0.7;}}
+.pre-ring{fill:none;stroke:#F9A825;stroke-width:1;stroke-dasharray:3 5;animation:preSpark 3s ease-in-out infinite;}
+@keyframes missPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+.miss-dot{animation:missPulse 2.4s ease-in-out infinite;}
+.stats{max-width:860px;margin:0 auto;padding:48px 8% 16px;}
+.st-title{font-family:'Noto Serif JP',serif;font-size:clamp(1.2rem,2.4vw,1.7rem);font-weight:700;color:var(--gold-l);margin-bottom:26px;text-align:center;}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+.st-card{background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:20px;}
+.st-label{font-family:var(--mono);font-size:9px;letter-spacing:3px;margin-bottom:8px;text-transform:uppercase;color:var(--gold-l);}
+.st-num{font-family:'Noto Serif JP',serif;font-size:2rem;font-weight:900;line-height:1.1;margin-bottom:6px;}
+.st-desc{font-size:11.5px;color:var(--dim);line-height:1.8;}
+.assist{max-width:780px;margin:0 auto;padding:24px 8% 8px;}
+.as-title{font-family:'Noto Serif JP',serif;font-size:clamp(1.1rem,2.2vw,1.5rem);font-weight:700;color:var(--gold-l);margin-bottom:16px;text-align:center;}
+.as-row{display:flex;align-items:center;gap:12px;background:rgba(249,168,37,0.04);border:0.5px dashed rgba(249,168,37,0.3);border-radius:10px;padding:12px 18px;margin-bottom:10px;font-size:12.5px;}
+.as-kanji{font-family:'Noto Serif JP',serif;font-size:1.4rem;font-weight:900;min-width:1.6em;text-align:center;}
+.as-text{flex:1;color:var(--white);}
+.as-text b{color:var(--gold-l);font-weight:500;}
+.as-dots{display:flex;gap:6px;}
+.as-dots span{width:12px;height:12px;border-radius:50%;display:inline-block;}
+.notes{max-width:780px;margin:0 auto;padding:40px 8% 40px;}
+.note{margin-bottom:44px;scroll-margin-top:32px;background:rgba(255,255,255,0.02);border:0.5px solid rgba(255,255,255,0.07);border-radius:14px;padding:26px 28px;}
+.note.spark{border-color:rgba(249,168,37,0.35);background:rgba(249,168,37,0.04);}
+.note-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.note-kanji{font-family:'Noto Serif JP',serif;font-size:1.8rem;font-weight:900;line-height:1;}
+.note-title{font-family:'Noto Serif JP',serif;font-size:15px;font-weight:700;color:#fff;flex:1;}
+.note-cat{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--dim);white-space:nowrap;}
+.note-body{font-size:13px;color:var(--white);line-height:2;}
+.note-body em{color:var(--gold-l);font-style:normal;}
+.note-assist{margin-top:12px;font-size:12px;color:var(--gold-l);display:flex;align-items:center;gap:8px;}
+.note-assist .as-dots span{width:10px;height:10px;}
+.lex-badge{font-family:var(--mono);font-size:8px;letter-spacing:2px;border:0.5px solid var(--dim);border-radius:20px;padding:1px 8px;color:var(--dim);}
+.lex-badge.known{border-color:var(--gold);color:var(--gold-l);}
+.back{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--dim);text-decoration:none;display:inline-block;margin-top:12px;}
+.back:hover{color:var(--gold-l);}
+.footer{text-align:center;padding:32px 8% 64px;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:2px;line-height:2.4;}
+.footer em{color:var(--gold);font-style:italic;}
+</style>
+</head>
+<body id="top">
+
+<div class="header">
+  <div class="h-eyebrow">NEURAL-MAP™ 04 · Prototype v0.2 — goal-front assist</div>
+  <div class="h-title">双雷の日の対話<em>。</em><br>転・承・Spark、掘、そして継承へ。</div>
+  <div class="h-sub">v0.2: ゴール前のノードに「足りない色」を表示。<br>俯瞰が読みになり、読みが次の対話の一手になる。</div>
+  <div class="h-period">2026.07.26 — 07.28</div>
+</div>
+
+<div class="legend" id="legend"></div>
+<div class="map-wrap"><div id="map"></div></div>
+
+<div class="assist">
+  <div class="as-title">ゴール前アシスト — 次のSparkはここで起こせる</div>
+  <div id="assist-rows"></div>
+</div>
+
+<div class="stats">
+  <div class="st-title">自動計測 — このマップの数字</div>
+  <div class="st-grid" id="stats"></div>
+</div>
+<div class="notes" id="notes"></div>
+
+<div class="footer">
+  NEURAL-MAP™ 04 · prototype v0.2 — 足りない色アシスト + lexicon照合（dictionary.json差し替え可）<br>
+  Spark = 3カテゴリ以上の合流（自動） ／ ゴール前 = 2カテゴリ合流 + 欠色表示 ／ JSONを差し替えれば別の対話のマップになる<br>
+  FPS（水谷榮二）→ FPS+（2008・承と転の補強）→ NEURAL-MAP / KANRI（2026・転の自動検出）<br>
+  DIGITERIOR × Claude.ai · <em>Love your long life, love your long time</em>
+</div>
+
+<script type="application/json" id="map-data">
+{
+  "categories": {
+    "認": {"color": "#378ADD", "label": "認 · 認証・技術・データ"},
+    "市": {"color": "#BA7517", "label": "市 · 事業・サービス"},
+    "語": {"color": "#534AB7", "label": "語 · 物語・哲学"},
+    "町": {"color": "#3B6D11", "label": "町 · 文化・自然"},
+    "双": {"color": "#C8920A", "label": "双 · 起点・結節"}
+  },
+  "lexicon": {
+    "双": {"color": "#C8920A", "note": "Dual System・結節"},
+    "承": {"color": "#534AB7", "note": "エポケー・承る（2008 FPS+より継承）"},
+    "転": {"color": "#534AB7", "note": "発想の転換・Spark"}
+  },
+  "lexicon_note": "dictionary.json（固定色24字）の内容をこのlexiconに貼り込めば既出漢字の色と意味が自動で引き当てられます",
+  "nodes": [
+    {"id":"ten",  "kanji":"転","cat":"語","row":0,"title":"起承転結は課題解決のメソッド",
+     "body":"起承転結が論文に合わない違和感から出発。発見のプロセス文法と報告の文法は別物。「転」こそ課題解決の肝という読み直し——のちにFPS+のC（発想の転換）として2008年に既出だったことが判明する。"},
+    {"id":"zu",   "kanji":"図","cat":"認","row":0,"title":"NEURAL-MAP 03 — 対話の可視化",
+     "body":"応募週間の対話を可視化したマップから「話題が変わる瞬間にSparkが起こる」という観測。収束よりも<em>拡散が刺激になって話が進む</em>。ここが今回のすべての起点。"},
+    {"id":"rai",  "kanji":"雷","cat":"町","row":0,"title":"双つの稲妻 — Twin thunderbolt by AIDA",
+     "body":"没後40年の命日7/26、東京の空に二本並んだ稲妻。異なる電荷の層の間にだけ放電は走る——異色交点の、空による実演。<em>Received, 40 years later.</em>"},
+    {"id":"sho",  "kanji":"承","cat":"語","row":1,"title":"承＝エポケー — 四文字に仕事が生まれた",
+     "body":"文章術の曖昧な「承」を、問題解決の<em>承る(うけたまわる)フェーズ</em>として再定義。先入観を排して受け止める＝エポケー。のちの発掘で、FPS+の P に「問題として承る。」と印字済みだったことが判明——18年越しの布石回収。"},
+    {"id":"kaku", "kanji":"拡","cat":"語","row":1,"title":"拡散への確信 — リズムがあれば怖くない",
+     "body":"リズムが出来れば拡散も恐れることはなく、とことん広がる方が枠を外せる。承が錨になるから転で遠くへ跳べる——収束と拡散の呼吸としての問題解決。"},
+    {"id":"ko",   "kanji":"交","cat":"認","row":2,"title":"異色交点の実証 — 仮説がデータに訂正された",
+     "body":"NEURAL-MAP 03をグラフ分析。単純な異色エッジ率では説明できず、効いていたのは<em>次数(3.17 vs 1.44)とカテゴリ多様度</em>。4色すべてが合流するノードは2つだけで、両方とも最大級のSpark。Spark→Spark連鎖エッジ4本も確認。"},
+    {"id":"shu",  "kanji":"蹴","cat":"町","row":3,"title":"ティキタカ — パスネットワークとの構造同型",
+     "body":"多様なノードが一点で重なり分岐する構造は、華麗なパス回しと同型。ハブは高次数・高多様度。ゴラッソはパス回しのリズムの中で既に決まっている。「三人目の動き」＝余白のSpark。"},
+    {"id":"ho",   "kanji":"歩","cat":"語","row":3,"title":"メッシの歩き — 承の視野と楽＝PLAY",
+     "body":"一流ほどボールを受ける前に首を振る。メッシは歩きながらピッチを<em>承っている</em>。リラックスが拡散の視野を保つ——ガルウェイ『インナーゲーム・オブ・テニス』のセルフ2への信頼。2008年セミナーの「何も考えない時に最高のプレーが生まれる」に直結。"},
+    {"id":"hori", "kanji":"掘","cat":"町","row":3,"title":"発掘 — DNAセミナー2008 / FPS-PLUS",
+     "body":"過去資料が浮上。石垣式(段取り=石組み)、余裕→チャレンジ、有視界レーダー飛行(俯瞰)、「売上を増やすだけの時代は終わった」——今週の対話の原文が2008年に出揃っていた。Copyright欄には<em>Digiterior 2010</em>の名も。"},
+    {"id":"kei",  "kanji":"継","cat":"語","row":4,"title":"継承 — 水谷榮二先生のFPSから18年",
+     "body":"FPS（F事実→P問題→S解決）に「承が薄く、転がない」と感じてFPS+を作った2008年。承をエポケーに、転をSpark自動検出に育てた2026年。<em>FPS → FPS+ → KANRI</em>の系譜が確定。継承もまた「承」の実践。"},
+    {"id":"kata", "kanji":"型","cat":"市","row":4,"title":"KANRIプロトタイプ — 対話→漢字ノード→マップ",
+     "body":"対話のまとまりに漢字一文字で名前をつけINDEX化し、俯瞰の視野を返すサービス。監督ではなくピッチを俯瞰するもう一つの眼。v0.2でゴール前の<em>足りない色</em>を指せるようになった——読みを返すツールへ。"},
+    {"id":"ritsu","kanji":"律","cat":"双","row":5,"title":"テンポもSparkを呼ぶ — このマップ自身",
+     "body":"ワンタッチのパス交換のようなリズム自体が発火装置。本頁はその実証としてのプロトタイプ。JSONを差し替えれば、次の対話のマップになる。"}
+  ],
+  "edges": [
+    ["ten","sho"],["ten","kaku"],["zu","kaku"],["zu","ko"],
+    ["kaku","ko"],["sho","ko"],["rai","ko"],
+    ["ko","shu"],["ko","ho"],["ko","kata"],
+    ["shu","kata"],["ho","kata"],
+    ["zu","hori"],["sho","hori"],["hori","kei"],["ten","kei"],["kei","kata"],
+    ["kata","ritsu"]
+  ]
+}
+</script>
+
+<script>
+const data = JSON.parse(document.getElementById('map-data').textContent);
+const CATS = data.categories, LEX = data.lexicon || {};
+const ALLCATS = ["認","市","語","町"];
+const nodes = data.nodes, edges = data.edges;
+const byId = Object.fromEntries(nodes.map(n=>[n.id,n]));
+
+const adj = {};
+nodes.forEach(n=>adj[n.id]=[]);
+edges.forEach(([a,b])=>{adj[a].push(b);adj[b].push(a);});
+
+nodes.forEach(n=>{
+  const neigh = adj[n.id].map(id=>byId[id]).filter(m=>m.cat!=="双");
+  n.deg = adj[n.id].length;
+  n.ncats = new Set(neigh.map(m=>m.cat));
+  n.spark = n.cat!=="双" && n.ncats.size>=3;
+  n.pre = !n.spark && n.cat!=="双" && n.ncats.size===2 && n.deg>=2;
+  n.missing = n.pre ? ALLCATS.filter(c=>!n.ncats.has(c)) : [];
+  n.lex = LEX[n.kanji] || null;
+});
+
+const W=960, ROWH=175, PADX=90, PADY=90;
+const rows = {};
+nodes.forEach(n=>{(rows[n.row]=rows[n.row]||[]).push(n);});
+Object.values(rows).forEach(list=>{
+  list.forEach((n,i)=>{
+    n.x = list.length===1 ? W/2 : PADX + i*(W-2*PADX)/(list.length-1);
+    n.y = PADY + n.row*ROWH;
+  });
+});
+const H = PADY + (Math.max(...nodes.map(n=>n.row)))*ROWH + 110;
+
+let svg = `<svg class="map-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+edges.forEach(([a,b])=>{
+  const A=byId[a],B=byId[b];
+  const cross = A.cat!==B.cat && A.cat!=="双" && B.cat!=="双";
+  const stroke = cross ? CATS[B.cat].color+"aa" : "rgba(255,255,255,0.14)";
+  const dx=B.x-A.x, dy=B.y-A.y, len=Math.hypot(dx,dy);
+  const r1=(A.spark?40:32)/len, r2=(B.spark?44:36)/len;
+  svg += `<line x1="${A.x+dx*r1}" y1="${A.y+dy*r1}" x2="${B.x-dx*r2}" y2="${B.y-dy*r2}" stroke="${stroke}" stroke-width="1"/>`;
+});
+nodes.forEach(n=>{
+  const c = CATS[n.cat].color;
+  const glyph = n.lex ? n.lex.color : (n.spark ? '#F9A825' : 'rgba(255,255,255,0.9)');
+  const r = n.spark?36:(n.cat==="双"?38:30);
+  svg += `<a href="#n-${n.id}" class="spark-node">`;
+  if(n.spark) svg += `<circle cx="${n.x}" cy="${n.y}" r="${r+8}" class="spark-ring"/>`;
+  if(n.pre)   svg += `<circle cx="${n.x}" cy="${n.y}" r="${r+10}" class="pre-ring"/>`;
+  svg += `<circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${c}22" stroke="${n.spark?'#F9A825':c}" stroke-width="${n.spark?1.5:1}"/>`;
+  svg += `<text x="${n.x}" y="${n.y+2}" text-anchor="middle" dominant-baseline="central" class="kanji" font-size="${n.spark?24:20}" fill="${glyph}">${n.kanji}</text>`;
+  svg += `<text x="${n.x}" y="${n.y+r+18}" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.45)">${n.spark?'⚡ ':''}${n.title.split(' — ')[0]}</text>`;
+  if(n.pre){
+    const total=n.missing.length, x0=n.x-(total-1)*9;
+    n.missing.forEach((mc,i)=>{
+      svg += `<circle class="miss-dot" cx="${x0+i*18}" cy="${n.y+r+33}" r="4.5" fill="${CATS[mc].color}"/>`;
+    });
+    svg += `<text x="${n.x}" y="${n.y+r+50}" text-anchor="middle" font-size="8.5" fill="#F9A825" opacity="0.75">あと${n.missing.join('・')}で発火</text>`;
+  }
+  svg += `</a>`;
+});
+svg += `</svg>`;
+document.getElementById('map').innerHTML = svg;
+
+document.getElementById('legend').innerHTML =
+  Object.values(CATS).map(c=>`<div class="lg-item"><div class="lg-dot" style="background:${c.color}"></div>${c.label}</div>`).join('') +
+  `<div class="lg-item"><div class="lg-dot" style="background:#F9A825;box-shadow:0 0 8px #F9A825"></div>⚡ Spark（3カテゴリ以上の合流・自動判定）</div>` +
+  `<div class="lg-item"><div class="lg-dot" style="border:1px dashed #F9A825;background:transparent"></div>ゴール前（2カテゴリ合流 + 足りない色を表示）</div>`;
+
+const pres = nodes.filter(n=>n.pre);
+document.getElementById('assist-rows').innerHTML = pres.map(n=>`
+  <div class="as-row">
+    <span class="as-kanji" style="color:${CATS[n.cat].color}">${n.kanji}</span>
+    <span class="as-text"><b>${n.title.split(' — ')[0]}</b> は ${[...n.ncats].join('・')} まで合流済み。あと <b>${n.missing.join('・')}</b> のパスが入れば発火し得ます。</span>
+    <span class="as-dots">${n.missing.map(mc=>`<span style="background:${CATS[mc].color}"></span>`).join('')}</span>
+  </div>`).join('') || '<div class="as-row"><span class="as-text">ゴール前のノードはありません。</span></div>';
+
+const sparks = nodes.filter(n=>n.spark);
+const nonsp = nodes.filter(n=>!n.spark && n.cat!=="双");
+const avg = a=>a.length?(a.reduce((s,n)=>s+n.deg,0)/a.length).toFixed(2):"—";
+document.getElementById('stats').innerHTML = `
+  <div class="st-card"><div class="st-label">Sparks（自動判定）</div><div class="st-num" style="color:#F9A825">${sparks.length}</div><div class="st-desc">${sparks.map(n=>n.kanji).join('・')} — 3カテゴリ以上のスレッドが合流</div></div>
+  <div class="st-card"><div class="st-label">平均次数 Spark / 非Spark</div><div class="st-num" style="color:#8f84e0">${avg(sparks)} / ${avg(nonsp)}</div><div class="st-desc">合流本数の差がそのまま発火条件</div></div>
+  <div class="st-card"><div class="st-label">ゴール前</div><div class="st-num" style="color:#F9A825">${pres.length}</div><div class="st-desc">${pres.map(n=>n.kanji).join('・')} — 欠色はアシスト欄参照</div></div>
+  <div class="st-card"><div class="st-label">lexicon既出</div><div class="st-num" style="color:#6fb0ec">${nodes.filter(n=>n.lex).length}</div><div class="st-desc">dictionary.jsonとの照合（差し替え可能な疎結合）</div></div>`;
+
+document.getElementById('notes').innerHTML = nodes.map(n=>`
+  <div class="note${n.spark?' spark':''}" id="n-${n.id}">
+    <div class="note-head">
+      <span class="note-kanji" style="color:${n.lex?n.lex.color:(n.spark?'#F9A825':CATS[n.cat].color)}">${n.kanji}</span>
+      <span class="note-title">${n.title}</span>
+      <span class="lex-badge${n.lex?' known':''}">${n.lex?'既出 · '+n.lex.note:'新出'}</span>
+      <span class="note-cat">${n.cat} · deg ${n.deg} · ${n.ncats.size}色${n.spark?' · ⚡SPARK':n.pre?' · ゴール前':''}</span>
+    </div>
+    <div class="note-body">${n.body}</div>
+    ${n.pre?`<div class="note-assist">🎯 あと <b>${n.missing.join('・')}</b> のパスで発火 <span class="as-dots">${n.missing.map(mc=>`<span style="background:${CATS[mc].color}"></span>`).join('')}</span></div>`:''}
+    <a href="#top" class="back">↑ MAPに戻る</a>
+  </div>`).join('');
+</script>
+</body>
+</html>
