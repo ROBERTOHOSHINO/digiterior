@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:image" content="https://digiterior.net/ogp.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>回る速度 ── Resource Management System 五層の陣形図 | html-notes | DIGITERIOR</title>
+<meta name="description" content="日本の課題は、お金の回る速度が遅すぎること。血液が循環しなければ栄養は届かない。最大の最高のリソースは、時間。五層の陣形図とティキ・タカで描く、KANRI白書の序章。">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Noto+Sans+JP:wght@300;400&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1814;
+  --paper:#faf8f4;
+  --hoshi:#1A237E;
+  --akira:#F9A825;
+  --gold:#b8960c;
+  --teal:#0f6e56;
+  --accent:#c0550a;
+  --green:#1B6B5A;
+  --spark:#EF9F27;
+  --muted:#8a8680;
+  --line:rgba(26,24,20,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif JP',serif;line-height:1.9}
+
+.hero{max-width:760px;margin:0 auto;padding:4.5rem 1.6rem 2.5rem;text-align:center}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.4em;
+  color:var(--muted);text-transform:uppercase;margin-bottom:2rem}
+.hero h1{font-size:clamp(1.5rem,4.4vw,2.2rem);font-weight:400;line-height:1.65;margin-bottom:1.2rem}
+.hero h1 .kai{color:var(--accent)}
+.hero-en{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;
+  font-weight:300;color:var(--muted)}
+.hero-lede{font-size:.93rem;font-weight:300;line-height:2.3;margin-top:2rem;color:var(--ink);
+  max-width:600px;margin-left:auto;margin-right:auto;text-align:left}
+.hero-lede em{font-style:normal;color:var(--accent)}
+
+.pitch-wrap{max-width:520px;margin:2.5rem auto 0;padding:0 1.6rem}
+.pitch-caption{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;letter-spacing:.18em;
+  color:var(--muted);text-align:center;margin-top:1rem;line-height:2}
+
+.chapter{max-width:660px;margin:0 auto;padding:3.6rem 1.6rem 1.5rem}
+.eyebrow{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.38em;
+  color:var(--muted);margin-bottom:1.4rem;text-transform:uppercase}
+.chapter h2{font-size:clamp(1.2rem,3.2vw,1.6rem);font-weight:400;line-height:1.7;margin-bottom:1.6rem}
+.body{font-size:.94rem;font-weight:300;line-height:2.3;letter-spacing:.03em}
+.body + .body{margin-top:1.4rem}
+.body em{font-style:normal;color:var(--accent)}
+.body strong{font-weight:400;color:var(--hoshi)}
+.pquote{margin:2.6rem auto;max-width:520px;text-align:center;
+  font-size:clamp(1.02rem,2.8vw,1.25rem);font-weight:400;line-height:2.05;letter-spacing:.05em}
+.pquote span{display:inline-block;border-bottom:1px solid var(--gold);padding-bottom:.35rem}
+.sep{width:3rem;height:1px;background:var(--line);margin:3rem auto 0}
+
+/* 層カード */
+.layer{border:1px solid var(--line);background:#fff;border-radius:10px;
+  padding:1.6rem 1.7rem;margin:1.4rem 0}
+.layer-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:.8rem;flex-wrap:wrap}
+.layer-num{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.15em;
+  color:#fff;background:var(--l-color,var(--gold));padding:.2rem .6rem;border-radius:99px}
+.layer-title{font-size:1.02rem;font-weight:500;font-family:'Noto Serif JP',serif}
+.layer-pos{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--muted)}
+.layer p{font-size:.88rem;font-weight:300;line-height:2.15}
+.layer p + p{margin-top:.7rem}
+.layer p b{font-weight:400;color:var(--l-color,var(--gold))}
+.l1{--l-color:var(--hoshi)}
+.l2{--l-color:var(--teal)}
+.l3{--l-color:var(--accent)}
+.l4{--l-color:var(--gold)}
+.l5{--l-color:var(--spark)}
+
+.aside{font-size:.8rem;font-weight:300;color:var(--muted);background:rgba(184,150,12,.06);
+  border-radius:8px;padding:1rem 1.3rem;margin:1.6rem 0;line-height:2.1;
+  font-family:'Noto Sans JP',sans-serif}
+.aside b{font-weight:500;color:var(--ink)}
+
+.coin{border-left:3px solid var(--spark);background:#fbf3df;
+  border-radius:0 10px 10px 0;padding:1.1rem 1.4rem;margin:1.8rem 0;font-size:.92rem}
+.coin b{font-family:'Noto Serif JP',serif;color:var(--hoshi);font-size:1.02rem}
+.coin .credit{display:block;font-family:'DM Mono',monospace;font-size:.62rem;
+  color:#a08a4a;margin-top:.5rem;letter-spacing:.06em}
+
+footer{max-width:640px;margin:0 auto;padding:3.5rem 1.6rem 1rem;text-align:center;
+  border-top:1px solid var(--line)}
+.fmeta{font-family:'Noto Sans JP',sans-serif;font-size:.68rem;line-height:2.2;
+  letter-spacing:.12em;color:var(--muted)}
+.rakkan{display:flex;flex-direction:column;align-items:center;gap:.55rem;padding:3rem 1rem 2.4rem}
+.rakkan img{width:22px;height:22px}
+.rakkan span{font-family:'Noto Sans JP',sans-serif;font-size:11px;letter-spacing:.3em;
+  text-indent:.3em;color:var(--muted);text-transform:lowercase}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <p class="hero-eyebrow">html-notes · kanri whitepaper · prologue draft</p>
+  <h1><span class="kai">回</span>る速度 ──<br>Resource Management System<br>五層の陣形図</h1>
+  <p class="hero-en">It is not the volume of blood. It is the speed of circulation.</p>
+  <p class="hero-lede">日本の課題は、お金が無いことではない。<em>お金の回る速度が、遅すぎること</em>である。血液が循環しなければ、栄養は足りていても届かない。届かないあいだ、みんなただ時間を失っている。だから、フォーカスを変える。量ではなく速度へ。資産ではなく循環へ。そして——最大の最高のリソースは、時間へ。</p>
+</section>
+
+<!-- ═══════════ ピッチ図 ═══════════ -->
+<div class="pitch-wrap">
+<svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" aria-label="五層の陣形図" style="width:100%;height:auto">
+  <!-- ピッチ -->
+  <rect x="30" y="20" width="340" height="560" fill="none" stroke="#1a1814" stroke-width="1.2"/>
+  <!-- ゴール -->
+  <rect x="160" y="12" width="80" height="8" fill="none" stroke="#1a1814" stroke-width="1.2"/>
+  <!-- 層の帯 -->
+  <g font-family="'Noto Sans JP',sans-serif" font-size="11" fill="#8a8680">
+    <line x1="30" y1="470" x2="370" y2="470" stroke="#e4dfd2" stroke-width="1"/>
+    <line x1="30" y1="360" x2="370" y2="360" stroke="#e4dfd2" stroke-width="1"/>
+    <line x1="30" y1="250" x2="370" y2="250" stroke="#e4dfd2" stroke-width="1"/>
+    <line x1="30" y1="140" x2="370" y2="140" stroke="#e4dfd2" stroke-width="1"/>
+    <text x="42" y="555" fill="#1A237E">① 金の流れ · GK</text>
+    <text x="42" y="450" fill="#0f6e56">② 取引の書式 · DF</text>
+    <text x="42" y="340" fill="#c0550a">③ 業界マスター · MF(混戦)</text>
+    <text x="42" y="230" fill="#b8960c">④ 企業間連携 · MF</text>
+    <text x="42" y="120" fill="#EF9F27">⑤ Creative × AI余力 · FW</text>
+  </g>
+  <!-- ティキ・タカのパス経路 -->
+  <g fill="none" stroke="#c0550a" stroke-width="1.4" stroke-dasharray="4 4" opacity="0.85">
+    <path d="M 200,540 L 130,480"/>
+    <path d="M 130,480 L 250,430"/>
+    <path d="M 250,430 L 150,330"/>
+    <path d="M 150,330 L 270,300"/>
+    <path d="M 270,300 L 120,210"/>
+    <path d="M 120,210 L 260,170"/>
+    <path d="M 260,170 L 190,80"/>
+    <path d="M 190,80 L 200,26"/>
+  </g>
+  <!-- パス地点 -->
+  <g fill="#faf8f4" stroke="#1a1814" stroke-width="1.2">
+    <circle cx="200" cy="540" r="6"/>
+    <circle cx="130" cy="480" r="6"/>
+    <circle cx="250" cy="430" r="6"/>
+    <circle cx="150" cy="330" r="6"/>
+    <circle cx="270" cy="300" r="6"/>
+    <circle cx="120" cy="210" r="6"/>
+    <circle cx="260" cy="170" r="6"/>
+    <circle cx="190" cy="80" r="6"/>
+  </g>
+  <!-- ゴールの火花 -->
+  <g fill="#EF9F27">
+    <path d="M 200,8 L 204,20 L 216,22 L 206,29 L 210,41 L 200,33 L 190,41 L 194,29 L 184,22 L 196,20 Z"/>
+  </g>
+</svg>
+<p class="pitch-caption">ティキ・タカ ── 短いパスの連続が、最後列から最前列へ。<br>ゴールは⑤で生まれる。しかし速度は①から作られる。</p>
+</div>
+
+<!-- ═══════════ 序 ═══════════ -->
+<article class="chapter">
+  <p class="eyebrow">序 ── 血流</p>
+  <h2>量は足りている。速度が死んでいる。</h2>
+  <p class="body">月末に締めて、翌月に払う。承認が三つの階層を昇って降りてくる。見積もりの返事に一週間、契約書の押印にもう一週間。<em>そのあいだ、資金は止まり、判断は止まり、人は待つ。</em>待っている時間は、帳簿のどこにも記録されないが、確実に失われている。</p>
+  <p class="body">これは新しい指摘ではない。二〇〇九年、私はこう言っていた——「時短が必要。仕事は短時間であっても、質のある仕事ができれば良いと思いませんか?」。二〇一六年のバザールバザール構想は「<strong>利益 = 時間</strong>」を土台に置いた。モモの時間泥棒の話は、参照の索引にずっといる。<em>十七年、同じ場所を螺旋で回ってきた。</em>今回はそれを、白書の焦点に据える番である。</p>
+  <div class="coin">
+    <b>最大の最高のリソースは、時間。</b>
+    <span class="credit">Coined by Roberto Hoshino · 2026-08-05 · 軽井沢、バクタタンクの最終日に</span>
+  </div>
+</article>
+
+<div class="sep"></div>
+
+<!-- ═══════════ 五層 ═══════════ -->
+<article class="chapter">
+  <p class="eyebrow">壱 ── 陣形</p>
+  <h2>五層とひとつの速度。</h2>
+  <p class="body">Resource Management System の全体を、五つの層に切る。ティキ・タカの陣形として読む——それぞれの層に役割があり、<em>どの層で戦い、どの層では戦わないか</em>を先に決めておく。</p>
+
+  <div class="layer l1">
+    <div class="layer-head"><span class="layer-num">①</span><span class="layer-title">金の流れ</span><span class="layer-pos">GK ── 触らない</span></div>
+    <p>送金・決済のレールそのものは、形を変えていない。全銀システムも国際送金も、動いている仕組みは安定している。<b>変わっていないものは、変えない。</b>ゴールキーパーは攻撃に参加しない。ただし——レールは速いのに、レールに乗せるまでが遅い。問題は次の層以降にある。</p>
+  </div>
+
+  <div class="layer l2">
+    <div class="layer-head"><span class="layer-num">②</span><span class="layer-title">取引の書式</span><span class="layer-pos">DF ── 乗るだけ</span></div>
+    <p>Peppol が EU から世界へ広がり、日本もインボイス制度で JP PINT を採用済み。デジタル庁が Peppol Authority を担う——実はこの層、<b>日本は意外に先頭集団</b>にいる(シンガポール・豪州に続くアジアの先行組)。書式の標準化競争には参加しない。整備されたディフェンスラインに、乗るだけでいい。</p>
+  </div>
+
+  <div class="layer l3">
+    <div class="layer-head"><span class="layer-num">③</span><span class="layer-title">業界マスター(INDEX)</span><span class="layer-pos">MF ── 混戦。消耗しない</span></div>
+    <p>ここが標準のせめぎあいの主戦場である。GS1(小売・物流)、eCl@ss(欧州・工業)、UNSPSC(国連系)、CPV(EU調達)——欧州発の規格が先行し、国連系は理念先行で実務に勝てていない。発展途上国の声を運ぶ回路は機能不全のまま。</p>
+    <p>日本の弱点はこの層にある。業界VANが乱立し、社内コードの文化が根深く、「その他」だらけのマスターが放置されている。<b>混沌を直しに行かない。混沌のままでも針が通るINDEXを提示する</b>——形・音・色・意味、四本の針の思想はこの層に立つが、この層で消耗はしない。</p>
+  </div>
+
+  <div class="layer l4">
+    <div class="layer-head"><span class="layer-num">④</span><span class="layer-title">企業間連携</span><span class="layer-pos">MF ── パスの通り道</span></div>
+    <p>EDI から API へ、そしてエージェント間連携へ。ここで効いてくるのが白書の巻頭句である——<b>エージェントは読まない、検証する。</b>人が読んで承認する三階層が、検証可能な構造データの一往復に置き換わるとき、①のレールに乗るまでの時間が桁で縮む。血流の速度は、この層で決まる。</p>
+  </div>
+
+  <div class="layer l5">
+    <div class="layer-head"><span class="layer-num">⑤</span><span class="layer-title">Creative × AI余力</span><span class="layer-pos">FW ── 誰の縄張りでもない</span></div>
+    <p>AIが生み出した余力——浮いた時間、浮いた判断力——を、人のCreativeにどう繋ぎ直すか。<b>この層を扱う標準は、世界のどこにもまだ無い。</b>EUのAI規制は「してはいけないこと」の体系であって、「余力を何に使うべきか」の体系ではない。空白地帯。旗を立てるのはここである。</p>
+    <p>雑談からダイレクトパスが回って、誰も狙っていなかったゴールに届く——八月一日の朝に起きたことを、仕組みとして記述できるのは <b>Spark Neural System</b> だけだ。ゴラッソは、この層で生まれる。</p>
+  </div>
+
+  <div class="aside"><b>ブロックの視点:</b> EU=規格の輸出元。英国=離脱後の独自路線と金融。アジア=Peppol拡張の最前線(星・豪・日・馬)。発展途上国=<b>leapfrog</b>の宝庫——固定電話を飛ばして携帯に跳んだように、レガシーEDIを飛ばしてエージェント連携へ直接跳ぶ国が出る。⑤の思想は、むしろそちらで先に刺さる可能性がある。日本国内の特殊事情には、突っ込みすぎない。</div>
+</article>
+
+<div class="sep"></div>
+
+<!-- ═══════════ 結 ═══════════ -->
+<article class="chapter">
+  <p class="eyebrow">結 ── 速度と時間</p>
+  <h2>回る速度を上げると、時間が生まれる。</h2>
+  <p class="body">五層のどこを速くしても、最後に増えるのは同じものである——<em>人の時間。</em>締めと払いの間で止まっていた時間、承認の階段で失われていた時間、読んで確認するためだけの時間。それらが解放されたとき、何に使うのか。①から④は、その問いに答えない。答えるのは⑤であり、答えの形は一人ひとりの Creative である。</p>
+  <p class="body">お金は、回ってこそ栄養になる。時間は、生まれてこそ人生になる。<strong>Love your long life, love your long time</strong>——白書が最後に言いたいことは、結局、この一行に戻ってくる。</p>
+  <p class="pquote"><span>量ではなく、速度を。資産ではなく、循環を。</span></p>
+</article>
+
+<footer>
+  <p class="fmeta">
+    html-notes ／ 回る速度 ── Resource Management System 五層の陣形図(白書序章・草稿)<br>
+    Roberto Hoshino（<ruby>星野晃一郎<rt>ほしのこういちろう</rt></ruby>）× Claude.ai<br>
+    Digiterior Studio ／ 2026.08.05<br>
+    © 2026 Roberto Hoshino. Smart Life Styles™️ — Love your long life, love your long time™️
+  </p>
+</footer>
+
+<div class="rakkan">
+  <img src="/logo-mark.svg" alt="digiterior" loading="lazy">
+  <span>digiterior</span>
+</div>
+
+</body>
+</html>
