@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VICKEYファミリーの日本株30年変化 × こどもNISAナビ</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Sans','Meiryo',sans-serif;background:#fff8f0;color:#2d2d2d;min-height:100vh}
+ruby rt{font-size:0.6em;color:#888}
+.hero{background:linear-gradient(135deg,#ffd700 0%,#f97316 50%,#c084fc 100%);padding:20px 16px 18px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
+.hero::after{content:'株';font-size:140px;position:absolute;right:-10px;top:-20px;opacity:.07;color:#fff;font-weight:900;line-height:1}
+.hero-img-fallback{width:82px;height:82px;border-radius:16px;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:44px;flex-shrink:0}
+.hero-text{flex:1}
+.hero-sub{font-size:10px;color:rgba(255,255,255,.85);letter-spacing:2px;margin-bottom:4px}
+.hero-title{font-size:clamp(16px,4vw,22px);font-weight:900;color:#fff;text-shadow:1px 2px 4px rgba(0,0,0,.2);line-height:1.4}
+.hero-title span{color:#ffe066}
+.hero-desc{font-size:11px;color:rgba(255,255,255,.88);margin-top:5px;line-height:1.6}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.9);border-radius:20px;padding:4px 14px;margin-top:8px;font-size:12px;font-weight:800;color:#f97316}
+.cki-bar{background:#2d2d2d;color:#fff;padding:10px 16px;font-size:11px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.cki-bar b{color:#ffe066}
+.cki-demo{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.cki-k{font-size:20px;font-weight:900;line-height:1;padding:2px 5px;border-radius:4px}
+.cki-lbl{font-size:9px;color:#aaa}
+.section{max-width:960px;margin:0 auto;padding:22px 14px}
+.sec-title{font-size:16px;font-weight:900;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#333}
+.sec-title::before{content:'';display:block;width:5px;height:20px;background:linear-gradient(180deg,#f97316,#c084fc);border-radius:3px}
+.cat-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.cat-tab{display:flex;flex-direction:column;align-items:center;padding:7px 12px;border-radius:12px;border:2.5px solid #eee;background:#fff;cursor:pointer;transition:all .2s;min-width:58px;box-shadow:0 2px 5px rgba(0,0,0,.05)}
+.cat-tab:hover{transform:translateY(-2px);box-shadow:0 5px 12px rgba(0,0,0,.1)}
+.cat-tab.active{box-shadow:0 4px 14px rgba(0,0,0,.15);transform:translateY(-2px)}
+.cat-tab .ck{font-size:24px;font-weight:900;line-height:1.1}
+.cat-tab .cl{font-size:8px;color:#888;margin-top:2px;text-align:center;line-height:1.3}
+.company-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:12px}
+.company-card{background:#fff;border:2.5px solid #fde8d8;border-radius:16px;padding:16px;cursor:pointer;transition:all .25s;display:none;box-shadow:0 3px 8px rgba(0,0,0,.06)}
+.company-card.show{display:block}
+.company-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.1)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.card-name{font-size:14px;font-weight:900;color:#333}
+.card-code{font-size:9px;color:#bbb;margin-top:1px}
+.kanji-badge .kb-k{font-size:30px;font-weight:900;line-height:1}
+.kanji-badge .kb-l{font-size:8px;color:#888;margin-top:1px;text-align:center}
+.timeline{display:flex;gap:0;margin:8px 0}
+.tl-item{flex:1;position:relative}
+.tl-item+.tl-item::before{content:'→';position:absolute;left:-10px;top:50%;transform:translateY(-50%);color:#f97316;font-size:14px;font-weight:900}
+.tl-box{border:1.5px solid #fde8d8;border-radius:10px;padding:7px 6px;font-size:10px;background:#fff9f5}
+.tl-year{color:#f97316;font-size:9px;font-weight:800;margin-bottom:2px}
+.tl-biz{color:#444;font-weight:700;font-size:10px;line-height:1.3}
+.growth-chip{display:inline-block;padding:3px 9px;border-radius:9px;font-size:10px;font-weight:800}
+.up{background:linear-gradient(90deg,#d4fc79,#96e6a1);color:#276749}
+.down{background:linear-gradient(90deg,#ffecd2,#fcb69f);color:#c05000}
+.new{background:linear-gradient(90deg,#a8edea,#fed6e3);color:#806080}
+.detail-panel{background:#fff;border:2.5px solid #f97316;border-radius:16px;padding:20px;margin-top:14px;display:none;box-shadow:0 8px 28px rgba(249,115,22,.15)}
+.detail-panel.open{display:block}
+.dp-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.dp-name{font-size:16px;font-weight:900;color:#333}
+.dp-kanji-row{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.dp-ki{display:flex;flex-direction:column;align-items:center;background:#fff8f0;border-radius:10px;padding:6px 10px;min-width:50px;border:1.5px solid #fde8d8}
+.dp-ki .dkk{font-size:28px;font-weight:900;line-height:1.1}
+.dp-ki .dkl{font-size:8px;color:#888;margin-top:2px;text-align:center}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.dp-grid{grid-template-columns:1fr}}
+.dp-box{background:#fff9f5;border:1.5px solid #fde8d8;border-radius:10px;padding:11px}
+.dp-box-t{font-size:10px;color:#f97316;font-weight:800;margin-bottom:6px}
+.seg-row{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:10px}
+.seg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.seg-pct{font-weight:800;width:26px;text-align:right;color:#f97316;font-size:10px}
+.bubble-wrap{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+.vcface{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.vcface.mone{background:linear-gradient(135deg,#ffd700,#f59e0b);border:2.5px solid #C9920A}
+.vcface.mane{background:linear-gradient(135deg,#e2e8f0,#94a3b8);border:2.5px solid #475569}
+.vc-name{font-size:10px;font-weight:800;margin-bottom:3px}
+.vc-name.mone{color:#C9920A}
+.vc-name.mane{color:#6B7280}
+.vc-bubble{border-radius:4px 14px 14px 14px;padding:9px 12px;font-size:12px;line-height:2;color:#374151}
+.vc-bubble.mone{background:#fffbeb;border:1.5px solid #fcd34d}
+.vc-bubble.mane{background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:14px 4px 14px 14px}
+.bubble-right{flex-direction:row-reverse}
+.nisa-section{background:linear-gradient(135deg,#f8ffae,#43c6ac);border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 6px 20px rgba(67,198,172,.2)}
+.nisa-title{font-size:15px;font-weight:900;color:#fff;margin-bottom:14px;text-shadow:1px 1px 3px rgba(0,0,0,.1);display:flex;align-items:center;gap:8px}
+.nisa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px}
+.nisa-card{background:rgba(255,255,255,.88);border-radius:13px;padding:13px}
+.nisa-card h4{font-size:11px;font-weight:800;color:#2b8a6e;margin-bottom:5px}
+.nisa-card p{font-size:11px;color:#444;line-height:1.8}
+.nisa-card .num{font-size:20px;font-weight:900;color:#f97316;display:block;margin-bottom:3px}
+.era-timeline{display:flex;overflow-x:auto;padding-bottom:8px;margin:12px 0;gap:8px}
+.era-item{min-width:100px;padding:10px 8px;border-radius:12px;flex-shrink:0;text-align:center;border:2px solid transparent}
+.era-item:nth-child(1){background:#ffe0f0;border-color:#ffb3d9}
+.era-item:nth-child(2){background:#fff0d6;border-color:#ffd6a5}
+.era-item:nth-child(3){background:#fffbd6;border-color:#ffe066}
+.era-item:nth-child(4){background:#d6ffe8;border-color:#96e6a1}
+.era-item:nth-child(5){background:#d6f0ff;border-color:#90cdf4}
+.era-item:nth-child(6){background:#e8d6ff;border-color:#b794f4}
+.era-item:nth-child(7){background:#ffd6d6;border-color:#fc8181}
+.era-year{font-size:9px;font-weight:800;color:#888;margin-bottom:3px}
+.era-biz{font-size:10px;font-weight:700;color:#444;line-height:1.4}
+.era-icon{font-size:20px;margin-bottom:3px}
+footer{text-align:center;padding:16px;font-size:10px;color:#ccc;border-top:3px dashed #fde8d8;margin-top:16px;background:#fff;line-height:1.8}
+/* 複利シミュレーター */
+:root{--purple:#534AB7;--purple-lt:#EEEDFE;--purple-md:#AFA9EC;--purple-dk:#3C3489;--teal:#1D9E75;--teal-lt:#E1F5EE;--teal-dk:#085041;--amber-lt:#FAEEDA;--amber-dk:#633806;--radius:12px;--radius-sm:8px}
+.sim-section{background:linear-gradient(135deg,#EEEDFE,#fff);border:2px solid #AFA9EC;border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 6px 20px rgba(83,74,183,.12)}
+.sim-section-title{font-size:15px;font-weight:900;color:#3C3489;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sim-wrap{background:#fff;border:1px solid #E8E6E0;border-radius:var(--radius);padding:1.5rem;margin-top:14px}
+.slider-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.slider-label{font-size:13px;color:#5F5E5A;min-width:72px;line-height:1.4}
+.slider-val{font-size:14px;font-weight:700;min-width:80px;text-align:right}
+input[type=range]{flex:1;accent-color:var(--purple)}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:1.25rem 0}
+.result-card{border-radius:var(--radius-sm);padding:12px;text-align:center}
+.result-card.start{background:var(--purple-lt)}
+.result-card.gain{background:var(--teal-lt)}
+.result-card.total{background:var(--amber-lt)}
+.result-label{font-size:11px;margin-bottom:4px}
+.result-card.start .result-label{color:var(--purple)}
+.result-card.gain .result-label{color:var(--teal)}
+.result-card.total .result-label{color:var(--amber-dk)}
+.result-val{font-size:17px;font-weight:700}
+.result-card.start .result-val{color:var(--purple-dk)}
+.result-card.gain .result-val{color:var(--teal-dk)}
+.result-card.total .result-val{color:var(--amber-dk)}
+.bar-area{margin-bottom:1rem}
+.bar-row{margin-bottom:8px}
+.bar-lbl{font-size:12px;margin-bottom:3px}
+.bar-bg{height:20px;background:#EEE;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .4s ease}
+.legend-row{display:flex;gap:16px;font-size:12px;color:#5F5E5A;margin-bottom:10px;flex-wrap:wrap}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px}
+.sim-msg{background:var(--purple-lt);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:var(--purple-dk);line-height:1.6;margin-top:1rem}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div id="vfb" class="hero-img-fallback">🐱</div>
+  <div class="hero-text">
+    <div class="hero-sub">天然色漢字INDEX™ × こどもNISAナビ</div>
+    <div class="hero-title">VICKEYファミリーの<br><span>日本株<ruby>30年<rt>さんじゅうねん</rt></ruby>変化</span>ナビ</div>
+    <div class="hero-desc"><ruby>難<rt>むずか</rt></ruby>しい<ruby>言葉<rt>ことば</rt></ruby>を<ruby>漢字<rt>かんじ</rt></ruby>一<ruby>字<rt>じ</rt></ruby>でかんたん<ruby>理解<rt>りかい</rt></ruby>！</div>
+    <div class="hero-badge">⭐ COLORFUL KANJI INDEX® × <ruby>長期投資<rt>ちょうきとうし</rt></ruby></div>
+  </div>
+</div>
+
+<div class="cki-bar">
+  <b>COLORFUL KANJI INDEX®</b>
+  <span style="font-size:10px"><ruby>業種<rt>ぎょうしゅ</rt></ruby>を<ruby>漢字<rt>かんじ</rt></ruby>1<ruby>字<rt>じ</rt></ruby>＋<ruby>色<rt>いろ</rt></ruby>で<ruby>直感表示<rt>ちょっかんひょうじ</rt></ruby>：</span>
+  <div class="cki-demo">
+    <span class="cki-k" style="color:#C0A000;background:#fffbe6">融</span><span class="cki-lbl"><ruby>銀行<rt>ぎんこう</rt></ruby></span>
+    <span class="cki-k" style="color:#5DADE2;background:#ebf8ff">電</span><span class="cki-lbl"><ruby>電気機器<rt>でんききき</rt></ruby></span>
+    <span class="cki-k" style="color:#27AE60;background:#e6ffed">通</span><span class="cki-lbl"><ruby>情報通信<rt>じょうほうつうしん</rt></ruby></span>
+    <span class="cki-k" style="color:#8E44AD;background:#f5e8ff">務</span><span class="cki-lbl">サービス</span>
+    <span class="cki-k" style="color:#D4AC0D;background:#fffbe0">販</span><span class="cki-lbl"><ruby>小売<rt>こうり</rt></ruby></span>
+  </div>
+  <span style="color:#777;font-size:10px">© <ruby>Digiterior Studio<rt>デジテリアスタジオ</rt></ruby></span>
+</div>
+
+<div class="section">
+  <div class="sec-title"><ruby>企業<rt>きぎょう</rt></ruby>30<ruby>年変化<rt>ねんへんか</rt></ruby>マップ</div>
+  <div style="margin-bottom:16px">
+    <div class="bubble-wrap">
+      <div class="vcface mone">🐱</div>
+      <div style="flex:1">
+        <div class="vc-name mone">VICKEY-MONE 💛</div>
+        <div class="vc-bubble mone"><ruby>下<rt>した</rt></ruby>の<ruby>漢字<rt>かんじ</rt></ruby>タブで<ruby>業種<rt>ぎょうしゅ</rt></ruby>をしぼれるよ！<ruby>企業<rt>きぎょう</rt></ruby>カードをタップすると30<ruby>年前<rt>ねんまえ</rt></ruby>のすがたと<ruby>今<rt>いま</rt></ruby>の<ruby>変化<rt>へんか</rt></ruby>がみえるよ✨</div>
+      </div>
+    </div>
+    <div class="bubble-wrap bubble-right">
+      <div style="flex:1;text-align:right">
+        <div class="vc-name mane" style="text-align:right">VICKEY-MANE 🩶</div>
+        <div class="vc-bubble mane"><ruby>株価<rt>かぶか</rt></ruby>が「▲20<ruby>倍<rt>ばい</rt></ruby>」の<ruby>会社<rt>かいしゃ</rt></ruby>があるよ。1995<ruby>年<rt>ねん</rt></ruby>に<ruby>投資<rt>とうし</rt></ruby>してたら<ruby>今<rt>いま</rt></ruby>どうなってたか<ruby>考<rt>かんが</rt></ruby>えてみよう！</div>
+      </div>
+      <div class="vcface mane">🐱</div>
+    </div>
+  </div>
+  <div class="cat-tabs" id="catTabs"></div>
+  <div class="company-grid" id="cards"></div>
+  <div class="detail-panel" id="detail"></div>
+</div>
+
+<div class="section">
+  <div class="nisa-section">
+    <div class="nisa-title">🌱 <ruby>子<rt>こ</rt></ruby>どもNISA（<ruby>新<rt>しん</rt></ruby>NISA）で<ruby>始<rt>はじ</rt></ruby>める<ruby>長期投資<rt>ちょうきとうし</rt></ruby></div>
+    <div style="margin-bottom:14px">
+      <div class="bubble-wrap">
+        <div class="vcface mone" style="width:34px;height:34px;font-size:18px">🐱</div>
+        <div style="flex:1">
+          <div class="vc-name mone" style="font-size:9px">VICKEY-MONE</div>
+          <div class="vc-bubble mone" style="font-size:11px"><ruby>非課税<rt>ひかぜい</rt></ruby>ってね、もうけたお<ruby>金<rt>かね</rt></ruby>に<ruby>税金<rt>ぜいきん</rt></ruby>がかからないこと！NISAならまるごと<ruby>自分<rt>じぶん</rt></ruby>のものに✨</div>
+        </div>
+      </div>
+      <div class="bubble-wrap bubble-right">
+        <div style="flex:1;text-align:right">
+          <div class="vc-name mane" style="font-size:9px;text-align:right">VICKEY-MANE</div>
+          <div class="vc-bubble mane" style="font-size:11px"><ruby>複利<rt>ふくり</rt></ruby>は「ふえたお<ruby>金<rt>かね</rt></ruby>がさらにふえる」<ruby>魔法<rt>まほう</rt></ruby>のしくみ。<ruby>雪<rt>ゆき</rt></ruby>だるまみたいにコロコロ<ruby>大<rt>おお</rt></ruby>きくなるよ⛄</div>
+        </div>
+        <div class="vcface mane" style="width:34px;height:34px;font-size:18px">🐱</div>
+      </div>
+    </div>
+    <div class="nisa-grid">
+      <div class="nisa-card">
+        <h4>💰 <ruby>新<rt>しん</rt></ruby>NISA（2024<ruby>年<rt>ねん</rt></ruby>〜）</h4>
+        <span class="num">1,800<ruby>万円<rt>まんえん</rt></ruby></span>
+        <p><ruby>生涯非課税枠<rt>しょうがいひかぜいわく</rt></ruby>。18<ruby>歳<rt>さい</rt></ruby>から<ruby>口座開設<rt>こうざかいせつ</rt></ruby>できる！</p>
+      </div>
+      <div class="nisa-card">
+        <h4>👶 ジュニアNISAとの<ruby>違<rt>ちが</rt></ruby>い</h4>
+        <span class="num">2023<ruby>年終了<rt>ねんしゅうりょう</rt></ruby></span>
+        <p>ジュニアNISAは<ruby>終了済<rt>しゅうりょうず</rt></ruby>み。18<ruby>歳<rt>さい</rt></ruby>になったら<ruby>自分<rt>じぶん</rt></ruby>で<ruby>開設<rt>かいせつ</rt></ruby>！</p>
+      </div>
+      <div class="nisa-card">
+        <h4>⏳ <ruby>複利<rt>ふくり</rt></ruby>の<ruby>魔法<rt>まほう</rt></ruby></h4>
+        <span class="num"><ruby>年<rt>ねん</rt></ruby>5%<ruby>想定<rt>そうてい</rt></ruby></span>
+        <p>毎<ruby>月<rt>つき</rt></ruby>3<ruby>万円<rt>まんえん</rt></ruby>×30<ruby>年<rt>ねん</rt></ruby>→<ruby>約<rt>やく</rt></ruby>2,495<ruby>万円<rt>まんえん</rt></ruby>に！</p>
+      </div>
+      <div class="nisa-card">
+        <h4>🎯 18<ruby>歳<rt>さい</rt></ruby>スタートの<ruby>力<rt>ちから</rt></ruby></h4>
+        <span class="num">+10<ruby>年<rt>ねん</rt></ruby>で</span>
+        <p>28<ruby>歳<rt>さい</rt></ruby>より18<ruby>歳<rt>さい</rt></ruby>から<ruby>始<rt>はじ</rt></ruby>めると65<ruby>歳<rt>さい</rt></ruby>の<ruby>資産<rt>しさん</rt></ruby>が約1.6<ruby>倍<rt>ばい</rt></ruby>！</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 複利インタラクティブシミュレーター -->
+  <div class="sim-section">
+    <div class="sim-section-title">📊 <ruby>複利<rt>ふくり</rt></ruby>シミュレーター ── スライダーを<ruby>動<rt>うご</rt></ruby>かしてみよう！</div>
+    <div class="bubble-wrap" style="margin-bottom:12px">
+      <div class="vcface mone" style="width:34px;height:34px;font-size:18px">🐱</div>
+      <div style="flex:1">
+        <div class="vc-name mone" style="font-size:9px">VICKEY-MONE</div>
+        <div class="vc-bubble mone" style="font-size:11px">スライダーを<ruby>動<rt>うご</rt></ruby>かしてみてね！<ruby>未来<rt>みらい</rt></ruby>が<ruby>変<rt>か</rt></ruby>わるよ✦</div>
+      </div>
+    </div>
+    <div class="sim-wrap">
+      <div class="slider-row">
+        <span class="slider-label">はじめの<br>おかね</span>
+        <input type="range" id="principal" min="10000" max="500000" step="10000" value="100000" oninput="updateSim()">
+        <span class="slider-val" id="p-out" style="color:var(--purple-dk)">¥100,000</span>
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">ねんり<br>（年利）</span>
+        <input type="range" id="rate" min="1" max="15" step="1" value="5" oninput="updateSim()">
+        <span class="slider-val" id="r-out" style="color:var(--teal-dk)">5%</span>
+      </div>
+      <div class="slider-row" style="margin-bottom:0">
+        <span class="slider-label">なんねん<br>つづける</span>
+        <input type="range" id="years" min="1" max="40" step="1" value="18" oninput="updateSim()">
+        <span class="slider-val" id="y-out" style="color:var(--amber-dk)">18年</span>
+      </div>
+      <div class="result-grid">
+        <div class="result-card start"><div class="result-label">はじめ</div><div class="result-val" id="r-start">¥100,000</div></div>
+        <div class="result-card gain"><div class="result-label">ふえたおかね</div><div class="result-val" id="r-gain">—</div></div>
+        <div class="result-card total"><div class="result-label"><ruby>合計<rt>ごうけい</rt></ruby></div><div class="result-val" id="r-total">—</div></div>
+      </div>
+      <div class="bar-area" id="bar-area"></div>
+      <div class="legend-row">
+        <span><span class="legend-dot" style="background:var(--purple)"></span><ruby>複利<rt>ふくり</rt></ruby></span>
+        <span><span class="legend-dot" style="background:var(--teal)"></span><ruby>単利<rt>たんり</rt></ruby></span>
+        <span><span class="legend-dot" style="background:#B4B2A9"></span>はじめのおかね</span>
+      </div>
+      <div style="position:relative;width:100%;height:240px;">
+        <canvas id="sim-chart"></canvas>
+      </div>
+      <div class="sim-msg" id="sim-msg"></div>
+    </div>
+    <div class="bubble-wrap" style="margin-top:12px">
+      <div class="vcface mane" style="width:30px;height:30px;font-size:16px">🐱</div>
+      <div style="flex:1">
+        <div class="vc-bubble mane" style="font-size:10px"><ruby>早<rt>はや</rt></ruby>く<ruby>始<rt>はじ</rt></ruby>めるほどグラフが<ruby>高<rt>たか</rt></ruby>くなるよ！※<ruby>元本保証<rt>がんぽんほしょう</rt></ruby>なし。<ruby>投資<rt>とうし</rt></ruby>は<ruby>自己責任<rt>じこせきにん</rt></ruby>で。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-title"><ruby>産業<rt>さんぎょう</rt></ruby>の「<ruby>主役<rt>しゅやく</rt></ruby>」はこう<ruby>変<rt>か</rt></ruby>わった</div>
+  <div class="era-timeline">
+    <div class="era-item"><div class="era-year">1995</div><div class="era-icon">📺</div><div class="era-biz"><ruby>家電<rt>かでん</rt></ruby>・<ruby>銀行<rt>ぎんこう</rt></ruby></div></div>
+    <div class="era-item"><div class="era-year">2000</div><div class="era-icon">💻</div><div class="era-biz">ITバブル</div></div>
+    <div class="era-item"><div class="era-year">2005</div><div class="era-icon">📱</div><div class="era-biz"><ruby>携帯<rt>けいたい</rt></ruby>・EC</div></div>
+    <div class="era-item"><div class="era-year">2010</div><div class="era-icon">🤳</div><div class="era-biz">スマホ<ruby>革命<rt>かくめい</rt></ruby></div></div>
+    <div class="era-item"><div class="era-year">2015</div><div class="era-icon">🌐</div><div class="era-biz">グローバル<ruby>化<rt>か</rt></ruby></div></div>
+    <div class="era-item"><div class="era-year">2020</div><div class="era-icon">😷</div><div class="era-biz">DX<ruby>加速<rt>かそく</rt></ruby></div></div>
+    <div class="era-item"><div class="era-year">2025</div><div class="era-icon">🤖</div><div class="era-biz">AI・EV・IP</div></div>
+  </div>
+  <div class="bubble-wrap" style="margin-top:8px">
+    <div class="vcface mane" style="width:30px;height:30px;font-size:16px">🐱</div>
+    <div style="flex:1">
+      <div class="vc-bubble mane" style="font-size:10px">30<ruby>年<rt>ねん</rt></ruby>で「<ruby>主役<rt>しゅやく</rt></ruby>」が<ruby>入<rt>い</rt></ruby>れかわるよ。だから<ruby>分散投資<rt>ぶんさんとうし</rt></ruby>と<ruby>長期保有<rt>ちょうきほゆう</rt></ruby>が<ruby>大切<rt>たいせつ</rt></ruby>なの！</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  ※ <ruby>株価<rt>かぶか</rt></ruby>データは<ruby>概算<rt>がいさん</rt></ruby>・<ruby>参考値<rt>さんこうち</rt></ruby>です。<ruby>投資判断<rt>とうしはんだん</rt></ruby>は<ruby>自己責任<rt>じこせきにん</rt></ruby>でお<ruby>願<rt>ねが</rt></ruby>いします。<br>
+  天然色漢字INDEX™ COLORFUL KANJI INDEX® <ruby>Digiterior Studio<rt>デジテリアスタジオ</rt></ruby> ／ <ruby>制作<rt>せいさく</rt></ruby>: Claude (Anthropic)
+</footer>
+
+<script>
+const TSE={"7050":{kanji:"融",name:"銀行業",color:"#C0A000"},"7100":{kanji:"券",name:"証券業",color:"#566573"},"7150":{kanji:"険",name:"保険業",color:"#E67E22"},"7200":{kanji:"貸",name:"その他金融",color:"#D4AC0D"},"5250":{kanji:"通",name:"情報・通信",color:"#27AE60"},"9050":{kanji:"務",name:"サービス業",color:"#8E44AD"},"3650":{kanji:"電",name:"電気機器",color:"#5DADE2"},"3700":{kanji:"輸",name:"輸送用機器",color:"#7F8C8D"},"3600":{kanji:"機",name:"機械",color:"#8B6914"},"3050":{kanji:"食",name:"食料品",color:"#E8700A"},"6100":{kanji:"販",name:"小売業",color:"#D4AC0D"},"6050":{kanji:"卸",name:"卸売業",color:"#E74C3C"},"3800":{kanji:"製",name:"その他製品",color:"#9B59B6"},"3200":{kanji:"化",name:"化学",color:"#00BCD4"},"3300":{kanji:"油",name:"石油・石炭",color:"#4A90D9"},"3450":{kanji:"鉄",name:"鉄鋼",color:"#B7770D"},"2050":{kanji:"建",name:"建設業",color:"#D35400"},"8050":{kanji:"地",name:"不動産業",color:"#8B4513"},"4050":{kanji:"熱",name:"電気・ガス",color:"#FF4500"},"3250":{kanji:"薬",name:"医薬品",color:"#58D68D"}};
+const CUSTOM={"3800_custom":{kanji:"製",name:"その他製品",color:"#9B59B6"}};
+function getTse(code){return TSE[code]||CUSTOM[code]||{kanji:"?",name:"—",color:"#888"};}
+
+const companies=[
+  {id:"nintendo",name:"任天堂",code:"7974",mainTse:"3800_custom",cats:["3800_custom","9050"],listed1995:true,tag1995:"🎮 スーパーファミコン・ゲームボーイ",tagNow:"🌍 Switch・IP・テーマパーク",rev1995:"約4,300億円",revNow:"約1兆6,700億円",mult:1.4,note:"ゲームハード全盛期からSwitch世界1.5億台超へ。マリオ映画・USJで「IP帝国」に変貌。",past:[{c:"#9B59B6",n:"ゲームハード",p:70},{c:"#ffd93d",n:"ゲームソフト",p:25},{c:"#6bcb77",n:"玩具・その他",p:5}],now:[{c:"#9B59B6",n:"Nintendo Switch",p:55},{c:"#ffd93d",n:"ゲームソフト",p:25},{c:"#8E44AD",n:"IP・映画・テーマパーク",p:12},{c:"#6bcb77",n:"モバイル・その他",p:8}]},
+  {id:"fastretailing",name:"ファーストリテイリング",code:"9983",mainTse:"6100",cats:["6100"],listed1995:true,tag1995:"👕 山口県のローカルSPA",tagNow:"🌏 ユニクロ 世界3,000店舗超",rev1995:"約300億円",revNow:"約3兆1,000億円",mult:20,note:"1995年は広島・山口中心の小型SPA企業。フリースブームで全国区→現在は世界3位のアパレル企業。株価約20倍。",past:[{c:"#D4AC0D",n:"ユニクロ国内",p:95},{c:"#ffd93d",n:"その他",p:5}],now:[{c:"#D4AC0D",n:"ユニクロ海外",p:55},{c:"#ffd93d",n:"ユニクロ国内",p:30},{c:"#c084fc",n:"GU・その他",p:15}]},
+  {id:"rakuten",name:"楽天グループ",code:"4755",mainTse:"5250",cats:["5250","7050","7200"],listed1995:false,tag1995:"🚫 1997年設立（当時未上場）",tagNow:"🛒 EC・金融・モバイルの複合体",rev1995:"—",revNow:"約2兆1,534億円",mult:null,isNew:true,note:"1997年設立、2000年上場。楽天市場から楽天経済圏へ拡大。会員1億人超。",past:[{c:"#27AE60",n:"（設立前・存在せず）",p:100}],now:[{c:"#27AE60",n:"EC・インターネット",p:35},{c:"#C0A000",n:"フィンテック",p:30},{c:"#27AE60",n:"楽天モバイル",p:30},{c:"#8E44AD",n:"AI・その他",p:5}]},
+  {id:"mufg",name:"三菱UFJ FG",code:"8306",mainTse:"7050",cats:["7050","7100","7200"],listed1995:true,tag1995:"🏦 三菱銀行・東京銀行（別々）",tagNow:"🌍 国内最大メガバンク・世界展開",rev1995:"約3兆円",revNow:"約20兆円（業務粗利益）",mult:1.6,note:"三菱銀行・東京銀行等が合併を重ね誕生。金利上昇で純利益が急拡大。米国・ASEANへ積極展開中。",past:[{c:"#C0A000",n:"国内預金・貸出",p:80},{c:"#D4AC0D",n:"外国為替・国際",p:15},{c:"#566573",n:"信託・証券",p:5}],now:[{c:"#C0A000",n:"国内銀行",p:45},{c:"#E67E22",n:"海外（米国・ASEAN）",p:25},{c:"#566573",n:"証券・投資銀行",p:15},{c:"#D4AC0D",n:"信託・AM・リース",p:10},{c:"#27AE60",n:"デジタル・AI",p:5}]},
+  {id:"hitachi",name:"日立製作所",code:"6501",mainTse:"3650",cats:["3650","3600","9050"],listed1995:true,tag1995:"🔌 何でもやる総合電機の巨人",tagNow:"💡 DX・社会インフラのグローバル企業",rev1995:"約8兆円",revNow:"約9兆7,833億円",mult:4.9,note:"家電・重電など「何でも屋」からLumada（DX）・鉄道・エネルギーに絞り込む大変革。株価約5倍に。",past:[{c:"#5DADE2",n:"重電・産業機器・家電",p:40},{c:"#8B6914",n:"建設機械",p:25},{c:"#D35400",n:"建設・プラント",p:20},{c:"#C0A000",n:"素材系子会社",p:15}],now:[{c:"#8E44AD",n:"DX・Lumada",p:29},{c:"#5DADE2",n:"エネルギー",p:27},{c:"#7F8C8D",n:"鉄道システム",p:24},{c:"#58D68D",n:"ヘルスケア",p:12},{c:"#8B4513",n:"ビルシステム",p:8}]},
+  {id:"sony",name:"ソニーグループ",code:"6758",mainTse:"3650",cats:["3650","3800_custom","7150"],listed1995:true,tag1995:"📺 ウォークマン・トリニトロンTV",tagNow:"🎮 ゲーム・映画・センサーの帝国",rev1995:"約5兆円",revNow:"約13兆2,096億円",mult:0.58,note:"家電王者からエンタメ複合体へ。PS5・ソニーピクチャーズ・イメージセンサー世界首位と、稼ぎ頭が完全に入れ替わった。",past:[{c:"#5DADE2",n:"テレビ・ウォークマン",p:65},{c:"#F1C40F",n:"映画・音楽",p:20},{c:"#9B59B6",n:"ゲーム（PS黎明期）",p:15}],now:[{c:"#9B59B6",n:"ゲーム（PlayStation）",p:35},{c:"#F1C40F",n:"映画・音楽",p:22},{c:"#E67E22",n:"金融",p:18},{c:"#5DADE2",n:"イメージセンサー",p:15},{c:"#c084fc",n:"家電・音響",p:10}]},
+  {id:"toyota",name:"トヨタ自動車",code:"7203",mainTse:"3700",cats:["3700","7200"],listed1995:true,tag1995:"🚗 国産車メーカー・輸出拡大期",tagNow:"🌐 EV・AI・金融 世界販売首位",rev1995:"約9兆円",revNow:"約48兆367億円",mult:2.7,note:"バブル後の国内自動車メーカーから世界販売首位・売上48兆円へ。HEV戦略が奏功し金融・AI事業も急成長中。",past:[{c:"#7F8C8D",n:"自動車製造・販売",p:88},{c:"#D4AC0D",n:"金融（カーローン）",p:8},{c:"#8B6914",n:"その他部品",p:4}],now:[{c:"#7F8C8D",n:"自動車・HEV",p:76},{c:"#D4AC0D",n:"金融事業",p:16},{c:"#5DADE2",n:"電動化・EV",p:5},{c:"#27AE60",n:"AI・コネクテッド",p:3}]},
+  {id:"ntt",name:"NTTグループ",code:"9432",mainTse:"5250",cats:["5250","4050"],listed1995:true,tag1995:"☎️ 固定電話の独占インフラ王",tagNow:"📡 通信・DX・再エネ・AI",rev1995:"約7兆円",revNow:"約13兆5,900億円",mult:null,note:"固定電話独占→携帯（ドコモ）→DX・IOWN光電融合へ。再生可能エネルギー事業も急拡大中。",past:[{c:"#27AE60",n:"固定電話",p:85},{c:"#5DADE2",n:"通信機器製造",p:10},{c:"#8E44AD",n:"IT（NTTデータ等）",p:5}],now:[{c:"#27AE60",n:"通信（ドコモ等）",p:45},{c:"#8E44AD",n:"IT・DX（NTTデータ）",p:30},{c:"#FF4500",n:"再エネ・エネルギー",p:12},{c:"#8B4513",n:"不動産・AI・IOWN",p:13}]}
+];
+
+let selectedId=null,currentCat="all";
+
+function buildTabs(){
+  const el=document.getElementById('catTabs');el.innerHTML='';
+  const seen=new Set();
+  const allCats=[{tse:"all",kanji:"全",color:"#f97316",name:"全社"},...companies.map(c=>({tse:c.mainTse,...getTse(c.mainTse)})).filter(c=>{if(seen.has(c.tse))return false;seen.add(c.tse);return true;}).map(c=>({tse:c.tse,kanji:c.kanji,color:c.color,name:c.name}))];
+  allCats.forEach(c=>{const d=document.createElement('div');d.className='cat-tab'+(currentCat===c.tse?' active':'');d.style.color=c.color;if(currentCat===c.tse){d.style.borderColor=c.color;d.style.background=c.color+'18';}d.innerHTML=`<span class="ck">${c.kanji}</span><span class="cl">${c.name}</span>`;d.onclick=()=>{currentCat=c.tse;selectedId=null;closeDetail();buildTabs();renderCards();};el.appendChild(d);});
+}
+
+function renderCards(){
+  const g=document.getElementById('cards');g.innerHTML='';
+  companies.forEach(c=>{
+    const show=currentCat==='all'||c.cats.includes(currentCat);
+    const ti=getTse(c.mainTse);
+    const multStr=c.mult===null?'IPO後上場':c.mult>=1?`▲${c.mult}倍`:`▼${c.mult}倍`;
+    const multCls=c.mult===null?'new':c.mult>=1?'up':'down';
+    const d=document.createElement('div');
+    d.className='company-card'+(show?' show':'');
+    d.innerHTML=`<div class="card-top"><div style="flex:1"><div class="card-name">${c.name}</div><div class="card-code">${c.code}　${c.listed1995?'1995年上場済':'1995年以降設立'}</div></div><div class="kanji-badge" style="display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0"><span class="kb-k" style="color:${ti.color}">${ti.kanji}</span><span class="kb-l">主業種</span></div></div><div class="timeline"><div class="tl-item"><div class="tl-box"><div class="tl-year">1995年頃</div><div class="tl-biz">${c.tag1995}</div></div></div><div class="tl-item"><div class="tl-box"><div class="tl-year">2025年</div><div class="tl-biz">${c.tagNow}</div></div></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="font-size:9px;color:#bbb">株価変化（概算）</span><span class="growth-chip ${multCls}">${multStr}</span></div><div style="font-size:10px;color:#999;margin-top:5px;line-height:1.6">${c.note.substring(0,55)}…</div><div style="margin-top:8px;font-size:11px;font-weight:800;cursor:pointer;color:${ti.color}" onclick="openDetail('${c.id}')">▶ くわしく見る</div>`;
+    g.appendChild(d);
+  });
+}
+
+function openDetail(id){
+  selectedId=id;
+  const c=companies.find(x=>x.id===id);
+  const ti=getTse(c.mainTse);
+  const panel=document.getElementById('detail');
+  const pastSegs=c.past.map(s=>`<div class="seg-row"><div class="seg-dot" style="background:${s.c}"></div><div style="flex:1;color:#555">${s.n}</div><div class="seg-pct">${s.p}%</div></div>`).join('');
+  const nowSegs=c.now.map(s=>`<div class="seg-row"><div class="seg-dot" style="background:${s.c}"></div><div style="flex:1;color:#555">${s.n}</div><div class="seg-pct">${s.p}%</div></div>`).join('');
+  const multStr=c.mult===null?'IPO後上場':c.mult>=1?`株価 ▲${c.mult}倍`:`株価 ▼${c.mult}倍`;
+  const multCls=c.mult===null?'new':c.mult>=1?'up':'down';
+  const kanjiRow=c.cats.map(t=>{const ti2=getTse(t);return `<div class="dp-ki"><span class="dkk" style="color:${ti2.color}">${ti2.kanji}</span><span class="dkl">${ti2.name}</span></div>`;}).join('');
+  panel.innerHTML=`<div class="dp-head"><div class="dp-name">${c.name} <span style="font-size:11px;color:#bbb">(${c.code})</span></div><span class="growth-chip ${multCls}">${multStr}</span></div><div style="font-size:11px;color:#999;margin-bottom:6px">関連業種（COLORFUL KANJI INDEX®）</div><div class="dp-kanji-row">${kanjiRow}</div><div class="bubble-wrap" style="margin-bottom:10px"><div class="vcface mone" style="width:32px;height:32px;font-size:16px">🐱</div><div style="flex:1"><div class="vc-bubble mone" style="font-size:11px;line-height:1.8">${c.note}</div></div></div><div class="dp-grid"><div class="dp-box"><div class="dp-box-t">📅 1995年頃の事業構成</div><div style="font-size:9px;color:#bbb;margin-bottom:5px">売上 ${c.rev1995}</div>${pastSegs}</div><div class="dp-box"><div class="dp-box-t">🚀 2025年の事業構成</div><div style="font-size:9px;color:#bbb;margin-bottom:5px">売上 ${c.revNow}</div>${nowSegs}</div></div><div style="margin-top:12px;padding:10px;background:linear-gradient(90deg,#fff8e1,#fff8f0);border-radius:9px;border-left:4px solid ${ti.color}"><p style="font-size:10px;font-weight:800;color:${ti.color}">💡 長期投資家へのポイント</p><p style="font-size:11px;color:#666;margin-top:3px;line-height:1.8">30年前にこの企業を知っていて長期保有していたら？事業変化を先読みする目が長期投資の最大の武器です。</p></div><div style="text-align:right;margin-top:10px"><span onclick="closeDetail()" style="font-size:12px;color:#f97316;cursor:pointer;font-weight:800">✕ 閉じる</span></div>`;
+  panel.classList.add('open');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function closeDetail(){selectedId=null;document.getElementById('detail').classList.remove('open');}
+
+let simChart;
+function fmt(n){return '¥'+Math.round(n).toLocaleString('ja-JP');}
+function simMsg(p,r,y,final){
+  const x=Math.round(final/p*10)/10;
+  if(y>=18&&x>=2)return `${y}年つづけると はじめの${x}倍に！これが複利の魔法✦ 大学のころには${fmt(final)}になるかも！`;
+  if(x>=5)return `すごい！はじめの${x}倍になったよ！長くつづけることが最大の武器✦`;
+  if(y<=5)return `${y}年で${fmt(final)}になるよ！小さなたねをまいたね🌱`;
+  return `${y}年で${fmt(final-p)}ふえるよ！単利との差${fmt(Math.round(p*Math.pow(1+r,y))-Math.round(p*(1+r*y)))}が複利のちから✦`;
+}
+function updateSim(){
+  const p=parseInt(document.getElementById('principal').value);
+  const r=parseInt(document.getElementById('rate').value)/100;
+  const y=parseInt(document.getElementById('years').value);
+  document.getElementById('p-out').textContent=fmt(p);
+  document.getElementById('r-out').textContent=(r*100)+'%';
+  document.getElementById('y-out').textContent=y+'年';
+  document.getElementById('r-start').textContent=fmt(p);
+  const labels=[],comp=[],simp=[],prin=[];
+  for(let i=0;i<=y;i++){labels.push(i===0?'いま':i+'年');comp.push(Math.round(p*Math.pow(1+r,i)));simp.push(Math.round(p*(1+r*i)));prin.push(p);}
+  const fC=comp[y],fS=simp[y];
+  document.getElementById('r-total').textContent=fmt(fC);
+  document.getElementById('r-gain').textContent='+'+fmt(fC-p);
+  document.getElementById('sim-msg').textContent=simMsg(p,r,y,fC);
+  const ba=document.getElementById('bar-area');
+  const wS=Math.round(100*fS/fC);
+  ba.innerHTML=`<div class="bar-row"><div class="bar-lbl" style="color:var(--purple);font-size:12px;">複利 ${fmt(fC)}</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--purple);"></div></div></div><div class="bar-row"><div class="bar-lbl" style="color:var(--teal);font-size:12px;">単利 ${fmt(fS)}</div><div class="bar-bg"><div class="bar-fill" style="width:${wS}%;background:var(--teal);"></div></div></div>`;
+  if(simChart){simChart.data.labels=labels;simChart.data.datasets[0].data=comp;simChart.data.datasets[1].data=simp;simChart.data.datasets[2].data=prin;simChart.update();}
+  else{simChart=new Chart(document.getElementById('sim-chart'),{type:'line',data:{labels,datasets:[{data:comp,borderColor:'#534AB7',backgroundColor:'rgba(83,74,183,0.08)',fill:true,tension:0.4,pointRadius:0,borderWidth:2.5},{data:simp,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.05)',fill:true,tension:0,pointRadius:0,borderWidth:2,borderDash:[4,4]},{data:prin,borderColor:'#B4B2A9',backgroundColor:'transparent',fill:false,tension:0,pointRadius:0,borderWidth:1.5,borderDash:[2,2]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>fmt(ctx.parsed.y)}}},scales:{x:{ticks:{maxTicksLimit:8,font:{size:11},color:'#888780'},grid:{color:'rgba(0,0,0,0.05)'}},y:{ticks:{callback:v=>v>=1000000?'¥'+(v/1000000).toFixed(1)+'M':'¥'+(v/1000).toFixed(0)+'K',font:{size:11},color:'#888780'},grid:{color:'rgba(0,0,0,0.05)'}}}}})}
+}
+
+buildTabs();renderCards();updateSim();
+
+// VICKEYアイコン：一度だけ試みてフリッカーを防ぐ
+(function(){
+  const img=new Image();
+  img.onload=function(){
+    const el=document.getElementById('vfb');
+    el.innerHTML='';
+    el.style.background='transparent';
+    el.style.border='none';
+    el.style.padding='0';
+    const i=document.createElement('img');
+    i.src='https://robertohoshino.github.io/kanji-index/Vickey.png';
+    i.style.cssText='width:82px;height:82px;object-fit:cover;border-radius:16px;border:3px solid rgba(255,255,255,.8);box-shadow:0 4px 14px rgba(0,0,0,.2)';
+    el.appendChild(i);
+  };
+  img.onerror=function(){/* 絵文字フォールバックのまま */};
+  img.src='https://robertohoshino.github.io/kanji-index/Vickey.png';
+})();
+</script>
+</body>
+</html>
